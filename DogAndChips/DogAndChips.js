@@ -20,10 +20,10 @@ function jump(x, y) {
 
 for (var i = 0; i < size; i++) {
   for (var j = 0; j < size; j++) {
-    var id = DX.createItem("CheckerChip", i * 2 - 6, j * 2 - 6, -0.2);
+    var id = DX.createItem("CheckerChip", i * 2 - size + 1, j * 2 - size + 1, -0.2);
     var chip = DX.item(id);
     chip.setScale(2);
     chip.setColor(0, 128, 0);
-    chip.activate(jump(i * 2 - 6, j * 2 - 6));
+    chip.activate(jump(i * 2 - size + 1, j * 2 - size + 1));
   }
 }
