@@ -88,7 +88,7 @@ Game.prototype.addTask = function(name) {
 
 Game.prototype.findTask = function(name) {
     // DX.log("findTask for " + name);
-    for (let i = 0; i < this._tasks.length; i++) {
+    for (var i = 0; i < this._tasks.length; i++) {
         if (name === this._tasks[i].name) {
             // DX.log("[findTask] Returning " + name);
             return this._tasks[i];
