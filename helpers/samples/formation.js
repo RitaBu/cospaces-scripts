@@ -7,19 +7,19 @@ function clear() {
 DX.loadScript("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/formations/formation.js", function () {
   var funcs = [
     function () {
-      DX.Formation.rect(5, 5, 1, 1, function (x, y) {
+      Formation.rect(5, 5, 1, 1, function (x, y) {
         DX.createItem("Sphere", x, y, 0);
       });
     },
 
     function () {
-      DX.Formation.spiral(Math.PI * 6, 1, 1, function (x, y) {
+      Formation.spiral(Math.PI * 6, 1, 1, function (x, y) {
         DX.createItem("Sphere", x, y, 0);
       });
     },
 
     function () {
-      DX.Formation.circle(5, 0, Math.PI * 2, Math.PI / 6, function (x, y) {
+      Formation.circle(5, 0, Math.PI * 2, Math.PI / 6, function (x, y) {
         DX.createItem("Sphere", x, y, 0);
       });
     }
