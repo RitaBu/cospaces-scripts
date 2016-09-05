@@ -2,13 +2,17 @@
 #define OBJECT_CASH_JS
 
 function ObjectCash(obj) {
+    var thisRef = this;
     this.temp = {};
     for(var prop in obj) {
         if(!obj.hasOwnProperty(prop) || typeof obj[prop] == "function" || typeof obj[prop] == "object") {
             continue;
         }
-        
-        this.temp[prop] = obj[prop];
+        (function(prop_value){
+            thisRef.temp[prop] = prop_value;
+        })(obj[prop]);
+        DX.log("cache stringify: " + JSON.stringify(this));
+        //this.temp[prop] = obj[prop];
     }
 }
 
@@ -19,7 +23,6 @@ ObjectCash.prototype.restore = function(obj) {
             typeof this.temp[prop] == "object") {
             continue;
         }
-
         obj[prop] = this.temp[prop];
     }
 }

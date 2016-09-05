@@ -26,6 +26,10 @@ function vec3lengthSquared(vec) {
   return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
 }
 
+function vec3length(vec) {
+  return Math.sqrt(vec3lengthSquared(vec));
+}
+
 function vec3getNormal(vec) {
   if(vec3lengthSquared(vec) > 0) {
     return vec3mul(vec, 1.0 / Math.sqrt(vec3lengthSquared(vec)));

@@ -3,6 +3,7 @@
 
 #include "lib/heartbeat_wrapper.js"
 #include "lib/FocusGameCamera.js"
+#include "lib/property_utils.js"
 
 var Button = null
 
@@ -45,11 +46,11 @@ ButtonReady.prototype.move = function() {
         var pos = item.position();
         var dir = item.getAxisY();
         if(button != null) {
-            button.nonDiscreteTeleport(pos[0] + dir[0] * this.dx,
+            PropertyUtils.ndTeleportWithCompare(button, pos[0] + dir[0] * this.dx,
                 pos[1] + dir[1] * this.dy, pos[2]);
         }
         if(marker != null) {
-            marker.nonDiscreteTeleport(pos[0], pos[1], pos[2] + this.dz);
+            PropertyUtils.ndTeleportWithCompare(marker, pos[0], pos[1], pos[2] + this.dz);
         }
     }
 }
@@ -72,11 +73,15 @@ ButtonReady.prototype.check = function(dt) {
                 (b - itemPos[1]) * (b - itemPos[1]));
 
             if (l > 1) {
-                button.setColor(this.red, 0, 0);
-                marker.setColor(this.red, 0, 0);
-                this.color[0] = this.red;
-                this.color[1] = 0;
-                this.color[2] = 0;
+                //button.setColor(this.red, 0, 0);
+                //marker.setColor(this.red, 0, 0);
+                if(this.color[0] != this.red || this.color[1] != 0 || this.color[2] != 0) {
+                    this.color[0] = this.red;
+                    this.color[1] = 0;
+                    this.color[2] = 0;
+                    button.setColor(this.red, 0, 0);
+                    marker.setColor(this.red, 0, 0);
+                }
             } else {
                 var dr = this.red / this.time * dt;
                 var dg = this.green / this.time * dt;

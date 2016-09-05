@@ -20,7 +20,7 @@ function GameState() {
   this.init = function(server) {
     if(myServer !== null) return;
     myServer = server;
-    server.serverReceiveCallback = function(id, message) {
+    server.addServerReceiveCallback(function(id, message) {
       DX.log("server received message.");
       DX.log("id: " + id);
       DX.log("message: " + message);
@@ -43,16 +43,16 @@ function GameState() {
             var columnDeltaAngle = Math.PI * 2 / numberOfColumns;
             var pos = [columnRadius * Math.cos(columnDeltaAngle * firstFreeColumn), columnRadius * Math.sin(columnDeltaAngle * firstFreeColumn), columnHeight];
             firstFreeColumn++;
-            server.sendToClient(id, {type: "teleport", pos: pos});
+            server.sendReliableToClient(id, {type: "teleport", pos: pos});
           }
           break;
       }
-    }
+    });
 
-    server.onPlayerDisconnected = function(id) {
+    server.addOnDisconnectCallback(function(id) {
       DX.log("playerDisconnected: " + id);
       thisRef.clearButtons(id);
-    }
+    });
   }
 
 
@@ -82,7 +82,7 @@ function GameState() {
       var playerItem = DX.item(players[i]);
       if(playerItem === null) continue;
       var spawnPos = [spawnRadius * Math.sin(angle), spawnRadius * Math.cos(angle), 0];
-      myServer.sendToClient(players[i], {
+      myServer.sendReliableToClient(players[i], {
         type : "playing", 
         spawnPos : spawnPos,
         bodyOrientation : angle
@@ -102,7 +102,7 @@ function GameState() {
 
     var players = myServer.getPlayersList();
     for(var i = 0; i < players.length; i++) {
-      myServer.sendToClient(players[i], {type : "waiting"});
+      myServer.sendReliableToClient(players[i], {type : "waiting"});
     }
 
   }
@@ -111,7 +111,6 @@ function GameState() {
     if(myServer === null) return;
     if(!myServer.getIsServer()) return;
     var players = myServer.getPlayersList();
-    DX.log("players: " + players);
     switch(thisRef.state) {
       case "waiting":
           var allPlayersAreReady = true;
@@ -132,7 +131,7 @@ function GameState() {
               luckyPlayers++;
             }
           }
-          if(luckyPlayers == 0) {
+          if(luckyPlayers < 2) {
             finishGame();
           }
           break;

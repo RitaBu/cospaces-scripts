@@ -11,9 +11,10 @@ function SinkResolver(server) {
   var sphereRadius = 0.5;
   var downSpeed = 0.3;
   var sinkRate = 0.1;
+  var epsilon = 0.05;
   var isMovingDown = true;
   var playersList = [];
-  Heartbeat.add(function(dt){
+  Heartbeat.add(function(dt) {
 
     //updating players list
     playersUpdateTime += dt;
@@ -44,20 +45,23 @@ function SinkResolver(server) {
         var normal = vec3getNormal(deltaPosition);
         normal = vec3mul(normal, distance * sinkRate);
         var newPosition = vec3add(normal, thisPosition);
+        DX.log("teleport in sinkResolver");
         thisItem.nonDiscreteTeleport(newPosition[0], newPosition[1], newPosition[2]);
         thisPosition = thisItem.position();
       }
     }
 
     //moving player down
-    if(isMovingDown) {
+    if(isMovingDown && thisPosition[2] > epsilon) {
+      DX.log("teleport in sinkResolver");
       thisItem.nonDiscreteTeleport(thisPosition[0], thisPosition[1], thisPosition[2] - downSpeed * dt);  
     }
     
     //resolving floor sinking
     var floorPenetration = thisPosition[2];
-    if(floorPenetration < 0) {
+    if(floorPenetration < -epsilon) {
       floorPenetration = -floorPenetration;
+      DX.log("teleport in sinkResolver");
       thisItem.nonDiscreteTeleport(thisPosition[0], thisPosition[1], thisPosition[2] + floorPenetration * sinkRate);
       thisPosition = thisItem.position();
     }

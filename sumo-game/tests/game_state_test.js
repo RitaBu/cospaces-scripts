@@ -3,9 +3,9 @@
 
 var server = new ServerFramework();
 
-server.clientReceiveCallback = function(msg) {
+server.addClientReceiveCallback(function(msg) {
   DX.log("client received message from server: " + JSON.stringify(msg));
-}
+});
 
 server.onFirstServerTick = function() {
   if(server.getServerObject(GameState) === null) {

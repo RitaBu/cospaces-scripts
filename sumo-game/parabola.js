@@ -60,7 +60,7 @@ ParabolaClass.prototype.z = function () {
  * @param yComponent
  */
 ParabolaClass.prototype.execute = function(xComponent, yComponent, power, func) {
-    this.power = power;
+    this.v0 = power;
     var tg = yComponent / xComponent;
     if (xComponent < 0) {
         this.angle = Math.PI + Math.atan(tg);

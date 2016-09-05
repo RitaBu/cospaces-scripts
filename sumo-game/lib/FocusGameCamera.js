@@ -19,8 +19,22 @@ var Camera = (function (){
         myHeight = height;
     }
 
+    var rotateMultiplier = 0.2;
+
+    var myRotationDelta = 0;
+
+    var bodyRotation = 0;
+
     var getCameraHeight = function() {
         return myHeight;
+    }
+
+    var setRotationDelta = function(rotationDelta) {
+        myRotationDelta += rotationDelta;
+    }
+
+    var setBodyRotation = function(argBodyRotation) {
+        bodyRotation = argBodyRotation;
     }
 
     var myCamera = null;
@@ -41,6 +55,11 @@ var Camera = (function (){
             camDirection = vec3mul(camDirection, -1 * myCamera.getCameraDistance());
             myCamera.setPosition(pos[0] + camDirection[0], pos[1] + camDirection[1], pos[2] + camDirection[2] + myHeight);
 
+            bodyRotation += myRotationDelta * rotateMultiplier;
+            myRotationDelta = (1 - rotateMultiplier) * myRotationDelta;
+
+            myCamera.setBaseRotation(bodyRotation);
+
         });};
 
     DX.runLater(runLaterFunc, 0.1);
@@ -49,7 +68,9 @@ var Camera = (function (){
         focusOn : focusOn,
         getCamera : getCamera,
         setCameraHeight : setCameraHeight,
-        getCameraHeight : getCameraHeight
+        getCameraHeight : getCameraHeight,
+        setRotationDelta : setRotationDelta,
+        setBodyRotation : setBodyRotation
     };
 })();
 

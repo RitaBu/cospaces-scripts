@@ -4,6 +4,7 @@
 #include "lib/server_framework.js"
 #include "parabola.js"
 #include "lib/control.js"
+#include "lib/property_utils.js"
 #include "SumoAnimator.js"
 #include "lib/FocusGameCamera.js"
 #include "lib/vector_utils.js"
@@ -13,6 +14,8 @@
 #include "ObjectCash.js"
 
 var server = new ServerFramework();
+
+var soundManager = new SoundManager(server);
 
 var sinkResolver = new SinkResolver(server);
 
@@ -106,12 +109,12 @@ Player.prototype.setGameState = function(state) {
             this.isWaitingForPlayers = true;
             this.isFailed = false;
             this.isFalling = false;
-            new ButtonReady(server.getPlayerId(),0.2,0.2,4, function (){
-                server.sendToServer({type: "ready"});
+            new ButtonReady(server.getPlayerId(),0.6,0.6,4, function (){
+                server.sendReliableToServer({type: "ready"});
             });
 
             var ids = Button.getButtonIds();
-            server.sendToServer({type: "buttons", ids: ids});
+            server.sendReliableToServer({type: "buttons", ids: ids});
 
             sinkResolver.setMovingDown(true);
             controlManager.setControlEnabled(server.getPlayerId(), true);
@@ -119,7 +122,7 @@ Player.prototype.setGameState = function(state) {
         case "playing":
             if(!this.isWaitingForPlayers) return;
             
-            PlaySound("gong",false);
+            soundManager.playSound("gong", this.item.position(), false, true);
             this.isWaitingForPlayers = false;
             Button.remove();
             Button = null;
@@ -154,12 +157,18 @@ Player.prototype.update = function(dt) {
             this.updStun(dt)
         }
     }
+
+    soundManager.setListenerPosition(this.item.position());
+
     var camera = Camera.getCamera();
     if(camera != null) {
         var axis = camera.cameraDirection();
         var angle = getAngle(axis[0], axis[1]) - Math.PI / 2;
         var unitAxis = this.item.getAxisY();
-        setRotationAroundZAxis(server.getPlayerId(), angle);
+        var unitAngle = getAngle(unitAxis[0], unitAxis[1]);
+        if(Math.abs(unitAngle - Math.PI / 2 - angle) > 0.05) {
+            setRotationAroundZAxis(server.getPlayerId(), angle);
+        }
     }
 }
 Player.prototype.checkOutOfRing = function() {
@@ -181,7 +190,7 @@ Player.prototype.checkOutOfRing = function() {
                 this.animator.setAnim(this.animator.standState);
                 pos = this.item.position();
                 this.parabolaOnDead.execute(pos[0],pos[1],this.jumpPower/3, function () {
-                    server.sendToServer({type: "fail"});
+                    server.sendReliableToServer({type: "fail"});
                     controlManager.setControlEnabled(server.getPlayerId(), false);
                     sinkResolver.setMovingDown(false);
                     this.isFailed = true;
@@ -195,34 +204,35 @@ Player.prototype.checkOutOfRing = function() {
 
 Player.prototype.start = function() {
     server.initWithItem(DX.createItem("Sumo", 0, 0, 0));
-    PlaySound("music",true);
+
     sinkResolver.setPlayerId(server.getPlayerId());
     var that = this;
     this.item = DX.item(server.getPlayerId());
+    soundManager.playSound("music", this.item.position(), true, true);
     this.animator = new SumoAnimator(this.item);
-    this.item.onPropertyChanged("punched",function() { that.onPunched(); } );
-    this.item.onPropertyChanged("stunned",function() { that.onStunned(); } );
-    this.item.onPropertyChanged("buff",function() { that.onBuff() } );
+    PropertyUtils.onPropertyChanged(server.getPlayerId() + "#punched",function() { that.onPunched(); } );
+    PropertyUtils.onPropertyChanged(server.getPlayerId() + "#stunned",function() { that.onStunned(); } );
+    DX.log("subscribed to property: " + server.getPlayerId() + "#stunnded");
     //DX.focusOn(server.getPlayerId(), true);
     DX.setControlEnabled(false);
     Camera.focusOn(server.getPlayerId());
     this.forwardVector = this.item.getAxisY();
-    new ButtonReady(server.getPlayerId(),0.2,0.2,4, function (){
-        server.sendToServer({type: "ready"});
+    new ButtonReady(server.getPlayerId(),0.6,0.6,4, function (){
+        server.sendReliableToServer({type: "ready"});
     });
     DX.runLater(function(){
         DX.log("sent buttons to server");
         var ids = Button.getButtonIds();
-        server.sendToServer({type: "buttons", ids: ids});
+        server.sendReliableToServer({type: "buttons", ids: ids});
     }, 6);
     var ids = Button.getButtonIds();
-    server.sendToServer({type : "buttons", ids: ids});
+    server.sendReliableToServer({type : "buttons", ids: ids});
     playerCash = new ObjectCash(this);
 }
 
 Player.prototype.jump = function() {
     if(this.active && !this.jumpCD && !this.isFailed && !this.isFalling) {
-        PlaySound("jump",false);
+        soundManager.playSound("jump", this.item.position(), false, false);
         var that = this;
         that.animator.setAnim(that.animator.jumpState);
         this.jumpCD = true;
@@ -237,35 +247,29 @@ Player.prototype.jump = function() {
 }
 
 Player.prototype.stomp = function() {
-    PlaySound("land",false);
+    soundManager.playSound("land", this.item.position(), false, false);
     var listPlayersToPunch = [];
     var playersList = server.getPlayersList();
     for(i = 0; i < playersList.length; i++) {
         var enemy = DX.item(playersList[i]);
         if(enemy != null && playersList[i] != server.getPlayerId() &&
             this.item.distanceToItem(enemy) < this.stompRadius) {
-            listPlayersToPunch.push(enemy);
+            listPlayersToPunch.push(playersList[i]);
         }
     }
     for(i = 0; i < listPlayersToPunch.length; i++) {
-        listPlayersToPunch[i].setProperty("stunned", this.duration);
+        //listPlayersToPunch[i].setProperty("stunned", this.duration);
+        PropertyUtils.setProperty(listPlayersToPunch[i] + "#stunned", this.duration);
     }
     controlManager.setControlEnabled(server.getPlayerId(),true);
 }
 
-Player.prototype.onBuff = function() {
-    this.scale += 0.1;
-    this.strength += 3;
-    this.item.setScale(this.scale);
-    //call buff function
-    //call runLater, which will restore
-}
-
 Player.prototype.onStunned = function() {
+    DX.log("onStunned called");
     var that = this;
-    var duration = parseFloat(getProperty(that.item, "stunned"));
+    var duration = parseFloat(getProperty(DX, server.getPlayerId() + "#stunned"));
     if (duration > 0 && this.active) {
-        PlaySound("dizzy",false);
+        soundManager.playSound("dizzy", this.item.position(), false, false);
         var that = this;
         that.animator.setAnim(that.animator.stunnedState);
         this.active = false;
@@ -283,7 +287,7 @@ Player.prototype.updStun = function(dt) {
 
 Player.prototype.stunEnd = function() {
     this.active = true;
-    this.item.setProperty("stunned", -1);
+    //this.item.setProperty("stunned", -1);
     this.stunDuration = -1;
     this.atStunTime = 0;
     controlManager.setControlEnabled(server.getPlayerId(),true);
@@ -294,9 +298,9 @@ Player.prototype.stunEnd = function() {
  */
 Player.prototype.onPunched = function() {
     if(this.active || this.stunDuration > 0) {
-        PlaySound("receiveKick",false);
+        soundManager.playSound("receiveKick", this.item.position(), false, false);
         var that = this;
-        var params = (getProperty(that.item, "punched")).split(" ");
+        var params = (getProperty(DX, server.getPlayerId() + "#punched")).split(" ");
         var x = parseFloat(params[0]);
         var y = parseFloat(params[1]);
         var pow = parseFloat(params[2]);
@@ -320,7 +324,7 @@ Player.prototype.punch = function(enemy, devisor) {
         Math.sqrt(this.forwardVector[0] * this.forwardVector[0] + this.forwardVector[1] * this.forwardVector[1]) /
         Math.sqrt(x * x + y * y);
     if(Math.acos(angleCos)/Math.PI*this.degInPI < this.punchDeltaAngle) {
-        enemy.setProperty("punched", x + " " + y + " " + this.strength / devisor);
+        PropertyUtils.setProperty(enemy.id() + "#punched", x + " " + y + " " + this.strength / devisor);
     }
 }
 
@@ -359,9 +363,9 @@ Player.prototype.checkWhoIsPunched = function() {
             this.punch(listPlayersToPunch[i], listPlayersToPunch.length);
         }
         if(listPlayersToPunch.length > 0) {
-            PlaySound("successKick",false);
+            soundManager.playSound("successKick", this.item.position(), false, false);
         } else {
-            PlaySound("failKick",false);
+            soundManager.playSound("failKick", this.item.position(), false, false);
         }
     }
 }
@@ -382,14 +386,14 @@ Player.prototype.stop = function() {
     controlManager.setDirection(server.getPlayerId(), 0);
 }
 
-function movePlayer (itemId, dir, dt) {
-
+//function movePlayer (itemId, dir, dt) {
+Player.prototype.movePlayer  = function(/*itemId,*/ dir, dt) {
 
     var zeroVec = {};
     zeroVec[0] = 0.0; zeroVec[1] = 0.0; zeroVec[2] = 0.0;
 
-    const speed = 4.0;
-    var item = DX.item(itemId);
+    const speed = this.speed;
+    var item = DX.item(server.getPlayerId());
     if(item === null) return;
 
     var resDir = zeroVec;

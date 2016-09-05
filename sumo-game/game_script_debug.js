@@ -3,16 +3,20 @@
 #include "lib/heartbeat_wrapper.js"
 #include "food.js"
 #include "game_state.js"
+#include "Color.js"
+
+var foodCount = 3;
 
 function ServerInfo() {
-    this.food = null;
+    this.food = [];
+    for(server_info_i = 0; server_info_i < foodCount; server_info_i++) {
+        this.food.push(null);
+    }
     this.scene = null;
     this.columns = null;
     this.gameState = null;
-    //this.init = function() {
-    //    DX.log("called init of ServerInfo");
-    //    thisRef.gameState = new GameState();
-    //}
+    this.colorMap = null;
+    this.colorStack = null;
 }
 
 var info = server.getServerObjectFromClient(ServerInfo);
@@ -24,15 +28,13 @@ if(info == null || info.gameState.getGameState() == "waiting") {
 
 
     var player = new Player();
-    var food;
-    var foodsp = true;
+    var foodsp = [];
+    for(i = 0; i < foodCount; i++) {
+        foodsp.push(true);
+    }
 
     var serverInfo = null;
 
-
-    if (DX.setUnitAttachedToCamera) {
-        DX.setUnitAttachedToCamera(false);
-    }
 
 
 //DX.setHeartbeatInterval(0);
@@ -54,6 +56,14 @@ if(info == null || info.gameState.getGameState() == "waiting") {
                     DX.log("punch!!");
                     player.checkWhoIsPunched();
                     break;
+                case 5:
+                    DX.log("rotating");
+                    Camera.setRotationDelta(Math.PI / 2);
+                    break;
+                case 6:
+                    DX.log("rotating");
+                    Camera.setRotationDelta(-Math.PI / 2);
+                    break;
                 case 11:
                 case 12:
                 case 13:
@@ -71,7 +81,7 @@ if(info == null || info.gameState.getGameState() == "waiting") {
     });
 
     controlManager.moveControlledItem = function (itemId, direction) {
-        movePlayer(itemId, direction, server.getDt());
+        player.movePlayer(direction, server.getDt());
     }
 
 
@@ -80,13 +90,15 @@ if(info == null || info.gameState.getGameState() == "waiting") {
             isServerCreated = true;
             server.registerServerObject(new ServerInfo());
         }
+
         serverInfo = server.getServerObject(ServerInfo);
+
         if (serverInfo.gameState === null) {
             serverInfo.gameState = new GameState();
         }
         serverInfo.gameState.init(server);
         if(serverInfo.scene == null || DX.item(serverInfo.scene) === null) {
-            serverInfo.scene = DX.createItem("%%dff80a1a652caaf9b12bfa106255b85a21b348262ead9feec7c40470622be9f2", 0, 0, 0); //sumo arena
+            serverInfo.scene = DX.createItem("%%ffdbcebdf440742dc4eeeec4aeda03fb71623decf36e4f538ecf257bae4bc08a", 0, 0, 0); //sumo arena
         }
         foodFunc();
         colomns();
@@ -129,8 +141,9 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         }
     }
 
-    var foodFunc = function() {
+    foodFunc = function() {
         if (serverInfo.gameState.getGameState() != "playing") {
+            /*
             if (serverInfo.food !== null) {
                 var foodItem = DX.item(serverInfo.food.id);
                 if (foodItem != null) {
@@ -139,31 +152,60 @@ if(info == null || info.gameState.getGameState() == "waiting") {
                 serverInfo.food = null;
                 foodsp = true;
             }
+            */
+            DX.log("food non-playing");
+            for(i = 0; i < foodCount; i++) {
+                if(serverInfo.food[i] !== null) {
+                    var foodItem = DX.item(serverInfo.food[i].id);
+                    if (foodItem != null) {
+                        foodItem.remove();
+                    }
+                    serverInfo.food[i] = null;
+                    foodsp[i] = true;
+                }
+            }
             return;
         }
-        if (serverInfo.food == null && foodsp) {
-            DX.log("spawn init");
-            foodsp = false;
-            DX.runLater(function (dt) {
-                    DX.log("spawn");
-                    serverInfo.food = new FoodClass(scaleBuff, 1);
-                    serverInfo.food.init();
-                    DX.setProperty("food" + server.getPlayerId(), serverInfo.food.id);
+
+
+        for(food_i = 0; food_i < foodCount; food_i++) {
+            if (serverInfo.food[food_i] == null && foodsp[food_i]) {
+                DX.log("spawn init");
+                foodsp[food_i] = false;
+                var temp_food_i = food_i;
+                (function(i){
+                    DX.runLater(function (dt) {
+                            DX.log("food_i in food runLater: " + i);
+                            serverInfo.food[i] = new FoodClass(1);
+                            serverInfo.food[i].init();
+                        }
+                        , foodSpawnTime + Math.random() * foodSpawnTime / 2);
+                })(food_i);
+
+            } else {
+                //DX.log("else called for i: " + i);
+                //DX.log("food: " + JSON.stringify(serverInfo.food[i]));
+                if (serverInfo.food[food_i] != null) {
+                    DX.log("serverInfo.food[i] != null");
+                    if (!serverInfo.food[food_i].shouldRemove) {
+                        DX.log("i: " + food_i);
+                        DX.log("calling food update");
+                        serverInfo.food[food_i].update();
+                    }
+                    if (serverInfo.food[food_i].shouldRemove) {
+                        serverInfo.food[food_i] = null;
+                        DX.log("setting food to null");
+                        foodsp[food_i] = true;
+                    }
                 }
-                , foodSpawnTime);
-        } else if (serverInfo.food != null) {
-            if (!serverInfo.food.shouldRemove) {
-                serverInfo.food.update();
-            }
-            if (serverInfo.food.shouldRemove) {
-                serverInfo.food = null;
-                foodsp = true;
             }
         }
     }
 
-    server.clientReceiveCallback = function (msg) {
+    server.addClientReceiveCallback(function (msg) {
         if (msg.type == "teleport") {
+            player.parabolaOnJump.finishImmediately();
+            player.parabolaOnPunched.finishImmediately();
             player.item.teleport(msg.pos[0], msg.pos[1], msg.pos[2]);
             return;
         }
@@ -171,23 +213,51 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         if (msg.type == "playing") {
             player.item.teleport(msg.spawnPos[0], msg.spawnPos[1], 0);
             if(Camera.getCamera() !== null) {
-                Camera.getCamera().setBaseRotation(msg.bodyOrientation + Math.PI);
+                Camera.setBodyRotation(msg.bodyOrientation + Math.PI);
                 Camera.getCamera().setCameraAH(msg.bodyOrientation + Math.PI, -Math.PI / 6);
             }
         }
-
-    }
-
-    function scaleBuff(item) {
-        var onBuff = getProperty(item, "buff");
-        var onBuffVal;
-        if (onBuff == null) {
-            item.setProperty("buff", 0);
-        } else {
-            onBuffVal = parseInt(onBuff);
-            item.setProperty("buff", onBuffVal + 1);
+        if (msg.type == "buff") {
+            DX.log("buff: " + msg.func);
+            msg.func(player);
         }
-    }
+
+    });
+
+    server.addOnConnectCallback(function (id) {
+        if (server.getServerObject(ServerInfo) === null) {
+            isServerCreated = true;
+            server.registerServerObject(new ServerInfo());
+        }
+
+        info = server.getServerObject(ServerInfo);
+        if(info.colorMap == null) {
+            info.colorMap = {};
+            info.colorStack = [];
+            for(var i = 0; i < 8; i++) {
+                info.colorStack.push(i);
+            }
+        }
+
+        if(info.colorMap[id] == null) {
+            var c = info.colorStack.pop();
+            info.colorMap[id] = c;
+            var color = colors[c];
+            var it = DX.item(id);
+            it.setColor(color.r, color.g, color.b);
+        }
+
+        DX.log(info.colorStack);
+    });
+
+    server.addOnDisconnectCallback(function (id) {
+        info = server.getServerObject(ServerInfo);
+        DX.log(info.colorMap[id]);
+        if(info != null && info.colorMap!=null) {
+            info.colorStack.push(info.colorMap[id]);
+            info.colorMap[id] = null;
+        }
+    });
 }
 
 

@@ -23,7 +23,7 @@ SumoAnimator.prototype.stopWalking = function(active) {
         this.setAnim(this.standState);
     }
     if(active && this.currentAnimState < this.pushState) {
-        this.item.animateToState("Walk");
+        //----------this.item.animateToState("Walk");
         //this.item.animateToStateContinuous("Walk");
     }
 }
@@ -60,7 +60,11 @@ SumoAnimator.prototype.setAnim = function(anim) {
 
 SumoAnimator.prototype.walkAnim = function() {
     var classThis = this;
-    classThis.item.playIdleAnimation("Walk");
+    //--------------------classThis.item.playIdleAnimation("Walk");
+    classThis.item.animateToState("Walk");
+    classThis.item.onFinishAnimation(function () {
+        classThis.setAnim(classThis.standState);
+    });
 }
 
 SumoAnimator.prototype.standAnim = function() {

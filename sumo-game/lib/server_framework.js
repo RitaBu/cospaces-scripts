@@ -25,29 +25,52 @@ var ServerFramework = function() {
   this.onServerTick = null;
   this.onFirstServerTick = null;
   this.onClientTick = null;
-  this.serverReceiveCallback = null;
-  this.clientReceiveCallback = null;
-  this.onPlayerConnected = null;
-  this.onPlayerDisconnected = null;
+  //this.onPlayerConnected = null;
+  //this.onPlayerDisconnected = null;
   this.onFrame = null;
-  var serverCheckPeriod = 20.0;
-  var serverCheckTime = 0.0;
+ 
   var dt = 1.0 / 45.0; //should be dynamycally updated
-  var objectGroupsRefreshPeriod = 0.2;
-  var objectGroupsRefreshTime = 0.0;
+  
   var localTime = 0;
   var frameLocalTime = 0;
   var thisRef = this;
   var isServer = false;
+  
+  var serverReceiveCallbackList = [];
+  var clientReceiveCallbackList = [];
+  var onDisconnectedCallbackList = [];
+  var onConnectedCallbackList = [];
 
+  //messaging variables
+
+  var clientLock = false;
+  var clientReliableMessagesList = [];
+  var clientUnreliableMessage = null;
+  function ServerMessageData(argId) {
+    this.id = argId;
+    this.lock = false
+    this.reliableMessagesList = [];
+    this.unreliableMessage = null;
+  }
+
+  var serverMessageMap = {};
+  
+  //time variables
+  
   var playerUpdatePeriod = 2.0;
   var playerCheckPeriod = 15.0;
   var playerUpdateTime = 0.0;
   var playerCheckTime = 0.0;
 
+  var serverCheckPeriod = 20.0;
+  var serverCheckTime = 0.0;
+  
   var serverUpdateTime = 0.0;
   var serverUpdatePeriod = 2.0;
 
+  var objectGroupsRefreshPeriod = 0.2;
+  var objectGroupsRefreshTime = 0.0;
+  
 //server variables:
   var localPlayers = {};
   var objectGroups = {};
@@ -103,9 +126,10 @@ var ServerFramework = function() {
 
   var removePlayer = function(playerID) {
     DX.log("removePlayer called");
-    if(thisRef.onPlayerDisconnected !== null) {
-      thisRef.onPlayerDisconnected(playerID);
-    }
+    //if(thisRef.onPlayerDisconnected !== null) {
+    //  thisRef.onPlayerDisconnected(playerID);
+    //}
+    callOnDisconnectedCallbacks(playerID);
     var playersList = thisRef.getPlayersList();
     var newPlayersList = [];
     for(i = 0; i < playersList.length; i++) {
@@ -131,13 +155,44 @@ var ServerFramework = function() {
   }
 
   var serverCounter = 0;
+  
+  var callServerReceiveFunctions = function(id, message) {
+    for(server_callback_i = 0; server_callback_i < serverReceiveCallbackList.length; server_callback_i++) {
+      serverReceiveCallbackList[server_callback_i](id, message);
+    }
+  }
+
+  var callClientReceiveFunctions = function(message) {
+    for(client_callback_i = 0; client_callback_i < clientReceiveCallbackList.length; client_callback_i++) {
+      clientReceiveCallbackList[client_callback_i](message);
+    }
+  }
+  
+  var callOnConnectedCallbacks = function(id) {
+    for(on_connected_i = 0; on_connected_i < onConnectedCallbackList.length; on_connected_i++) {
+      onConnectedCallbackList[on_connected_i](id);
+    }
+  }
+  
+  var callOnDisconnectedCallbacks = function(id) {
+    for(on_disconnected_i = 0; on_disconnected_i < onDisconnectedCallbackList.length; on_disconnected_i++) {
+      onDisconnectedCallbackList[on_disconnected_i](id);
+    }
+  }
 
   var subscribeToPlayer = function(id) {
     subscribedPlayers[id] = id;
     PropertyUtils.onPropertyChanged(id + "#message_receive", function(new_val){
-      if(thisRef.serverReceiveCallback !== null && isServer) {
+      if(isServer) {
         var obj = Serializer.parse(String(new_val));
-        thisRef.serverReceiveCallback(obj.id, obj.message);
+        callServerReceiveFunctions(obj.id, obj.message);
+        PropertyUtils.setProperty(id + "#message_receive_approve", "kekeke");
+      }
+    });
+    PropertyUtils.onPropertyChanged(id + "#message_approve", function(new_val){
+      if(isServer) {
+        serverMessageMap[id].lock = false;
+        sendMessageToClient(serverMessageMap[id]);
       }
     });
   }
@@ -174,9 +229,10 @@ var ServerFramework = function() {
       PropertyUtils.setPropertyWithCompare("next_player", null);
       if(nextPlayer !== null && !checkPlayerID(nextPlayer)) {
         
-        if(thisRef.onPlayerConnected !== null) {
-          thisRef.onPlayerConnected(nextPlayer);
-        }
+        //if(thisRef.onPlayerConnected !== null) {
+        //  thisRef.onPlayerConnected(nextPlayer);
+        //}
+        callOnConnectedCallbacks(nextPlayer);
 
         if(getProperty(DX, "players_list") === null) {
 
@@ -266,20 +322,107 @@ var ServerFramework = function() {
 
   //COMMUNICATON FUNCTIONS
 
+  var sendMessageToServer = function() {};
+  var sendMessageToClient = function(serverMessageData) {};
+
   this.sendToServer = function(message) {
-    var sealedMessage = {};
-    sealedMessage.id = thisRef.getPlayerId();
-    sealedMessage.message = message;
-    sealedMessage.timeStamp = frameLocalTime;
-    PropertyUtils.setProperty(thisRef.getPlayerId() + "#message_receive", Serializer.serialize(sealedMessage));
+    clientUnreliableMessage = message;
+    if(!clientLock) {
+      sendMessageToServer();
+    }
+  }
+  
+  this.sendReliableToServer = function(message) {
+    clientReliableMessagesList.push(message);
+    if(!clientLock) {
+      sendMessageToServer();
+    }
+  }
+  
+  
+  this.addServerReceiveCallback = function(serverReceiveCallback) {
+    serverReceiveCallbackList.push(serverReceiveCallback);
+  }
+  
+  this.addClientReceiveCallback = function(clientReceiveCallback) {
+    clientReceiveCallbackList.push(clientReceiveCallback);
+  }
+  
+  this.addOnDisconnectCallback = function(callback) {
+    onDisconnectedCallbackList.push(callback);
+  }
+  
+  this.addOnConnectCallback = function(callback) {
+    onConnectedCallbackList.push(callback);
   }
 
   this.sendToClient = function(id, message) {
-    var sealedMessage = {};
-    sealedMessage.message = message;
-    sealedMessage.timeStamp = frameLocalTime;
-    PropertyUtils.setProperty(id + "#message", Serializer.serialize(sealedMessage));
+    if(!(id in serverMessageMap)) {
+      serverMessageMap[id] = new ServerMessageData(id);
+    }
+    serverMessageMap[id].unreliableMessage = message;
+    if(!serverMessageMap[id].lock) {
+      sendMessageToClient(serverMessageMap[id]);
+    }
   }
+  
+  this.sendReliableToClient = function(id, message) {
+    if(!(id in serverMessageMap)) {
+      serverMessageMap[id] = new ServerMessageData(id);
+    }
+    serverMessageMap[id].reliableMessagesList.push(message);
+    if(!serverMessageMap[id].lock) {
+      sendMessageToClient(serverMessageMap[id]);
+    }
+  }
+
+  sendMessageToServer = function() {
+    var message = null;
+    var isReliable = false;
+    if(clientReliableMessagesList.length > 0) {
+      message = clientReliableMessagesList.shift();
+      isReliable = true;
+    } else {
+      message = clientUnreliableMessage;
+      clientUnreliableMessage = null;
+    }
+    if(message != null) {
+      var sealedMessage = {};
+      sealedMessage.id = thisRef.getPlayerId();
+      sealedMessage.message = message;
+      sealedMessage.timeStamp = frameLocalTime;
+      sealedMessage.isReliable = isReliable;
+      PropertyUtils.setProperty(thisRef.getPlayerId() + "#message_receive", Serializer.serialize(sealedMessage));
+      if(isReliable) {
+        clientLock = true;
+      }
+    }
+  }
+
+  sendMessageToClient = function(serverMessageData) {
+    var message = null;
+    var isReliable = false;
+    if(serverMessageData.reliableMessagesList.length > 0) {
+      message = serverMessageData.reliableMessagesList.shift();
+      isReliable = true;
+    } else {
+      message = serverMessageData.unreliableMessage;
+      serverMessageData.unreliableMessage = null;
+    }
+    if(message != null) {
+      var sealedMessage = {};
+      sealedMessage.message = message;
+      sealedMessage.timeStamp = frameLocalTime;
+      sealedMessage.isReliable = isReliable;
+      PropertyUtils.setProperty(serverMessageData.id + "#message", Serializer.serialize(sealedMessage));
+      if(isReliable) {
+        serverMessageData.lock = true;
+      }
+    }
+  }
+
+
+
 
   //SERVER OBJECTS
 
@@ -356,23 +499,22 @@ var ServerFramework = function() {
       frameFunction(argDt);
       dt = argDt;
     });
-
-
-    //DX.runLater(serverFunction, dt);
-    //DX.runLater(serverCheckFunction, dt);
-    //DX.runLater(frameFunction, dt);
-
+    
     if(thisRef.onServerTick === null) DX.log("onServerTick is null, so there is no server code. You could set the callback function.");
     if(thisRef.onFrame === null) DX.log("onFrame is null");
     if(thisRef.onClientTick === null) DX.log("onClientTick is null");
     if(thisRef.onPlayerDisconnected === null) DX.log("onPlayerDisconnected is null");
 
-
     PropertyUtils.onPropertyChanged(thisPlayerId + "#message", function(new_val){
-      if(thisRef.clientReceiveCallback !== null) {
-        var obj = Serializer.parse(String(new_val));
-        thisRef.clientReceiveCallback(obj.message);
-      }
+      var obj = Serializer.parse(String(new_val));
+      //thisRef.clientReceiveCallback(obj.message);
+      callClientReceiveFunctions(obj.message);
+      PropertyUtils.setProperty(thisPlayerId + "#message_approve", "kekeke");
+    });
+
+    PropertyUtils.onPropertyChanged(thisPlayerId + "#message_receive_approve", function(new_val) {
+      clientLock = false;
+      sendMessageToServer();
     });
   }
 

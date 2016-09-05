@@ -20,14 +20,14 @@ var playerModels = {};
 
 
 
-server.onPlayerConnected = function(id) {
+server.addOnConnectCallback(function(id) {
   playerModels[id] = DX.createItem("Sumo", 0, 0, 0);
   var item = DX.item(playerModels[id]);
   item.clearPhysicsBody();
   item.setColor(255, 0, 255);
-}
+});
 
-server.onPlayerDisconnected = function(id) {
+server.addOnDisconnectCallback(function(id) {
   var playerItem = DX.item(id);
   if(playerItem != null) {
     playerItem.clearPhysicsBody();
@@ -36,7 +36,7 @@ server.onPlayerDisconnected = function(id) {
   if(playerModel === null) return;
   playerModel.remove();
   //control.unregisterItemId(id);
-}
+});
 
 
 
@@ -57,15 +57,15 @@ server.onServerTick = function() {
 
 
 
-server.clientReceiveCallback = function(message) {
+server.addClientReceiveCallback(function(message) {
   if(message.type === "position") {
     var localBody = DX.item(message.body);
     localBody.nonDiscreteTeleport(message.pos[0], message.pos[1], message.pos[2]);
   }
 
-}
+});
 
-server.serverReceiveCallback = function(id, message) {
+server.addServerReceiveCallback(function(id, message) {
   var body = DX.item(id);
   if(body === null) return;
   switch(message.cmd) {
@@ -82,7 +82,7 @@ server.serverReceiveCallback = function(id, message) {
       body.setVelocity(3, 0, 1);
       break;
   }
-}
+});
 
 DX.command(function(cmd) {
   server.sendToServer({ cmd: parseInt(cmd), type : "command"});

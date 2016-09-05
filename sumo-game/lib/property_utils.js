@@ -31,7 +31,7 @@ var PropertyUtils = (function(){
   function PropertyData(name, callback) {
     this.name = name;
     this.callback = callback;
-    var propertyTime = DX.getProperty(name + "#time");
+    var propertyTime = DX.getProperty(name + "#approve_time");
     if(propertyTime === null) {
       this.time = -1;
     } else {
@@ -62,6 +62,7 @@ var PropertyUtils = (function(){
 
       if(time !== callbackMap[prop_name].time) {
         callbackMap[prop_name].time = time;
+        DX.setProperty(prop_name + "#approve_time", time);
         callbackMap[prop_name].callback(DX.getProperty(prop_name));
       }
     }
@@ -74,8 +75,14 @@ var PropertyUtils = (function(){
   var setPropertyWithCompare = function (name, value) {
     var lastValue = DX.getProperty(name);
     if(lastValue === null && value != null || String(lastValue) !== String(value)) {
-      DX.log("setting property " + name);
       DX.setProperty(name, value);
+    }
+  }
+
+  var ndTeleportWithCompare = function (item, x, y, z) {
+    var pos = item.position();
+    if(pos[0] != x || pos[1] != y || pos[2] != z) {
+      item.nonDiscreteTeleport(x, y, z);
     }
   }
   
@@ -83,7 +90,8 @@ var PropertyUtils = (function(){
     onPropertyChanged : onPropertyChanged,
     setProperty : setProperty,
     updateProperties : function() {propFunc(0.01); },
-    setPropertyWithCompare : setPropertyWithCompare
+    setPropertyWithCompare : setPropertyWithCompare,
+    ndTeleportWithCompare : ndTeleportWithCompare
   };
 })();
 
