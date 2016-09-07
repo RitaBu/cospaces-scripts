@@ -8,10 +8,12 @@ var Helper = {
 // Classes: Host, Animal, Sound, Game
 function Host(item) {
     this.item = item;
+    this.isClickable = true;
     this.welcomeMessage = 'Hallo! Kannst du mir sagen, welches Tiergeräusch zu welchem Tier gehört? ' +
         'Du hörst gleich ein Geräusch. ' +
         'Tippe einfach auf das dazugehörige Tier. ' +
-        'Bist du bereit? Dann lass uns spielen!';
+        'Bist du bereit? Klick auf mich und lass uns spielen!';
+    this.nextSoundMessage = 'Super! Bereit für das nächste Tiergeräusch?';
 
     this.initialize = function() {
         this.bindEvents();
@@ -22,8 +24,11 @@ function Host(item) {
         var self = this;
 
         this.item.activate(function() {
-            self.item.say('');
-            game.playRandomSound();
+            if(self.isClickable) {
+                self.item.say('');
+                self.isClickable = false;
+                game.playRandomSound();
+            }
         });
     };
 
