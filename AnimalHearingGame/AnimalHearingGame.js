@@ -13,7 +13,6 @@ function Host(item) {
         'Du hörst gleich ein Geräusch. ' +
         'Tippe einfach auf das dazugehörige Tier. ' +
         'Bist du bereit? Klick auf mich und lass uns spielen!';
-    this.nextSoundMessage = 'Super! Bereit für das nächste Tiergeräusch?';
 
     this.initialize = function() {
         this.bindEvents();
