@@ -85,6 +85,7 @@ function Game(host, animals, sounds) {
     this.animals = animals;
     this.sounds = sounds;
     this.currentSoundId;
+    this.lastSoundId = 'mouse';
 
     this.initialize = function() {
         var self = this;
@@ -102,10 +103,18 @@ function Game(host, animals, sounds) {
         return this.currentSoundId;
     };
 
+    this.getLastSoundId = function() {
+        return this.lastSoundId;
+    };
+
     this.playRandomSound = function() {
-        var randomIndex = Helper.getRandomInt(0, this.sounds.length);
-        this.currentSoundId = this.sounds[randomIndex].getSoundId();
+        do {
+            var randomIndex = Helper.getRandomInt(0, this.sounds.length);
+            this.currentSoundId = this.sounds[randomIndex].getSoundId();
+        } while(this.getCurrentSoundId() === this.getLastSoundId());
+
         this.sounds[randomIndex].playSound();
+        this.lastSoundId = this.getCurrentSoundId();
     };
 
     this.removeAllSpeechBubbles = function() {
