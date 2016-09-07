@@ -13,6 +13,7 @@ function Host(item) {
         'Du hörst gleich ein Geräusch. ' +
         'Tippe einfach auf das dazugehörige Tier. ' +
         'Bist du bereit? Klick auf mich und lass uns spielen!';
+    this.nextTaskMessage = 'Super! Bereit für das nächste Tiergeräusch?';
 
     this.initialize = function() {
         this.bindEvents();
@@ -26,6 +27,7 @@ function Host(item) {
             if(self.isClickable) {
                 self.item.say('');
                 self.isClickable = false;
+                game.removeAllSpeechBubbles();
                 game.playRandomSound();
             }
         });
@@ -55,7 +57,8 @@ function Animal(animalId, item) {
             game.removeAllSpeechBubbles();
             if(game.isRightChoice(self.getAnimalId())) {
                 self.item.say('Richtig!');
-                game.playRandomSound();
+                host.showMessage(host.nextTaskMessage);
+                host.isClickable = true;
             } else {
                 self.item.say('Leider falsch. Versuche es nochmal!');
             }
