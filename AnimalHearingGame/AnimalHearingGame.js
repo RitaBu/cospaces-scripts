@@ -134,27 +134,17 @@ function Game(host, animals, sounds) {
 }
 
 // Initialize application.
-var host1 = DX.item('FJNpNV30CN');
-var animal1 = DX.item('9np5tnExpc'); // Elephant
-var animal2 = DX.item('VIkx0xO2XE'); // Dog
-var animal3 = DX.item('RbGraO0IGj'); // Cat
-var animal4 = DX.item('xVXDONVw9d'); // Bear
-var animal5 = DX.item('PTIQD6TUWU'); // Camel
-var animal6 = DX.item('EOBZ04u457'); // Horse
-var animal7 = DX.item('LQMTggrwRe'); // Mouse
-var animal8 = DX.item('kbSkFnaMZ5'); // Lion
-
-var host = new Host(host1);
+var host = new Host(DX.item('FJNpNV30CN'));
 
 var animals = [
-    new Animal('elephant', animal1),
-    new Animal('dog', animal2),
-    new Animal('cat', animal3),
-    new Animal('bear', animal4),
-    new Animal('camel', animal5),
-    new Animal('horse', animal6),
-    new Animal('mouse', animal7),
-    new Animal('lion', animal8)
+    new Animal('elephant', DX.item('9np5tnExpc')),
+    new Animal('dog', DX.item('VIkx0xO2XE')),
+    new Animal('cat', DX.item('RbGraO0IGj')),
+    new Animal('bear', DX.item('xVXDONVw9d')),
+    new Animal('camel', DX.item('PTIQD6TUWU')),
+    new Animal('horse', DX.item('EOBZ04u457')),
+    new Animal('mouse', DX.item('LQMTggrwRe')),
+    new Animal('lion', DX.item('kbSkFnaMZ5'))
 ];
 
 var sounds = [
