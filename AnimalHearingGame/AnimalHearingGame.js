@@ -138,6 +138,7 @@ var animal4 = DX.item('xVXDONVw9d'); // Bear
 var animal5 = DX.item('PTIQD6TUWU'); // Camel
 var animal6 = DX.item('EOBZ04u457'); // Horse
 var animal7 = DX.item('LQMTggrwRe'); // Mouse
+var animal8 = DX.item('b5k07us0sK'); // Lion
 
 var host = new Host(host1);
 
@@ -148,7 +149,8 @@ var animals = [
     new Animal('bear', animal4),
     new Animal('camel', animal5),
     new Animal('horse', animal6),
-    new Animal('mouse', animal7)
+    new Animal('mouse', animal7),
+    new Animal('lion', animal8)
 ];
 
 var sounds = [
@@ -158,7 +160,8 @@ var sounds = [
     new Sound('bear', 'df6b524bd6d05220d228acdffc2f12b47974fe1a4010d486168874ada178bf49'),
     new Sound('camel', 'a312a82af35e65faa83cd3ec17f0443958cd5be23c9a66738d7e4fc17087193c'),
     new Sound('horse', 'bd0166e10f6cb7fd5676d348ce6a3027f0dedea15a7ebb5e638c1c68f8d20be1'),
-    new Sound('mouse', '23760f9ad986a00e2319466c29e5982823796e0b695ded5ebcfc3bf07ad3d40e')
+    new Sound('mouse', '23760f9ad986a00e2319466c29e5982823796e0b695ded5ebcfc3bf07ad3d40e'),
+    new Sound('lion', 'be20e7e83b0074097d87337d36fd38ad2e14e18a5c090b487255c4e0eaac1444')
 ];
 
 var game = new Game(host, animals, sounds);
