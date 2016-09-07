@@ -138,7 +138,7 @@ var animal4 = DX.item('xVXDONVw9d'); // Bear
 var animal5 = DX.item('PTIQD6TUWU'); // Camel
 var animal6 = DX.item('EOBZ04u457'); // Horse
 var animal7 = DX.item('LQMTggrwRe'); // Mouse
-var animal8 = DX.item('b5k07us0sK'); // Lion
+var animal8 = DX.item('kbSkFnaMZ5'); // Lion
 
 var host = new Host(host1);
 
