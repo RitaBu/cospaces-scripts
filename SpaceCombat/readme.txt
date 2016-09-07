@@ -1,0 +1,1 @@
+Change NUMBER_OF_PLAYERS constant to have multiplayer( =2)  or singleplayer(=1) game. 
