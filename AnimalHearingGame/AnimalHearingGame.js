@@ -116,11 +116,7 @@ function Game(host, animals, sounds) {
     };
 
     this.isRightChoice = function(animalId) {
-        if(this.getCurrentSoundId() === animalId) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getCurrentSoundId() === animalId;
     };
 }
 
