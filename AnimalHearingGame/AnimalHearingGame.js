@@ -61,6 +61,7 @@ function Animal(animalId, item) {
             game.removeAllSpeechBubbles();
             if(game.isRightChoice(self.getAnimalId())) {
                 self.item.say('Richtig!');
+                host.sayLoud(new Sound('correct', '729d3c7b54e2511e0d7b16352b869f74defb64d9d7448620ecd7fba4c45fbe94'));
                 host.showMessage(host.nextTaskMessage);
                 host.isClickable = true;
             } else {
