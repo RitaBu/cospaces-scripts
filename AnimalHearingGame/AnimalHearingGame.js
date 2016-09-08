@@ -37,6 +37,10 @@ function Host(item) {
         this.item.say(message);
     };
 
+    this.sayLoud = function(sound) {
+        sound.playSound();
+    };
+
     this.removeSpeechBubble = function() {
         this.item.say('');
     };
@@ -61,6 +65,7 @@ function Animal(animalId, item) {
                 host.isClickable = true;
             } else {
                 self.item.say('Leider falsch. Versuche es nochmal!');
+                host.sayLoud(new Sound('not_correct', 'e930c4b7700aa3d7a1d0d4da9f275f090c0b4bcc50356f5d32c309bd10bcd5ce'));
             }
         });
     };
