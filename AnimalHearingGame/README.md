@@ -9,3 +9,12 @@
 ## User
 
 manuela@delightex.com
+
+## How to play the game
+
+1. Start the game in script mode.
+2. Go into VR or gyroscope mode.
+3. Click on the host (woman) to hear an animal sound.
+4. Now you have to select the belonging animal. You have unlimited attempts.
+5. If you have chosen the right animal click on the host (woman) to hear another animal sound.
+6. Repeat.
