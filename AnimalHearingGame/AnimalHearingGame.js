@@ -61,12 +61,11 @@ function Animal(animalId, item) {
             game.removeAllSpeechBubbles();
             if(game.isRightChoice(self.getAnimalId())) {
                 self.item.say('Richtig!');
-                host.sayLoud(new Sound('correct', '729d3c7b54e2511e0d7b16352b869f74defb64d9d7448620ecd7fba4c45fbe94'));
+                host.sayLoud(game.currentSoundObj);
                 host.showMessage(host.nextTaskMessage);
                 host.isClickable = true;
             } else {
                 self.item.say('Leider falsch. Versuche es nochmal!');
-                host.sayLoud(new Sound('not_correct', 'e930c4b7700aa3d7a1d0d4da9f275f090c0b4bcc50356f5d32c309bd10bcd5ce'));
             }
         });
     };
@@ -97,7 +96,8 @@ function Game(host, animals, sounds) {
     this.host = host;
     this.animals = animals;
     this.sounds = sounds;
-    this.currentSoundId;
+    this.currentSoundId = '';
+    this.currentSoundObj = {};
     this.lastSoundId = 'mouse';
 
     this.initialize = function() {
@@ -123,6 +123,7 @@ function Game(host, animals, sounds) {
     this.playRandomSound = function() {
         do {
             var randomIndex = Helper.getRandomInt(0, this.sounds.length);
+            this.currentSoundObj = this.sounds[randomIndex];
             this.currentSoundId = this.sounds[randomIndex].getSoundId();
         } while(this.getCurrentSoundId() === this.getLastSoundId());
 
