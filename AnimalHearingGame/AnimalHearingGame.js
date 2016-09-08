@@ -60,11 +60,8 @@ function Animal(animalId, item) {
         this.item.activate(function() {
             game.removeAllSpeechBubbles();
             if(game.isRightChoice(self.getAnimalId())) {
-                host.sayLoud(new Sound('correct', '729d3c7b54e2511e0d7b16352b869f74defb64d9d7448620ecd7fba4c45fbe94'));
-                setTimeout(function() {
-                    host.sayLoud(new Sound('try_another', '4754000a909e53bff10c57c0fd931a43615fa57987a5e89b3c78202a52009d3c'));
-                }, 1800);
                 self.item.say('Richtig!');
+                host.sayLoud(new Sound('correct', '729d3c7b54e2511e0d7b16352b869f74defb64d9d7448620ecd7fba4c45fbe94'));
                 host.showMessage(host.nextTaskMessage);
                 host.isClickable = true;
             } else {
