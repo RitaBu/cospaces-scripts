@@ -58,14 +58,16 @@ function Animal(animalId, item) {
         var self = this;
 
         this.item.activate(function() {
-            game.removeAllSpeechBubbles();
-            if(game.isRightChoice(self.getAnimalId())) {
-                self.item.say('Richtig!');
-                host.sayLoud(game.currentSoundObj);
-                host.showMessage(host.nextTaskMessage);
-                host.isClickable = true;
-            } else {
-                self.item.say('Leider falsch. Versuche es nochmal!');
+            if(!host.isClickable) {
+                game.removeAllSpeechBubbles();
+                if(game.isRightChoice(self.getAnimalId())) {
+                    self.item.say('Richtig!');
+                    host.sayLoud(game.currentSoundObj);
+                    host.showMessage(host.nextTaskMessage);
+                    host.isClickable = true;
+                } else {
+                    self.item.say('Leider falsch. Versuche es nochmal!');
+                }
             }
         });
     };
