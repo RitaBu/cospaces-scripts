@@ -37,7 +37,6 @@ var modeUnit = function () {
       }
     }
   });
-
 };
 
 
@@ -97,7 +96,6 @@ var Scientist = function (x, y, price, model, step, cname, name) {
       temp.obj.say("Price for update is " + temp.price);
       temp.obj.think("Current coefficient is " + coef[temp.cname]);
     }
-
   })
 };
 
@@ -126,7 +124,6 @@ function toBattle() {
     }
     un.remove();
   }
-
 }
 
 function battler() {
@@ -207,7 +204,6 @@ function battler() {
     lasthp1 = 0;
     lasthp2 = 0;
   }
-
 };
 
 var messages = ["Click me to start game"];
@@ -331,7 +327,6 @@ messageCube.activate(function () {
   }
 });
 
-
 var str1 = DX.createPerson("MASCULINE", "ADULT", 0, 2 * playerCoef);
 
 var units = new unitsService("Man", 0, 2 * playerCoef, 1000, 1000);
@@ -368,82 +363,82 @@ money = (citizens * coef.inc / 100) * 5;
 var timer = 0;
 
 DX.heartbeat(
-  function (dt) {
-    gamePhase = DX.getProperty("Phase");
-    DX.log(gamePhase);
-    if (beginTime === 0) {
-      beginTime = dt;
+    function (dt) {
+      gamePhase = DX.getProperty("Phase");
+      DX.log(gamePhase);
+      if (beginTime === 0) {
+        beginTime = dt;
+        prevDt = dt;
+      }
+      var realDt = dt - prevDt;
       prevDt = dt;
-    }
-    var realDt = dt - prevDt;
-    prevDt = dt;
-    if (gamePhase == "battle") {
-      if (setInBattlePhase == false) {
-        timer = 0;
-        setInRecoveryPhase = false;
-        DX.setProperty("realC" + player, myUnits.length);
-        DX.setProperty("coef.bat" + player, coef.bat);
-        for (var i = myUnits.length; i > 0 && i > myUnits.length - 10; i--) {
-          var x = myUnits.length - i;
-          myUnits[i - 1].moveTo(x, 0.5 * playerCoef);
-        }
-        setInBattlePhase = true;
-        isBattle = (DX.getProperty("mode1") == "attack") || (DX.getProperty("mode2") == "attack");
-      }
-      if (isBattle) {
-        if (player == 1) {
-          battlePhase.plus(realDt);
-        }
-        toBattle();
-      } else {
-        defPhase.plus(realDt);
-      }
-    } else if (gamePhase == "invasion") {
-      if (setInInvasionPhase == false) {
-        var c = myUnits.length;
-        if (c > 0 && (DX.getProperty("mode" + player) == "attack")) {
-          for (var i = 0; i < c; i++) {
-            myUnits[i].moveTo(0, -10 * playerCoef);
+      if (gamePhase == "battle") {
+        if (setInBattlePhase == false) {
+          timer = 0;
+          setInRecoveryPhase = false;
+          DX.setProperty("realC" + player, myUnits.length);
+          DX.setProperty("coef.bat" + player, coef.bat);
+          for (var i = myUnits.length; i > 0 && i > myUnits.length - 10; i--) {
+            var x = myUnits.length - i;
+            myUnits[i - 1].moveTo(x, 0.5 * playerCoef);
           }
-          var cit = DX.getProperty("citizens" + (3 - player));
-          cit -= c * coef.bat * 20 * 1000;
-          DX.setProperty("citizens" + (3 - player), cit);
+          setInBattlePhase = true;
+          isBattle = (DX.getProperty("mode1") == "attack") || (DX.getProperty("mode2") == "attack");
         }
-        setInInvasionPhase = true;
-        setInRecoveryPhase = false;
-      }
-      citizens = parseInt(DX.getProperty("citizens" + player));
-      myHouse.update(citizens, money);
-      invPhase.plus(realDt);
-    } else if (gamePhase == "recovery") {
-      if (setInRecoveryPhase == false) {
-        setInBattlePhase = false;
-        setInInvasionPhase = false;
-        var c = myUnits.length;
-        if (c > 0) {
-          for (var i = 0; i < c; i++) {
-            myUnits[i].moveTo(units.x + units.x / units.l * (i + 1) / 10 + units.nx * ((i + 1) % 10 - 5), units.y + units.y / units.l * (i + 1) / 10 + units.ny * ((i + 1) % 10 - 5), 0);
+        if (isBattle) {
+          if (player == 1) {
+            battlePhase.plus(realDt);
           }
+          toBattle();
+        } else {
+          defPhase.plus(realDt);
+        }
+      } else if (gamePhase == "invasion") {
+        if (setInInvasionPhase == false) {
+          var c = myUnits.length;
+          if (c > 0 && (DX.getProperty("mode" + player) == "attack")) {
+            for (var i = 0; i < c; i++) {
+              myUnits[i].moveTo(0, -10 * playerCoef);
+            }
+            var cit = DX.getProperty("citizens" + (3 - player));
+            cit -= c * coef.bat * 20 * 1000;
+            DX.setProperty("citizens" + (3 - player), cit);
+          }
+          setInInvasionPhase = true;
+          setInRecoveryPhase = false;
         }
         citizens = parseInt(DX.getProperty("citizens" + player));
-        citizens = parseInt(citizens * coef.citInc);
-        money += parseInt(citizens * coef.inc / 100);
-        units.obj.say("Army supply " + (200 * myUnits.length));
-        money -= parseInt(myUnits.length * 200);
+        myHouse.update(citizens, money);
+        invPhase.plus(realDt);
+      } else if (gamePhase == "recovery") {
+        if (setInRecoveryPhase == false) {
+          setInBattlePhase = false;
+          setInInvasionPhase = false;
+          var c = myUnits.length;
+          if (c > 0) {
+            for (var i = 0; i < c; i++) {
+              myUnits[i].moveTo(units.x + units.x / units.l * (i + 1) / 10 + units.nx * ((i + 1) % 10 - 5), units.y + units.y / units.l * (i + 1) / 10 + units.ny * ((i + 1) % 10 - 5), 0);
+            }
+          }
+          citizens = parseInt(DX.getProperty("citizens" + player));
+          citizens = parseInt(citizens * coef.citInc);
+          money += parseInt(citizens * coef.inc / 100);
+          units.obj.say("Army supply " + (200 * myUnits.length));
+          money -= parseInt(myUnits.length * 200);
 
-        setInRecoveryPhase = true;
-      }
-      if (player == 2) {
-        timer += realDt;
-        messageCube.teleport(0, 0, 2.5);
-        messageCube.say(timer);
-        if (timer > 25) {
-          DX.setProperty("Phase", "battle");
-          messageCube.teleport(0, 0, 20);
+          setInRecoveryPhase = true;
         }
+        if (player == 2) {
+          timer += realDt;
+          messageCube.teleport(0, 0, 2.5);
+          messageCube.say(timer);
+          if (timer > 25) {
+            DX.setProperty("Phase", "battle");
+            messageCube.teleport(0, 0, 20);
+          }
+        }
+        myHouse.update(citizens, money);
+        DX.setProperty("citizens" + player, citizens);
       }
-      myHouse.update(citizens, money);
-      DX.setProperty("citizens" + player, citizens);
     }
-
-  });
+);
