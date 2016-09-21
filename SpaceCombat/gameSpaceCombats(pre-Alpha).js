@@ -80,12 +80,12 @@ function vecToQuat(vec, angl) {
 }
 
 
-var createEn = function (enm, slot, bending) {
+var createEn = function(enm, slot, bending) {
   var en = enm;
 
   var slt = slot;
   var bend = bending;
-  return function () {
+  return function() {
     createEnemy(en, slt, bend);
   }
 };
@@ -144,7 +144,7 @@ function fromArrayToEvents(arr, eventor) {
 
 //services
 //----------------------------------------------------
-var ScaledCloud = function (cloud, max, step, color) {
+var ScaledCloud = function(cloud, max, step, color) {
   this.scale = 1;
   this.obj = cloud;
   if (this.scale != 1) {
@@ -155,7 +155,7 @@ var ScaledCloud = function (cloud, max, step, color) {
   this.color = color;
 };
 
-ScaledCloud.prototype.addScale = function () {
+ScaledCloud.prototype.addScale = function() {
   if (this.scale >= this.max) {
     if (this.obj != undefined) {
       this.obj.remove();
@@ -172,12 +172,12 @@ ScaledCloud.prototype.addScale = function () {
   }
 };
 
-var Eventor = function () {
+var Eventor = function() {
   this.events = [];
   this.time = 0;
 };
 
-Eventor.prototype.plusDt = function (dt) {
+Eventor.prototype.plusDt = function(dt) {
   this.time += dt;
   while (this.events.length > 0 && this.events[0].time < this.time) {
     var event = this.events.shift();
@@ -186,21 +186,21 @@ Eventor.prototype.plusDt = function (dt) {
 };
 
 
-Eventor.prototype.addEvent = function (event, time, needSort) {
+Eventor.prototype.addEvent = function(event, time, needSort) {
   var ev = [];
-  ev.start = function (time) {
+  ev.start = function(time) {
     event();
   };
   ev.time = this.time + time;
   this.events.push(ev);
   if (needSort) {
-    this.events.sort(function (a, b) {
+    this.events.sort(function(a, b) {
       return a.time - b.time;
     })
   }
 };
 
-Eventor.prototype.appendEvent = function (event, time) {
+Eventor.prototype.appendEvent = function(event, time) {
   if (this.events.length != 0) {
     var tim = this.events[this.events.length - 1].time;
     this.addEvent(event, tim - this.time + time, false);
@@ -209,16 +209,16 @@ Eventor.prototype.appendEvent = function (event, time) {
   }
 };
 
-var hpService = function (object, hp) {
+var hpService = function(object, hp) {
   this.item = object;
   object.setProperty("hp2", 0);
   object.setProperty("hp1", hp);
 };
 
-hpService.prototype.minusHp = function (x, player) {
+hpService.prototype.minusHp = function(x, player) {
   var hp1 = parseInt(this.item.getProperty("hp1"));
   var hp2 = parseInt(this.item.getProperty("hp2"));
-  var max = 4 ;//parseInt(this.item.getProperty("maxHp"));
+  var max = 4;//parseInt(this.item.getProperty("maxHp"));
   if (player == 1) {
     hp1 -= x;
     this.item.setProperty("hp1", hp1);
@@ -249,7 +249,7 @@ hpService.prototype.minusHp = function (x, player) {
   }
 };
 
-hpService.prototype.getHp = function () {
+hpService.prototype.getHp = function() {
   var hp1 = parseInt(this.item.getProperty("hp1"));
   var hp2 = parseInt(this.item.getProperty("hp2"));
   return hp1 + hp2;
@@ -260,14 +260,14 @@ function addHpService(object, defHP) {
 }
 
 
-var Overheat = function (base, max, callback, additional) {
+var Overheat = function(base, max, callback, additional) {
   this.current = base;
   this.max = max;
   this.callback = callback;
   this.additional = additional;
 };
 
-Overheat.prototype.plus = function (dt) {
+Overheat.prototype.plus = function(dt) {
   this.current += dt;
   if (this.max < this.current) {
     this.current -= this.max;
@@ -280,7 +280,7 @@ function fire(gun) {
     isCmdWasUsed = false;
     laserSounds.play(0.2);
     shots++;
-    turret.shot(function (obj) {
+    turret.shot(function(obj) {
       if (obj != undefined) {
         successful_shots++;
         var hp1 = parseInt(obj.getProperty("hp1"));
@@ -346,7 +346,7 @@ ls = DX.resource("c014e8d182180cd6b59d49f4f57a0112e00568039271c0e6c3854d31f45a5a
 laserSounds.push(ls);
 ls = DX.resource("d6fdced1c6fc4cdceb8d7ccff76f49451eb20b854ed2bd4fbd646ddbae9e424c");
 laserSounds.push(ls);
-laserSounds.play = function (volume) {
+laserSounds.play = function(volume) {
   var x = Math.floor(Math.random() * 3);
   laserSounds[x].setVolume(volume * MUSIC_LVL);
   laserSounds[x].play();
@@ -384,7 +384,7 @@ if (temp === null || temp == 2) {
 var eventor = new Eventor();
 var introEventor = new Eventor();
 
-eventor.addEvent(function () {
+eventor.addEvent(function() {
   playWithVolume(engine, 0.2);
 }, GAME_START_TIME, true);
 
@@ -418,7 +418,7 @@ var prevDt = 0;
 
 manHero.teleport((1.5 - player) * 4, 1, TURRET_HIGHT);
 
-DX.command(function (cmd1) {
+DX.command(function(cmd1) {
   DX.log("cmd" + cmd1);
   cmd = cmd1;
   if (cmd == 11) {
@@ -443,7 +443,7 @@ function intro() {
   background.setVolume(0.75 * MUSIC_LVL);
   background.play(true);
   if (player == 1) {
-    introEventor.addEvent(function () {
+    introEventor.addEvent(function() {
       var cloud = DX.item(DX.createItem("Cloud", 0, DEFAULT_SPAWN_DISTANCE, TURRET_HIGHT));
       var scaled_step = 2;
       var duration = 2.5;
@@ -452,7 +452,7 @@ function intro() {
       for (var i = 2; i < final_scale / scaled_step + scaled_step * 2; i++) {
         introEventor.addEvent(telep.addScale.bind(telep), i * 0.1, true);
       }
-      introEventor.addEvent(function () {
+      introEventor.addEvent(function() {
         boss.teleport(0, DEFAULT_SPAWN_DISTANCE, TURRET_HIGHT);
         boss.setColor(133, 133, 133);
         for (var i = 0; i < 4; i++) {
@@ -472,7 +472,7 @@ function intro() {
         boss.startBezier3DPath();
         boss.addToBezier3DPath(0, MAX_BOSS + (MAX_BOSS) / 2, TURRET_HIGHT, 0, MAX_BOSS, TURRET_HIGHT);
         boss.finishBezier3DPath(0.5);
-        eventor.addEvent(function () {
+        eventor.addEvent(function() {
           for (var i = 0; i < 4; i++) {
             addHpService(hangars[i], hangarHp);
             hangars[i].setProperty("hangar1", 1)
@@ -481,7 +481,7 @@ function intro() {
       }, 2.7, true);
     }, 2, true);
   } else {
-    introEventor.addEvent(function () {
+    introEventor.addEvent(function() {
       initialize = true
     }, 5, false);
   }
@@ -491,78 +491,78 @@ function intro() {
 //------------------------------------------------------------------------
 var introAdded = false;
 DX.heartbeat(
-  function (dt) {
-    numberOfPlayers = parseInt(DX.getProperty("GI"));
-    if (beginTime === 0) {
-      beginTime = dt;
-      prevDt = dt;
-    }
-    var realDt = dt - prevDt;
-    prevDt = dt;
-    if (!initialize) {
-      var init = (DX.getProperty("Server") == NUMBER_OF_PLAYERS);
-      if (init) {
-        if (!introAdded) {
-          playWithVolume(neog, 1);
-          introEventor.addEvent(intro, 10, true);
-          introAdded = true;
-        }
-        introEventor.plusDt(realDt);
+    function(dt) {
+      numberOfPlayers = parseInt(DX.getProperty("GI"));
+      if (beginTime === 0) {
+        beginTime = dt;
+        prevDt = dt;
       }
-    } else {
-      dontLoose = parseBool(DX.getProperty("dontLoose"));
-      if (dontLoose) {
-        //setting target
-        enableTurret(realDt);
-        eventor.plusDt(realDt);
-        //loose condition
-        var mans = DX.items();
-        var min = DEFAULT_SPAWN_DISTANCE;
-        for (var i = numberOfPlayers * 2; i < mans.length; i++) {
-          var man = mans[i];
-          if (man.getProperty("hp1") != undefined) {
-            var pos = man.position();
-            var dist = pointDistance(pos, manHero.position());
-            min = Math.min(dist, min);
-            if (pos[1] <= 0.4) {
-              man.remove();
-              dontLoose = false;
-              clear(0);
-              var st = DX.createItem("CUBE", 0, 0, TURRET_HIGHT);
-              DX.item(st).say(dt - beginTime);
-              DX.setProperty("dontLoose", false);
-            }
+      var realDt = dt - prevDt;
+      prevDt = dt;
+      if (!initialize) {
+        var init = (DX.getProperty("Server") == NUMBER_OF_PLAYERS);
+        if (init) {
+          if (!introAdded) {
+            playWithVolume(neog, 1);
+            introEventor.addEvent(intro, 10, true);
+            introAdded = true;
           }
-        }
-        if (player == 1) {
-          boss_distance = pointDistance(boss.position(), [0, 0, 0]);
-          if (boss_distance < MAX_BOSS) {
-            var q = vecToQuat([0, 0, 1], Math.PI);
-            boss.teleportRotate(0, MAX_BOSS, TURRET_HIGHT, q[0], q[1], q[2], q[3]);
-          }
-        }
-        playWithVolume(engine, (DEFAULT_SPAWN_DISTANCE - min) / DEFAULT_SPAWN_DISTANCE);
-        //explosions control
-        if (derbises.length > 0) {
-          for (var i = 0; i < derbises.length; i++) {
-            if (derbises[i] != undefined) {
-              eventor.addEvent(derbises[i].addScale.bind(derbises[i]), 0.1 + i / 100, true);
-            }
-          }
-        }
-        if (parseInt(DX.getProperty("hangars1")) == 0) {
-          DX.finishWithImage("8f61e6ed57e8db3ba9dfc9e1c3f9eb0c5831d4d50ca66d4c61f44855e7be86a3");
-         // DX.finish();
+          introEventor.plusDt(realDt);
         }
       } else {
-        clear(1);
-        DX.camera().setCameraVerticalLimits(-Math.PI / 2, 0);
-        DX.camera().lockMousePointer(false);
-        DX.camera().enableAim(false);
-        DX.setProperty("dontLoose", false);
-        DX.setProperty("Server", null);
-        DX.finishWithImage("75332bf3558708c46130fe20fe632fb8561f3abdbacfd161e271a79faf029419");
+        dontLoose = parseBool(DX.getProperty("dontLoose"));
+        if (dontLoose) {
+          //setting target
+          enableTurret(realDt);
+          eventor.plusDt(realDt);
+          //loose condition
+          var mans = DX.items();
+          var min = DEFAULT_SPAWN_DISTANCE;
+          for (var i = numberOfPlayers * 2; i < mans.length; i++) {
+            var man = mans[i];
+            if (man.getProperty("hp1") != undefined) {
+              var pos = man.position();
+              var dist = pointDistance(pos, manHero.position());
+              min = Math.min(dist, min);
+              if (pos[1] <= 0.4) {
+                man.remove();
+                dontLoose = false;
+                clear(0);
+                var st = DX.createItem("CUBE", 0, 0, TURRET_HIGHT);
+                DX.item(st).say(dt - beginTime);
+                DX.setProperty("dontLoose", false);
+              }
+            }
+          }
+          if (player == 1) {
+            boss_distance = pointDistance(boss.position(), [0, 0, 0]);
+            if (boss_distance < MAX_BOSS) {
+              var q = vecToQuat([0, 0, 1], Math.PI);
+              boss.teleportRotate(0, MAX_BOSS, TURRET_HIGHT, q[0], q[1], q[2], q[3]);
+            }
+          }
+          playWithVolume(engine, (DEFAULT_SPAWN_DISTANCE - min) / DEFAULT_SPAWN_DISTANCE);
+          //explosions control
+          if (derbises.length > 0) {
+            for (var i = 0; i < derbises.length; i++) {
+              if (derbises[i] != undefined) {
+                eventor.addEvent(derbises[i].addScale.bind(derbises[i]), 0.1 + i / 100, true);
+              }
+            }
+          }
+          if (parseInt(DX.getProperty("hangars1")) == 0) {
+            DX.finishWithImage("8f61e6ed57e8db3ba9dfc9e1c3f9eb0c5831d4d50ca66d4c61f44855e7be86a3");
+            // DX.finish();
+          }
+        } else {
+          clear(1);
+          DX.camera().setCameraVerticalLimits(-Math.PI / 2, 0);
+          DX.camera().lockMousePointer(false);
+          DX.camera().enableAim(false);
+          DX.setProperty("dontLoose", false);
+          DX.setProperty("Server", null);
+          DX.finishWithImage("75332bf3558708c46130fe20fe632fb8561f3abdbacfd161e271a79faf029419");
 
+        }
       }
-    }
-  });
+    });
