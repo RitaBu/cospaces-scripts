@@ -53,7 +53,7 @@ DX.heartbeat(function(dt) {
   }
 });
 
-function resetWithWeight(){
+function resetWithWeight() {
   water1.setHeight(h * 0.5 - 0.1);
   water2.setHeight(h * 0.5 - 0.1);
   var pos = water1.position();
@@ -62,7 +62,7 @@ function resetWithWeight(){
   exec = false;
 }
 
-function resetWithoutWeight(){
+function resetWithoutWeight() {
   pipe.setColor(0, 100, 255);
   w.setPosition(5, 0, 0);
   weight = false;
