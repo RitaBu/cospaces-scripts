@@ -1,6 +1,6 @@
 # Animal Hearing Game
 
-> A game where you have to recognize certain animal sounds and select the associated animal.
+> A game where you have to recognize certain animal sounds and select the corresponding animal.
 
 ## Project location
 
