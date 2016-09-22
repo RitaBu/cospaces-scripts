@@ -18,7 +18,7 @@ resetWithWeight();
 var exec = false;
 
 DX.setHeartbeatInterval(0.01);
-DX.heartbeat(function(dt) {
+DX.heartbeat(function (dt) {
   var step = 0.02;
   var h1 = water1.getHeight();
   var h2 = water2.getHeight();

@@ -63,9 +63,9 @@ createFirst = function (x, y, service) {
       money -= service.price;
       service.count++;
       var t = DX.item(DX.createItem(service.name, service.x + service.x / service.l * service.count / 3
-        + service.nx * (service.count % 3 - 1), service.y
-        + service.y / service.l * service.count / 3
-        + service.ny * (service.count % 3 - 1), 0));
+          + service.nx * (service.count % 3 - 1), service.y
+          + service.y / service.l * service.count / 3
+          + service.ny * (service.count % 3 - 1), 0));
       service.price = parseInt(service.price * service.step);
       service.obj.think(service.price);
       t.say("+" + service.income);
@@ -145,38 +145,38 @@ sendMessage(messages[next]);
 var result = 0;
 
 DX.heartbeat(
-  function (dt) {
-    if (beginTime === 0) {
-      beginTime = dt;
-      prevDt = dt;
-    }
-    var realDt = dt - prevDt;
-    if (next == 1) {
-      sendMessage(messages[next]);
-    }
-    if (money > 10 && next == 2) {
-      sendMessage(messages[next]);
-    }
-    if (money > 50 && next == 3) {
-      sendMessage(messages[next]);
-    }
-    if (money > 1000 && next == 4) {
-      sendMessage(messages[next]);
-    }
-    if (money > 10000 && next == 5) {
-      sendMessage(messages[next]);
-    }
-    prevDt = dt;
-
-    collectMoney.plus(realDt);
-    money += incom;
-
-    cookie.say(money);
-    cookie.think("+" + incom);
-    if (money > 1000000) {
-      if (result == 0) {
-        result = (dt - beginTime);
+    function (dt) {
+      if (beginTime === 0) {
+        beginTime = dt;
+        prevDt = dt;
       }
-      sendMessage("You won! Time is " + result);
-    }
-  });
+      var realDt = dt - prevDt;
+      if (next == 1) {
+        sendMessage(messages[next]);
+      }
+      if (money > 10 && next == 2) {
+        sendMessage(messages[next]);
+      }
+      if (money > 50 && next == 3) {
+        sendMessage(messages[next]);
+      }
+      if (money > 1000 && next == 4) {
+        sendMessage(messages[next]);
+      }
+      if (money > 10000 && next == 5) {
+        sendMessage(messages[next]);
+      }
+      prevDt = dt;
+
+      collectMoney.plus(realDt);
+      money += incom;
+
+      cookie.say(money);
+      cookie.think("+" + incom);
+      if (money > 1000000) {
+        if (result == 0) {
+          result = (dt - beginTime);
+        }
+        sendMessage("You won! Time is " + result);
+      }
+    });

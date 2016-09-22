@@ -1,10 +1,12 @@
+var formation_js = "https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/formations/formation.js";
+
 function clear() {
   DX.items().forEach(function (item) {
     item.remove();
   });
 }
 
-DX.loadScript("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/formations/formation.js", function () {
+function init() {
   var funcs = [
     function () {
       Formation.rect(5, 5, 1, 1, function (x, y) {
@@ -36,4 +38,6 @@ DX.loadScript("https://raw.githubusercontent.com/delightex/cospaces-scripts/mast
   };
 
   next(0);
-});
+}
+
+DX.loadScript(formation_js, init);

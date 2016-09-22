@@ -10,8 +10,8 @@ var dog = DX.item(dogId);
 dog.setColor(162, 42, 42);
 
 function jump(x, y) {
-  return function() {
-    dog.throwTo(x, y, 0, 1, function() {
+  return function () {
+    dog.throwTo(x, y, 0, 1, function () {
       dog.animateToState("StandHowl");
       dog.animateToState("StandHowl");
     });
