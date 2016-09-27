@@ -2,6 +2,6 @@ var eye_js = "https://raw.githubusercontent.com/delightex/cospaces-scripts/maste
 
 DX.loadScript(formation_js, function () {
   var eye = DX.item("naihDdoqEK");
-  DX.runLater(blink());
+  DX.runLater(blink(eye));
 });
 
