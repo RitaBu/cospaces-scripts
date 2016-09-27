@@ -7,14 +7,14 @@ function blink(pupil) {
 
 function blinkRepeat(eye) {
   var pupil = eye.part("pupil");
+  blink(pupil);
   DX.runLater(function () {
-    blink(pupil);
     blinkRepeat(eye);
   }, 3);
 }
 
-var leftEye = DX.item("naihDdoqEK");
-var rightEye = DX.item("fdDAOhkXP5");
+var leftEye = DX.item("fdDAOhkXP5");
+var rightEye = DX.item("naihDdoqEK");
 
 blinkRepeat(leftEye);
 blinkRepeat(rightEye);
