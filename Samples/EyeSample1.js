@@ -1,7 +1,20 @@
-var eye_js = "https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/Eye.js";
+function blink(pupil) {
+  pupil.setColor(255, 255, 255);
+  DX.runLater(function () {
+    pupil.setColor(0, 0, 0);
+  }, 0.1);
+}
 
-DX.loadScript(eye_js, function () {
-  var eye = DX.item("naihDdoqEK");
-  DX.runLater(blink(eye));
-});
+function blinkRepeat(eye) {
+  var pupil = eye.part("pupil");
+  DX.runLater(function () {
+    blink(pupil);
+    blinkRepeat(eye);
+  }, 3);
+}
 
+var leftEye = DX.item("naihDdoqEK");
+var rightEye = DX.item("fdDAOhkXP5");
+
+blinkRepeat(leftEye);
+blinkRepeat(rightEye);
