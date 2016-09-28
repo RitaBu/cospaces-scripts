@@ -1,11 +1,11 @@
 //https://studio.cospaces.io/#Project:H0DmHz-g9K8.G82KTNh1She:BLXfBnTrrnt.FWK6VyWLEmk
-//Space 2
+//Space 1
 
 function blink(pupil) {
   pupil.setColor(255, 255, 255);
   DX.runLater(function () {
     pupil.setColor(0, 0, 0);
-  }, 0.1);
+  }, 0.06);
 }
 
 function blinkRepeat(eye) {
@@ -21,9 +21,22 @@ function moveRight(eye) {
   // pupil.move();
 }
 
-var leftEye = DX.item("NuOg0NAxT2");
-var eyeLid = DX.item("mNZuW8CSs4");
+var leftEye = DX.item("fdDAOhkXP5");
+var rightEye = DX.item("naihDdoqEK");
 
 blinkRepeat(leftEye);
+blinkRepeat(rightEye);
 
 moveRight(leftEye);
+
+var beginTime = 0;
+var totalTime = 0;
+
+DX.setHeartbeatInterval(0);
+DX.heartbeat(function (dt) {
+  if (beginTime === 0) {
+    beginTime = dt;
+  }
+  totalTime += dt;
+  DX.log(totalTime);
+});
