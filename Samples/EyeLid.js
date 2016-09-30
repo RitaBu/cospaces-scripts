@@ -1,8 +1,19 @@
 const STATE_OPEN = "OPEN";
 const STATE_CLOSED = "CLOSED";
+const BLINK_DURATION = 0.15;
 
 var startTime = 0;
 var totalTime = 0;
+
+// Converts from degrees to radians.
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+};
+
+// Converts from radians to degrees.
+Math.degrees = function(radians) {
+  return radians * 180 / Math.PI;
+};
 
 var Animation = function (name, duration, exec) {
   this.name = name;
@@ -22,22 +33,20 @@ Animation.prototype.start = function (t) {
 };
 
 Animation.prototype.update = function (t) {
+  this.currentTime = t;
   if ((t - this.startTime) > this.duration) {
     this.finished = true;
-    DX.log(this.toString() + " finished");
-    return;
+    //DX.log(this.toString() + " finished");
   }
-  this.currentTime = t;
-  this.exec(this.getProgress());
+  this.exec(this);
 };
 
 Animation.prototype.getProgress = function () {
-  if (this.finished) return "finished";
+  if (this.finished) return 1;
   var timeLeft = this.startTime + this.duration - this.currentTime;
-  var p = 1 - timeLeft / this.duration;
   // DX.log("Timeleft " + timeLeft);
   // DX.log("duration " + this.duration);
-  return p;
+  return 1 - timeLeft / this.duration;
 };
 
 var EyeLid = function (item, state) {
@@ -76,55 +85,80 @@ EyeLid.prototype.addAnimation = function (a) {
   }
 }
 
-EyeLid.prototype.close = function () {
+EyeLid.prototype.down = function () {
   /*
    if (this.state === STATE_CLOSED) return;
    this.state = STATE_CLOSED;
    */
   var that = this;
-  this.addAnimation(new Animation("Close", 2, function (progress) {
-    that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, 45 * progress, true);
-  }));
+  this.addAnimation(new Animation("Down", BLINK_DURATION / 2, (function () {
+    var lastProgress = 0;
+    return function (anim) {
+      var p = lastProgress;
+      lastProgress = 75 * anim.getProgress();
+      DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(-(lastProgress - p)), true);
+    };
+  })()));
 };
 
-EyeLid.prototype.open = function () {
+EyeLid.prototype.up = function () {
   /*
    if (this.state === STATE_OPEN) return;
    this.state = STATE_OPEN;
    */
   var that = this;
-  this.addAnimation(new Animation("Open", 2, function (progress) {
-    that.item.rotateLocalAxis(0, 0, 0, 0, 1, 0, -45 * progress, true);
-  }));
+  this.addAnimation(new Animation("Up", BLINK_DURATION / 2, (function () {
+    var lastProgress = 0;
+    return function (anim) {
+      var p = lastProgress;
+      lastProgress = 75 * anim.getProgress();
+      DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+    };
+  })()));
 };
 
-EyeLid.prototype.blink = function () {
-  this.close();
-  this.open();
+EyeLid.prototype.blinkTop = function () {
+  this.down();
+  this.up();
 };
 
-var eyeLid = new EyeLid(DX.item("7mxj4NOSqq"), STATE_OPEN);
+EyeLid.prototype.blinkBottom = function () {
+  this.up();
+  this.down();
+};
 
-DX.setHeartbeatInterval(0.1);
+var topEyeLid = new EyeLid(DX.item("oRE07xiEX3"), STATE_OPEN);
+var bottomEyeLid = new EyeLid(DX.item("Aytf70hzTt"), STATE_OPEN);
+
+DX.setHeartbeatInterval(0);
 DX.heartbeat(function (dt) {
   if (startTime === 0) {
     startTime = dt;
   }
   totalTime = dt - startTime;
   //x, y, z, axisX, axisY, axisZ, angle, discrete
-  //eyeLid.rotateLocalAxis(0, 0, 0, 0, 1, 0, -dt * 0.0001, true);
-  //eyeLid.moveLocal(1, 0, 0);
-  DX.log("Total time: " + totalTime);
-  eyeLid.update(totalTime);
+  //topEyeLid.rotateLocalAxis(0, 0, 0, 0, 1, 0, -dt * 0.0001, true);
+  //topEyeLid.moveLocal(1, 0, 0);
+  // DX.log("Total time: " + totalTime);
+  topEyeLid.update(totalTime);
+  bottomEyeLid.update(totalTime);
 });
 
-function blinkRepeat(eyeLid) {
-  eyeLid.blink();
-  /*
+function blinkRepeatTop(eyeLid) {
+  eyeLid.blinkTop();
    DX.runLater(function () {
-   blinkRepeat(eyeLid);
+   blinkRepeatTop(eyeLid);
    }, 2);
-   */
 }
 
-blinkRepeat(eyeLid);
+function blinkRepeatBottom(eyeLid) {
+  eyeLid.blinkBottom();
+   DX.runLater(function () {
+   blinkRepeatBottom(eyeLid);
+   }, 2);
+}
+
+blinkRepeatTop(topEyeLid);
+blinkRepeatBottom(bottomEyeLid);
