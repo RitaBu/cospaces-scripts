@@ -1,10 +1,10 @@
 //http://newcospaces.dx.labs.intellij.net/#Project:CkTcwhNsVW0.GWs1ktTIKDY:Bphqpl-f-jm.C26wI_GYLi5
 
-//var carRed = DX.item("BTh_UtU_55K.H0gOeHQ3wlv");
-//var carWhite = DX.item("Ymf-gS32OW.Eo_153VtdBr");
-//var carYellow = DX.item("EGAKeuNSKxa.BqYcT_jbHir");
-//var carGray = DX.item("DJK8m3pgBGC.HYAqM4LPD6c");
-//var carBlue = DX.item("F9rOG_-g_5G.C1RZWXPbHsb");
+//var carRed = Space.item("BTh_UtU_55K.H0gOeHQ3wlv");
+//var carWhite = Space.item("Ymf-gS32OW.Eo_153VtdBr");
+//var carYellow = Space.item("EGAKeuNSKxa.BqYcT_jbHir");
+//var carGray = Space.item("DJK8m3pgBGC.HYAqM4LPD6c");
+//var carBlue = Space.item("F9rOG_-g_5G.C1RZWXPbHsb");
 
 //var colors = [carGray, carBlue, carRed, carWhite, carYellow];
 
@@ -12,15 +12,15 @@ function create(x, y, w, h) {
   var r = 2;
   var d = 1;
 
-  var vec0 = DX.createVectorItem(-w + r + x, h + y, 0, d, 0, 0);
-  var vec1 = DX.createVectorItem(w - r + x, h + y, 0, d, 0, 0);
-  var vec2 = DX.createVectorItem(w + x, h - r + y, 0, 0, -d, 0);
-  var vec3 = DX.createVectorItem(w + x, -h + r + y, 0, 0, -d, 0);
+  var vec0 = Space.createVectorItem(-w + r + x, h + y, 0, d, 0, 0);
+  var vec1 = Space.createVectorItem(w - r + x, h + y, 0, d, 0, 0);
+  var vec2 = Space.createVectorItem(w + x, h - r + y, 0, 0, -d, 0);
+  var vec3 = Space.createVectorItem(w + x, -h + r + y, 0, 0, -d, 0);
 
-  var vec4 = DX.createVectorItem(w + x - r, -h + y, 0, -d, 0, 0);
-  var vec5 = DX.createVectorItem(-w + r + x, -h + y, 0, -d, 0, 0);
-  var vec6 = DX.createVectorItem(-w + x, -h + r + y, 0, 0, d, 0);
-  var vec7 = DX.createVectorItem(-w + x, h - r + y, 0, 0, d, 0);
+  var vec4 = Space.createVectorItem(w + x - r, -h + y, 0, -d, 0, 0);
+  var vec5 = Space.createVectorItem(-w + r + x, -h + y, 0, -d, 0, 0);
+  var vec6 = Space.createVectorItem(-w + x, -h + r + y, 0, 0, d, 0);
+  var vec7 = Space.createVectorItem(-w + x, h - r + y, 0, 0, d, 0);
 
   var vec = [vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7];
   addCarsToPath(vec, 4);
@@ -41,8 +41,8 @@ function createPathFromPoints(points) {
     var l = Math.sqrt(dx * dx + dy * dy);
     dx /= l;
     dy /= l;
-    var v1 = DX.createVectorItem(x + r * dx, y + r * dy, 0, dx, dy, 0);
-    var v2 = DX.createVectorItem(nx - nr * dx, ny - nr * dy, 0, dx, dy, 0);
+    var v1 = Space.createVectorItem(x + r * dx, y + r * dy, 0, dx, dy, 0);
+    var v2 = Space.createVectorItem(nx - nr * dx, ny - nr * dy, 0, dx, dy, 0);
     vec.push(v1);
     vec.push(v2);
   }
@@ -53,12 +53,12 @@ function addCarsToPath(vec, n, color) {
   var nl = vec.length;
   var car;
   for (var i = 0; i < n; i++) {
-    var line = DX.createCurveLineItem();
+    var line = Space.createCurveLineItem();
     for (var j = i; j <= i + nl; j++) {
       line.addVertex(vec[j % nl].id());
     }
     var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    car = DX.item(DX.createItem(modelId, vec[i].position()[0], vec[i].position()[1], 0));
+    car = Space.createItem(modelId, vec[i].position()[0], vec[i].position()[1], 0);
     if (color != null)
       car.setColor(color[0], color[1], color[2]);
     car.addToBezier3DPathCurve(line.id());
@@ -130,26 +130,26 @@ function longPath(d, w1, h1, w2, h2) {
   return addCarsToPath(vec, 1, [100, 100, 100]);
 }
 
-DX.setRenderShadows(false);
-DX.setRenderServiceItems(false);
+Space.setRenderShadows(false);
+Space.setRenderServiceItems(false);
 
 var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:"
 var states = ["D", "C", "A", "B"];
 
 var d = 1.8;
-var item0 = DX.item(DX.createItem(file + states[0], d, d, 0));
+var item0 = Space.createItem(file + states[0], d, d, 0);
 item0.setRotationOZ(1, 0, true);
 item0.setProperty("light", "red");
 
-var item1 = DX.item(DX.createItem(file + states[0], -d, -d, 0));
+var item1 = Space.createItem(file + states[0], -d, -d, 0);
 item1.setRotationOZ(-1, 0, true);
 item1.setProperty("light", "red");
 
-var item2 = DX.item(DX.createItem(file + states[0], -d, d, 0));
+var item2 = Space.createItem(file + states[0], -d, d, 0);
 item2.setRotationOZ(0, 1, true);
 item2.setProperty("light", "red");
 
-var item3 = DX.item(DX.createItem(file + states[0], d, -d, 0));
+var item3 = Space.createItem(file + states[0], d, -d, 0);
 item3.setRotationOZ(0, -1, true);
 item3.setProperty("light", "red");
 
@@ -164,7 +164,7 @@ path2(1, 10, 4);
 
 var focusCar = longPath(1, 10, 4, 4.5, 15);
 
-DX.setCarDriveController(1, 0.5);
+//Space.setCarDriveController(1, 0.5);
 
 var index = 0;
 function tick() {
@@ -205,8 +205,8 @@ function tick() {
     item3.setModelId(file + states[3]);
     pause = 3;
   }
-  DX.runLater(tick, pause);
+  Space.schedule(tick, pause);
 }
 
-DX.runLater(tick, 1);
-DX.focusOn(focusCar.id(), true);
+Space.schedule(tick, 1);
+Space.focusOn(focusCar.id(), true);
