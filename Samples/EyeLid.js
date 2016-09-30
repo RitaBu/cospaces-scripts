@@ -32,58 +32,75 @@ Animation.prototype.update = function (t) {
 };
 
 Animation.prototype.getProgress = function () {
+  if (this.finished) return "finished";
   var timeLeft = this.startTime + this.duration - this.currentTime;
   var p = 1 - timeLeft / this.duration;
-  DX.log("Timeleft " + timeLeft);
-  DX.log("duration " + this.duration);
+  // DX.log("Timeleft " + timeLeft);
+  // DX.log("duration " + this.duration);
   return p;
 };
 
 var EyeLid = function (item, state) {
   this.item = item;
   this.state = state;
+  this.anims = [];
 };
 
 /*
-EyeLid.prototype.isAnimated = function () {
-  if (this.animation === undefined) return false;
-  return !this.animation.finished;
-};
-*/
+ EyeLid.prototype.isAnimated = function () {
+ if (this.animation === undefined) return false;
+ return !this.animation.finished;
+ };
+ */
 
 EyeLid.prototype.update = function (t) {
-  if (this.animation !== undefined && this.animation !== null) {
-    if (!this.animation.finished) {
-      DX.log("Progress: " + this.animation.getProgress());
-      this.animation.update(t);
+  if (this.anims.length > 0) {
+    var a = this.anims[0];
+    a.update(t);
+    DX.log(a.toString() + " Progress: " + a.getProgress());
+    if (a.finished) {
+      this.anims.shift();
+      if (this.anims.length > 0) {
+        a = this.anims[0];
+        a.start(t);
+        // DX.log(a.toString() + " finished. Left " + this.anims.length + " animations");
+      }
     }
   }
 };
 
+EyeLid.prototype.addAnimation = function (a) {
+  this.anims.push(a);
+  if (this.anims.length == 1) {
+    a.start(totalTime);
+  }
+}
+
 EyeLid.prototype.close = function () {
-  if (this.state === STATE_CLOSED) return;
-  this.state = STATE_CLOSED;
+  /*
+   if (this.state === STATE_CLOSED) return;
+   this.state = STATE_CLOSED;
+   */
   var that = this;
-  this.animation = new Animation("Close", 1, function (progress) {
-    DX.log("Here");
+  this.addAnimation(new Animation("Close", 2, function (progress) {
     that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, 45 * progress, true);
-  });
-  DX.log("Starting closing animation");
-  this.animation.start(totalTime);
+  }));
 };
 
 EyeLid.prototype.open = function () {
-  if (this.state === STATE_OPEN) return;
-  this.state = STATE_OPEN;
+  /*
+   if (this.state === STATE_OPEN) return;
+   this.state = STATE_OPEN;
+   */
   var that = this;
-  this.animation = new Animation("Open", 1, function (progress) {
+  this.addAnimation(new Animation("Open", 2, function (progress) {
     that.item.rotateLocalAxis(0, 0, 0, 0, 1, 0, -45 * progress, true);
-  });
-  this.animation.start(totalTime);
+  }));
 };
 
 EyeLid.prototype.blink = function () {
   this.close();
+  this.open();
 };
 
 var eyeLid = new EyeLid(DX.item("7mxj4NOSqq"), STATE_OPEN);
