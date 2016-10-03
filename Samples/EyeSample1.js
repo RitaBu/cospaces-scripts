@@ -1,5 +1,5 @@
 //https://studio.cospaces.io/#Project:H0DmHz-g9K8.G82KTNh1She:BLXfBnTrrnt.FWK6VyWLEmk
-//Space 1
+//User 1
 
 function blink(pupil) {
   pupil.setColor(255, 255, 255);
@@ -16,15 +16,8 @@ function blinkRepeat(eye) {
   }, 3);
 }
 
-function moveRight(eye) {
-  var pupil = eye.part("pupil");
-  // pupil.move();
-}
-
 var leftEye = DX.item("fdDAOhkXP5");
 var rightEye = DX.item("naihDdoqEK");
 
 blinkRepeat(leftEye);
 blinkRepeat(rightEye);
-
-moveRight(leftEye);

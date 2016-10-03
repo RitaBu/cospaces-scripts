@@ -2,9 +2,6 @@ const STATE_OPEN = "OPEN";
 const STATE_CLOSED = "CLOSED";
 const BLINK_DURATION = 0.11;
 
-var startTime = 0;
-var totalTime = 0;
-
 // Converts from degrees to radians.
 Math.radians = function (degrees) {
   return degrees * Math.PI / 180;
@@ -24,7 +21,7 @@ var Animation = function (name, duration, exec) {
 
 Animation.prototype.toString = function () {
   return "[Animation] " + this.name;
-}
+};
 
 Animation.prototype.start = function (t) {
   this.startTime = t;
@@ -63,14 +60,14 @@ Animator.prototype.update = function (t) {
       if (this.anims.length > 0) {
         a = this.anims[0];
         a.start(t);
-        DX.log(a.toString() + " finished. Left " + this.anims.length + " animations");
+        //DX.log(a.toString() + " finished. Left " + this.anims.length + " animations");
       }
     }
   }
 };
 
 Animator.prototype.addAnimation = function (a) {
-  DX.log("Added " + (this.anims.length + 1) + " animation");
+  //DX.log("Added " + (this.anims.length + 1) + " animation");
   this.anims.push(a);
   if (this.anims.length == 1) {
     a.start(totalTime);
@@ -85,7 +82,7 @@ var Eyelid = function (item, state) {
 
 Eyelid.prototype.update = function (t) {
   this.animator.update(t);
-}
+};
 
 Eyelid.prototype.down = function () {
   /*
@@ -195,6 +192,11 @@ Eye.prototype.left = function () {
   this.pupil.left();
 };
 
+// ===================================================================
+
+var startTime = 0;
+var totalTime = 0;
+
 var rightEye = new Eye(DX.item("Fmyy6SlZFG"));
 var leftEye = new Eye(DX.item("hlWFPrk5c7"));
 
@@ -204,9 +206,6 @@ DX.heartbeat(function (dt) {
     startTime = dt;
   }
   totalTime = dt - startTime;
-  //x, y, z, axisX, axisY, axisZ, angle, discrete
-  //topEyelid.rotateLocalAxis(0, 0, 0, 0, 1, 0, -dt * 0.0001, true);
-  //topEyelid.moveLocal(1, 0, 0);
   // DX.log("Total time: " + totalTime);
   leftEye.update(totalTime);
   rightEye.update(totalTime);
