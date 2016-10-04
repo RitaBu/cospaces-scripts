@@ -118,4 +118,6 @@ Eye.prototype.left = function () {
 };
 
 var animation_js = "https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/animation/animation.js";
-Space.loadScript(animation_js, function () {});
+Space.loadScript(animation_js, function () {
+  Space.log("AnimatedEye Library loaded.");
+});
