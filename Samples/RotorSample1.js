@@ -9,3 +9,11 @@ Space.scheduleRepeating(function () {
   mainRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
   tailRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 10 * Math.PI / 180, true);
 }, 0);
+
+var animatedObject_js = "https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/AnimatedEye.js";
+
+function init() {
+  Space.log("Everything loaded. Starting...");
+}
+
+Space.loadScript(animatedObject_js, init);
