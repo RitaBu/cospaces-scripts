@@ -3,7 +3,7 @@
 
 function blink(pupil) {
   pupil.setColor(255, 255, 255);
-  DX.runLater(function () {
+  Space.schedule(function () {
     pupil.setColor(0, 0, 0);
   }, 0.06);
 }
@@ -11,7 +11,7 @@ function blink(pupil) {
 function blinkRepeat(eye) {
   var pupil = eye.part("pupil");
   blink(pupil);
-  DX.runLater(function () {
+  Space.schedule(function () {
     blinkRepeat(eye);
   }, 3);
 }

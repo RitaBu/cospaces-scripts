@@ -33,7 +33,7 @@ Animation.prototype.update = function (t) {
   this.currentTime = t;
   if ((t - this.startTime) > this.duration) {
     this.finished = true;
-    //DX.log(this.toString() + " finished");
+    //Space.log(this.toString() + " finished");
   }
   this.exec(this);
 };
@@ -41,8 +41,8 @@ Animation.prototype.update = function (t) {
 Animation.prototype.getProgress = function () {
   if (this.finished) return 1;
   var timeLeft = this.startTime + this.duration - this.currentTime;
-  // DX.log("Timeleft " + timeLeft);
-  // DX.log("duration " + this.duration);
+  // Space.log("Timeleft " + timeLeft);
+  // Space.log("duration " + this.duration);
   return 1 - timeLeft / this.duration;
 };
 
@@ -54,20 +54,20 @@ Animator.prototype.update = function (t) {
   if (this.anims.length > 0) {
     var a = this.anims[0];
     a.update(t);
-    // DX.log(a.toString() + " Progress: " + a.getProgress());
+    // Space.log(a.toString() + " Progress: " + a.getProgress());
     if (a.finished) {
       this.anims.shift();
       if (this.anims.length > 0) {
         a = this.anims[0];
         a.start(t);
-        //DX.log(a.toString() + " finished. Left " + this.anims.length + " animations");
+        //Space.log(a.toString() + " finished. Left " + this.anims.length + " animations");
       }
     }
   }
 };
 
 Animator.prototype.addAnimation = function (a) {
-  //DX.log("Added " + (this.anims.length + 1) + " animation");
+  //Space.log("Added " + (this.anims.length + 1) + " animation");
   this.anims.push(a);
   if (this.anims.length == 1) {
     a.start(totalTime);
@@ -96,7 +96,7 @@ Eyelid.prototype.down = function () {
     return function (anim) {
       var p = lastProgress;
       lastProgress = angle * anim.getProgress();
-      // DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
       that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(-(lastProgress - p)), true);
     };
   })()));
@@ -114,7 +114,7 @@ Eyelid.prototype.up = function () {
     return function (anim) {
       var p = lastProgress;
       lastProgress = angle * anim.getProgress();
-      // DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
       that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
     };
   })()));
@@ -143,7 +143,7 @@ Pupil.prototype.left = function () {
     return function (anim) {
       var p = lastProgress;
       lastProgress = distance * anim.getProgress();
-      // DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
       that.item.moveLocal(0, -(lastProgress - p), 0, true);
     };
   })()));
@@ -157,7 +157,7 @@ Pupil.prototype.right = function () {
     return function (anim) {
       var p = lastProgress;
       lastProgress = distance * anim.getProgress();
-      // DX.log(anim.toString() + " lastProgress = " + lastProgress);
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
       that.item.moveLocal(0, lastProgress - p, 0, true);
     };
   })()));
@@ -192,40 +192,72 @@ Eye.prototype.left = function () {
   this.pupil.left();
 };
 
+var EyedObject = function (item) {
+  this.leftEye = new Eye(item.part("LeftEye"));
+  this.rightEye = new Eye(item.part("RightEye"));
+};
+
+EyedObject.prototype.blink = function () {
+  this.leftEye.blink();
+  this.rightEye.blink();
+};
+
+EyedObject.prototype.right = function () {
+  this.leftEye.right();
+  this.rightEye.right();
+};
+
+EyedObject.prototype.left = function () {
+  this.leftEye.left();
+  this.rightEye.left();
+};
+
+EyedObject.prototype.update = function (t) {
+  this.leftEye.update(t);
+  this.rightEye.update(t);
+};
+
 // ===================================================================
 
 var startTime = 0;
 var totalTime = 0;
 
-var rightEye = new Eye(DX.item("Fmyy6SlZFG"));
-var leftEye = new Eye(DX.item("hlWFPrk5c7"));
+var elephant = new EyedObject(Space.item("imapObWTsT"));
+var tree = new EyedObject(Space.item("Jsqj60uMeS"));
+var tree2 = new EyedObject(Space.item("4tvtLJYadq"));
 
-DX.setHeartbeatInterval(0);
-DX.heartbeat(function (dt) {
+Space.scheduleRepeating(function (dt) {
   if (startTime === 0) {
     startTime = dt;
   }
   totalTime = dt - startTime;
-  // DX.log("Total time: " + totalTime);
-  leftEye.update(totalTime);
-  rightEye.update(totalTime);
-});
+  // Space.log("Total time: " + totalTime);
+  elephant.update(totalTime);
+  tree.update(totalTime);
+  tree2.update(totalTime);
+}, 0);
 
 function blinkRepeat(eye) {
   eye.blink();
-  DX.runLater(function () {
+  Space.schedule(function () {
     blinkRepeat(eye);
   }, 2);
 }
 
-blinkRepeat(leftEye);
-blinkRepeat(rightEye);
+blinkRepeat(elephant.leftEye);
+blinkRepeat(elephant.rightEye);
+
+blinkRepeat(tree.leftEye);
+blinkRepeat(tree.rightEye);
+
+blinkRepeat(tree2.leftEye);
+blinkRepeat(tree2.rightEye);
 
 function rightAndBackRepeat(eye) {
   eye.right();
-  DX.runLater(function () {
+  Space.schedule(function () {
     eye.left();
-    DX.runLater(function () {
+    Space.schedule(function () {
       leftAndBackRepeat(eye);
     }, 3);
   }, 3);
@@ -233,13 +265,13 @@ function rightAndBackRepeat(eye) {
 
 function leftAndBackRepeat(eye) {
   eye.left();
-  DX.runLater(function () {
+  Space.schedule(function () {
     eye.right();
-    DX.runLater(function () {
+    Space.schedule(function () {
       rightAndBackRepeat(eye);
     }, 3);
   }, 3);
 }
 
-rightAndBackRepeat(rightEye);
-rightAndBackRepeat(leftEye);
+rightAndBackRepeat(elephant.rightEye);
+rightAndBackRepeat(elephant.leftEye);

@@ -3,7 +3,7 @@
 
 function blink(pupil) {
   pupil.setColor(255, 255, 255);
-  DX.runLater(function () {
+  Space.schedule(function () {
     pupil.setColor(0, 0, 0);
   }, 0.06);
 }
@@ -11,7 +11,7 @@ function blink(pupil) {
 function blinkRepeat(eye) {
   var pupil = eye.part("pupil");
   blink(pupil);
-  DX.runLater(function () {
+  Space.schedule(function () {
     blinkRepeat(eye);
   }, 3);
 }
@@ -27,11 +27,10 @@ moveRight(leftEye);
 var beginTime = 0;
 var totalTime = 0;
 
-DX.setHeartbeatInterval(0);
-DX.heartbeat(function (dt) {
+Space.scheduleRepeating(function (dt) {
   if (beginTime === 0) {
     beginTime = dt;
   }
   totalTime += dt;
-  DX.log(totalTime);
-});
+  Space.log(totalTime);
+}, 0);
