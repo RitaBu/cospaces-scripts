@@ -1,8 +1,11 @@
-var mainRotorItem = DX.item("q7lQAi7BPE");
-var tailRotorItem = DX.item("d7eXQCxY5A");
+var s = Space.resource("899add87ab9b5d7f04d83c6e040abb581b6363bf90271af7a064e4398bfef6a2");
 
-DX.setHeartbeatInterval(0);
-DX.heartbeat(function () {
+s.play(true);
+
+var mainRotorItem = Space.item("q7lQAi7BPE");
+var tailRotorItem = Space.item("d7eXQCxY5A");
+
+Space.scheduleRepeating(function () {
   mainRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
   tailRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 10 * Math.PI / 180, true);
-});
+}, 0);
