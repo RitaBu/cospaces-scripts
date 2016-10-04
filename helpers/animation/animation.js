@@ -1,3 +1,6 @@
+var startTime = 0;
+var totalTime = 0;
+
 var Animation = function (name, duration, exec) {
   this.name = name;
   this.duration = duration;

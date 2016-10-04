@@ -1,3 +1,16 @@
+const STATE_OPEN = "OPEN";
+const STATE_CLOSED = "CLOSED";
+const BLINK_DURATION = 0.11;
+
+// Converts from degrees to radians.
+Math.radians = function (degrees) {
+  return degrees * Math.PI / 180;
+};
+
+// Converts from radians to degrees.
+Math.degrees = function (radians) {
+  return radians * 180 / Math.PI;
+};
 
 var Eyelid = function (item, state) {
   this.item = item;
