@@ -226,11 +226,12 @@ var elephant = new EyedObject(Space.item("imapObWTsT"));
 var tree = new EyedObject(Space.item("Jsqj60uMeS"));
 var tree2 = new EyedObject(Space.item("4tvtLJYadq"));
 
-Space.scheduleRepeating(function (dt) {
+Space.scheduleRepeating(function () {
+  var t = Space.currentTime();
   if (startTime === 0) {
-    startTime = dt;
+    startTime = t;
   }
-  totalTime = dt - startTime;
+  totalTime = t - startTime;
   // Space.log("Total time: " + totalTime);
   elephant.update(totalTime);
   tree.update(totalTime);
