@@ -83,7 +83,7 @@ function Animal(animalId, item) {
 
 function Sound(id, soundClipId) {
   this.id = id;
-  this.soundClip = DX.resource(soundClipId);
+  this.soundClip = Space.resource(soundClipId);
 
   this.getSoundId = function () {
     return this.id;
@@ -103,8 +103,6 @@ function Game(host, animals, sounds) {
   this.lastSoundId = 'mouse';
 
   this.initialize = function () {
-    var self = this;
-
     this.removeAllSpeechBubbles();
 
     this.host.initialize();
@@ -146,17 +144,17 @@ function Game(host, animals, sounds) {
 }
 
 // Initialize application.
-var host = new Host(DX.item('FJNpNV30CN'));
+var host = new Host(Space.item('FJNpNV30CN'));
 
 var animals = [
-  new Animal('elephant', DX.item('9np5tnExpc')),
-  new Animal('dog', DX.item('VIkx0xO2XE')),
-  new Animal('cat', DX.item('RbGraO0IGj')),
-  new Animal('bear', DX.item('xVXDONVw9d')),
-  new Animal('camel', DX.item('PTIQD6TUWU')),
-  new Animal('horse', DX.item('EOBZ04u457')),
-  new Animal('mouse', DX.item('LQMTggrwRe')),
-  new Animal('lion', DX.item('kbSkFnaMZ5'))
+  new Animal('elephant', Space.item('9np5tnExpc')),
+  new Animal('dog', Space.item('VIkx0xO2XE')),
+  new Animal('cat', Space.item('RbGraO0IGj')),
+  new Animal('bear', Space.item('xVXDONVw9d')),
+  new Animal('camel', Space.item('PTIQD6TUWU')),
+  new Animal('horse', Space.item('EOBZ04u457')),
+  new Animal('mouse', Space.item('LQMTggrwRe')),
+  new Animal('lion', Space.item('kbSkFnaMZ5'))
 ];
 
 var sounds = [
