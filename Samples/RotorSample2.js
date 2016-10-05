@@ -28,15 +28,13 @@ Animation.prototype.toString = function () {
   return "[Animation] " + this.name;
 };
 
-Animation.prototype.start = function (t) {
-  this.startTime = t;
-  this.currentTime = 0;
+Animation.prototype.start = function () {
+  this.startTime = Space.currentTime();
   this.finished = false;
 };
 
-Animation.prototype.update = function (t) {
-  this.currentTime = t;
-  if ((t - this.startTime) > this.duration) {
+Animation.prototype.update = function () {
+  if ((Space.currentTime() - this.startTime) > this.duration) {
     this.finished = true;
     //Space.log(this.toString() + " finished");
   }
@@ -45,7 +43,7 @@ Animation.prototype.update = function (t) {
 
 Animation.prototype.getProgress = function () {
   if (this.finished) return 1;
-  var timeLeft = this.startTime + this.duration - this.currentTime;
+  var timeLeft = this.startTime + this.duration - Space.currentTime();
   // Space.log("Timeleft " + timeLeft);
   // Space.log("duration " + this.duration);
   return 1 - timeLeft / this.duration;
@@ -55,10 +53,10 @@ var Animator = function () {
   this.anims = [];
 };
 
-Animator.prototype.update = function (t) {
+Animator.prototype.update = function () {
   if (this.anims.length > 0) {
     var a = this.anims[0];
-    a.update(t);
+    a.update();
     // Space.log(a.toString() + " Progress: " + a.getProgress());
     if (a.finished) {
       this.anims.shift();
@@ -75,7 +73,7 @@ Animator.prototype.addAnimation = function (a) {
   //Space.log("Added " + (this.anims.length + 1) + " animation");
   this.anims.push(a);
   if (this.anims.length == 1) {
-    a.start(totalTime);
+    a.start();
   }
 };
 
@@ -104,8 +102,8 @@ var Eyelid = function (item, state) {
   this.animator = new Animator();
 };
 
-Eyelid.prototype.update = function (t) {
-  this.animator.update(t);
+Eyelid.prototype.update = function () {
+  this.animator.update();
 };
 
 Eyelid.prototype.down = function () {
@@ -187,8 +185,8 @@ Pupil.prototype.right = function () {
   })()));
 };
 
-Pupil.prototype.update = function (t) {
-  this.animator.update(t);
+Pupil.prototype.update = function () {
+  this.animator.update();
 };
 
 //states: 1 - down, 2 - neutral, 3 - up
@@ -260,10 +258,10 @@ var Eye = function (eyeItem) {
   this.pupil = new Pupil(eyeItem.part("pupil"));
 };
 
-Eye.prototype.update = function (t) {
-  this.topEyelid.update(t);
-  this.bottomEyelid.update(t);
-  this.pupil.update(t);
+Eye.prototype.update = function () {
+  this.topEyelid.update();
+  this.bottomEyelid.update();
+  this.pupil.update();
 };
 
 Eye.prototype.blink = function () {
@@ -285,16 +283,13 @@ var leftEye = new Eye(Space.item("tbT09ciZTu"));
 var rightEB = new EyeBrow(Space.item("lwi4GxxSuH"), false);
 var leftEB = new EyeBrow(Space.item("VZuD0QyXaD"), true);
 
+// Main game loop
+
 Space.scheduleRepeating(function () {
-  var t = Space.currentTime();
-  if (startTime === 0) {
-    startTime = t;
-  }
-  totalTime = t - startTime;
-  leftEye.update(Space.currentTime());
-  rightEye.update(Space.currentTime());
-  leftEB.update(Space.currentTime());
-  rightEB.update(Space.currentTime());
+  leftEye.update();
+  rightEye.update();
+  leftEB.update();
+  rightEB.update();
 }, 0);
 
 var left = false;
