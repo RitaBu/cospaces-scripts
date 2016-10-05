@@ -1,4 +1,4 @@
-define(function() {
+define(function () {
   return function (cols, distX, distY) {
     var i = 0;
     var j = 0;

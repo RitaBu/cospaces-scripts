@@ -1,9 +1,9 @@
-Space.items().forEach(function(item) {
+Space.items().forEach(function (item) {
   item.remove();
 });
 
-Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function() {
-  require(['formations/Spiral', 'formations/Circle', 'formations/Rect'], function(Spiral, Circle, Rect) {
+Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
+  require(['formations/Spiral', 'formations/Circle', 'formations/Rect'], function (Spiral, Circle, Rect) {
     var n = 50;
     var items = [];
     for (var i = 0; i < n; ++i) {
@@ -23,11 +23,11 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
 
     (function newFormation(i) {
       var formation = getFormation(i);
-      items.forEach(function(item) {
+      items.forEach(function (item) {
         var next = formation.next();
         item.throwTo(next.x, next.y, 0, Math.random() * 10 + 0.1);
       });
-      Space.schedule(function() {
+      Space.schedule(function () {
         newFormation((i + 1) % 3);
       }, 5);
     })(0);
