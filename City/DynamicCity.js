@@ -1,6 +1,8 @@
-var city = Space.createCity(4,4,2);
+var city = Space.createCity(4, 4, 2);
 var rw = city.getRoadSize() / 4;
 var bs = city.getBlockSize() / 2;
+
+var carScale = 0.35;
 
 function createPathFromPoints(points) {
   var vec = [];
@@ -13,19 +15,19 @@ function createPathFromPoints(points) {
     var bp = city.getBlockPosition(h, w);
     var nbp = city.getBlockPosition(nh, nw);
     var xo = 0, yo = 0;
-    if(h == nh){
-      if(w < nw){
+    if (h == nh) {
+      if (w < nw) {
         yo = -rw;
       }
-      else{
+      else {
         yo = rw;
       }
     }
-    else{
-      if(h < nh){
+    else {
+      if (h < nh) {
         xo = -rw;
       }
-      else{
+      else {
         xo = rw;
       }
     }
@@ -63,47 +65,47 @@ function addCarsToPath(vec, n, color) {
       car.setColor(color[0], color[1], color[2]);
     car.addToBezier3DPathCurve(line.id());
     car.finishBezier3DPath(2, true);
-    car.setScale(0.4);
+    car.setScale(carScale);
   }
   return car;
 }
 
-function createPath1(){
+function createPath1() {
   var points = [];
-  points.push([0,0]);
-  points.push([0,3]);
-  points.push([3,3]);
-  points.push([3,0]);
+  points.push([0, 0]);
+  points.push([0, 3]);
+  points.push([3, 3]);
+  points.push([3, 0]);
   var vec = createPathFromPoints(points);
   addCarsToPath(vec, 8);
 }
 
-function createPath2(){
+function createPath2() {
   var points = [];
-  points.push([0,3]);
-  points.push([3,3]);
-  points.push([3,0]);
-  points.push([0,0]);
+  points.push([0, 3]);
+  points.push([3, 3]);
+  points.push([3, 0]);
+  points.push([0, 0]);
   var vec = createPathFromPoints(points);
   addCarsToPath(vec, 8);
 }
 
-function createPath3(){
+function createPath3() {
   var points = [];
-  points.push([0,3]);
-  points.push([0,1]);
-  points.push([3,1]);
-  points.push([3,3]);
+  points.push([0, 3]);
+  points.push([0, 1]);
+  points.push([3, 1]);
+  points.push([3, 3]);
   var vec = createPathFromPoints(points);
   addCarsToPath(vec, 8);
 }
 
-function createPath4(){
+function createPath4() {
   var points = [];
-  points.push([1,0]);
-  points.push([1,3]);
-  points.push([2,3]);
-  points.push([2,0]);
+  points.push([1, 1]);
+  points.push([1, 2]);
+  points.push([2, 2]);
+  points.push([2, 1]);
   var vec = createPathFromPoints(points);
   addCarsToPath(vec, 8);
 }
@@ -112,6 +114,73 @@ createPath1();
 createPath2();
 createPath3();
 createPath4();
+
+var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:"
+var states = ["D", "C", "A", "B"];
+
+var pos = city.getBlockPosition(1, 1);
+var x = pos[0];
+var y = pos[1];
+var d = 0.6 * bs;
+var item0 = Space.createItem(file + states[0], x + d, y + d, 0);
+item0.setRotationOZ(1, 0, true);
+item0.setProperty("light", "red");
+
+var item1 = Space.createItem(file + states[0], x - d, y - d, 0);
+item1.setRotationOZ(-1, 0, true);
+item1.setProperty("light", "red");
+
+var item2 = Space.createItem(file + states[0], x - d, y + d, 0);
+item2.setRotationOZ(0, 1, true);
+item2.setProperty("light", "red");
+
+var item3 = Space.createItem(file + states[0], x + d, y - d, 0);
+item3.setRotationOZ(0, -1, true);
+item3.setProperty("light", "red");
+
+var index = 0;
+function tick() {
+  index = (index + 1) % 4;
+  var pause;
+
+  if (index === 0) {
+    item0.setProperty("light", "red");
+    item0.setModelId(file + states[0]);
+    item1.setProperty("light", "red");
+    item1.setModelId(file + states[0]);
+
+    item2.setProperty("light", "green");
+    item2.setModelId(file + states[2]);
+    item3.setProperty("light", "green");
+    item3.setModelId(file + states[2]);
+    pause = 6;
+  } else if (index === 2) {
+    item0.setProperty("light", "green");
+    item0.setModelId(file + states[2]);
+    item1.setProperty("light", "green");
+    item1.setModelId(file + states[2]);
+
+    item2.setProperty("light", "red");
+    item2.setModelId(file + states[0]);
+    item3.setProperty("light", "red");
+    item3.setModelId(file + states[0]);
+    pause = 6;
+  } else {
+    item0.setProperty("light", "yellow");
+    item0.setModelId(file + states[3]);
+    item1.setProperty("light", "yellow");
+    item1.setModelId(file + states[3]);
+
+    item2.setProperty("light", "yellow");
+    item2.setModelId(file + states[3]);
+    item3.setProperty("light", "yellow");
+    item3.setModelId(file + states[3]);
+    pause = 3;
+  }
+  Space.schedule(tick, pause);
+}
+
+Space.schedule(tick, 1);
 
 Space.setCarDriveController(1, 0.5);
 Space.setRenderShadows(false);
