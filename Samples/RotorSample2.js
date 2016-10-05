@@ -209,7 +209,7 @@ EyeBrow.prototype.neutral = function () {
   var stateTo = this.state - 2;
   this.animator.addAnimation(new Animation("Neutral", BLINK_DURATION / 2, (function () {
     var lastProgress = 0;
-    const angle = 25;
+    const angle = 25 * stateTo;
     return function (anim) {
       var p = lastProgress;
       lastProgress = angle * anim.getProgress();
@@ -220,9 +220,37 @@ EyeBrow.prototype.neutral = function () {
 };
 
 EyeBrow.prototype.up = function () {
+  if (this.state === 3) return;
+  var that = this;
+  var r = this.left ? 3 : 1;
+  var stateTo = r - this.state;
+  this.animator.addAnimation(new Animation("Up", BLINK_DURATION / 2, (function () {
+    var lastProgress = 0;
+    const angle = 25 * stateTo;
+    return function (anim) {
+      var p = lastProgress;
+      lastProgress = angle * anim.getProgress();
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
+      that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+    };
+  })()));
 };
 
 EyeBrow.prototype.down = function () {
+  if (this.state === 1) return;
+  var that = this;
+  var r = this.left ? 1 : 3;
+  var stateTo = r - this.state;
+  this.animator.addAnimation(new Animation("Down", BLINK_DURATION / 2, (function () {
+    var lastProgress = 0;
+    const angle = 25 * stateTo;
+    return function (anim) {
+      var p = lastProgress;
+      lastProgress = angle * anim.getProgress();
+      // Space.log(anim.toString() + " lastProgress = " + lastProgress);
+      that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+    };
+  })()));
 };
 
 
@@ -251,9 +279,11 @@ Eye.prototype.left = function () {
   this.pupil.left();
 };
 
-Space.log("Everything loaded. Starting...");
 var rightEye = new Eye(Space.item("Lnq7saT89i"));
 var leftEye = new Eye(Space.item("tbT09ciZTu"));
+
+var rightEB = new EyeBrow(Space.item("lwi4GxxSuH"), false);
+var leftEB = new EyeBrow(Space.item("VZuD0QyXaD"), true);
 
 Space.scheduleRepeating(function () {
   var t = Space.currentTime();
@@ -261,12 +291,15 @@ Space.scheduleRepeating(function () {
     startTime = t;
   }
   totalTime = t - startTime;
-  rightEye.update(Space.currentTime());
   leftEye.update(Space.currentTime());
+  rightEye.update(Space.currentTime());
+  leftEB.update(Space.currentTime());
+  rightEB.update(Space.currentTime());
 }, 0);
 
 var left = false;
 var currentPos = 2;
+var currentEBPos = 2;
 
 function getRandom(min, max) {
   min = Math.ceil(min);
@@ -302,5 +335,25 @@ function moveEyesR() {
   }, r);
 }
 
+function moveEyebrowsR() {
+  var r = getRandom(1, 3);
+  if (r > currentEBPos) {
+    for (var i = currentEBPos; i < r; i++) {
+      leftEB.up();
+      rightEB.up();
+    }
+  } else if (currentEBPos > r) {
+    for (i = r; i < currentEBPos; i++) {
+      leftEB.down();
+      rightEB.down();
+    }
+  }
+  currentEBPos = r;
+  Space.schedule(function () {
+    moveEyebrowsR();
+  }, r);
+}
+
 blinkR();
 moveEyesR();
+moveEyebrowsR();
