@@ -1,4 +1,4 @@
-define(["lib1"], function(lib1) {
+define(["./lib1"], function(lib1) {
   var Lib2 = function() {
   };
 
