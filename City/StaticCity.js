@@ -164,7 +164,7 @@ path2(1, 10, 4);
 
 var focusCar = longPath(1, 10, 4, 4.5, 15);
 
-//Space.setCarDriveController(1, 0.5);
+Space.setCarDriveController(1, 0.5);
 
 var index = 0;
 function tick() {
