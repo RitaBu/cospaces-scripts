@@ -62,3 +62,17 @@ Animator.prototype.addAnimation = function (a) {
     a.start(totalTime);
   }
 };
+
+define(function() {
+  return {
+    Animator: Animator,
+    Animation: Animation,
+    startTime: startTime
+  }
+});
+
+require(['aasd'], function(animation) {
+  new animation.Animation();
+  new animation.Animator();
+  console.log(animation.startTime);
+});
