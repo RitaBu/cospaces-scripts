@@ -58,7 +58,7 @@ function addCarsToPath(vec, n, color) {
       line.addVertex(vec[j % nl].id());
     }
     var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    car = Space.createItem(modelId, vec[i].position()[0], vec[i].position()[1], 0);
+    car = Space.createItem(modelId, vec[i].position().x, vec[i].position().y, 0);
     if (color != null)
       car.setColor(color[0], color[1], color[2]);
     car.addToBezier3DPathCurve(line.id());
