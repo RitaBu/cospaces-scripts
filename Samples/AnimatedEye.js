@@ -107,18 +107,18 @@ define(['../helpers/animation/animation'], function (animation) {
   };
 
 //states: 1 - down, 2 - neutral, 3 - up
-  var EyeBrow = function (item, left) {
+  var Eyebrow = function (item, left) {
     this.item = item;
     this.left = left;
     this.animator = new animation.Animator();
     this.state = 2;
   };
 
-  EyeBrow.prototype.update = function (t) {
-    this.animator.update(t);
+  Eyebrow.prototype.update = function () {
+    this.animator.update();
   };
 
-  EyeBrow.prototype.neutral = function () {
+  Eyebrow.prototype.neutral = function () {
     if (this.state === 2) return;
     var that = this;
     var stateTo = this.state - 2;
@@ -134,7 +134,7 @@ define(['../helpers/animation/animation'], function (animation) {
     })()));
   };
 
-  EyeBrow.prototype.up = function () {
+  Eyebrow.prototype.up = function () {
     if (this.state === 3) return;
     var that = this;
     var r = this.left ? 3 : 1;
@@ -151,7 +151,7 @@ define(['../helpers/animation/animation'], function (animation) {
     })()));
   };
 
-  EyeBrow.prototype.down = function () {
+  Eyebrow.prototype.down = function () {
     if (this.state === 1) return;
     var that = this;
     var r = this.left ? 1 : 3;
@@ -168,16 +168,22 @@ define(['../helpers/animation/animation'], function (animation) {
     })()));
   };
 
-  var Eye = function (eyeItem) {
+  var Eye = function (eyeItem, eyebrowItem, left) {
     this.topEyelid = new Eyelid(eyeItem.part("topEyelid"), STATE_OPEN);
     this.bottomEyelid = new Eyelid(eyeItem.part("bottomEyelid"), STATE_OPEN);
     this.pupil = new Pupil(eyeItem.part("pupil"));
+    if (eyebrowItem !== undefined) {
+      this.eyebrow = new Eyebrow(eyebrowItem, left);
+    }
   };
 
   Eye.prototype.update = function () {
     this.topEyelid.update();
     this.bottomEyelid.update();
     this.pupil.update();
+    if (this.eyebrow !== undefined) {
+      this.eyebrow.update();
+    }
   };
 
   Eye.prototype.blink = function () {
@@ -192,6 +198,19 @@ define(['../helpers/animation/animation'], function (animation) {
   Eye.prototype.left = function () {
     this.pupil.left();
   };
+
+  Eye.prototype.eyebrowUp = function () {
+    if (this.eyebrow !== undefined) {
+      this.eyebrow.up();
+    }
+  };
+
+  Eye.prototype.eyebrowDown = function () {
+    if (this.eyebrow !== undefined) {
+      this.eyebrow.down();
+    }
+  };
+
   return Eye;
 });
 
