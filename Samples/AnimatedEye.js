@@ -71,7 +71,7 @@ define(['../helpers/animation/animation'], function (animation) {
 
   var Pupil = function (item) {
     this.item = item;
-    this.animator = new Animator();
+    this.animator = new animation.Animator();
   };
 
   Pupil.prototype.left = function () {
