@@ -11,6 +11,11 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function white(item) {
+  item.setColor(255, 255, 255);
+  return item;
+}
+
 function red(item) {
   item.setColor(255, 0, 0);
   return item;
@@ -27,13 +32,19 @@ function bgT(billboard) {
 }
 
 function bgG(billboard) {
-  billboard.setBackgroundColor(0, 44, 79);
+  billboard.setBackgroundColor(0, 44, 255);
   return billboard;
 }
 
 function bgC(billboard) {
-  billboard.setBackgroundColor(108, 0, 79);
+  billboard.setBackgroundColor(108, 255, 79);
   return billboard;
+}
+
+function newSugarItem(x, y, z) {
+  var item = Space.createItem("Sphere", x, y, z);
+  white(item).setScale(0.5);
+  return item;
 }
 
 function newPhosphateItem(x, y, z) {
@@ -51,7 +62,7 @@ function newBase(left, l, x1, y1, z1, angle) {
   billboard.setFontSize(0.3);
   billboard.showPodium(false);
   billboard.setText(l);
-  //billboard.rotateLocalAxis(0, 1, 0, 0, 1, 0, radians(angle), true);
+  //billboard.rotateLocalAxis(0, 1, 0, 0, 1, 0, radians(curAngle), true);
   switch (l) {
     case "A":
       bgA(billboard);
@@ -88,26 +99,38 @@ function newGC(a, x1, y1, z1, angle) {
   }
 }
 
+function _x(angle) {
+  return Math.cos(radians(angle)) * width / 2;
+}
+
+function _y(angle) {
+  return Math.sin(radians(angle)) * width / 2;
+}
+
 for (var i = 0; i < numSteps; i++) {
-  var angle = 10 * i;
+  var angle = 10;
+  var curAngle = angle * i;
+  var h = 0.4;
   var r = getRandom(0, 3);
-  var x = Math.cos(radians(angle)) * width / 2;
-  var y = Math.sin(radians(angle)) * width / 2;
-  newPhosphateItem(width / 2 - x, -y, i * 0.2);
-  newPhosphateItem(width / 2 + x, y, i * 0.2);
+  var x = _x(curAngle);
+  var y = _y(curAngle);
+  newSugarItem(width / 2 - x, -y, i * h);
+  newSugarItem(width / 2 + x, y, i * h);
+  newPhosphateItem(width / 2 - _x(curAngle + angle / 2), -_y(curAngle + angle / 2), i * h + h/2);
+  newPhosphateItem(width / 2 + _x(curAngle + angle / 2), _y(curAngle + angle / 2), i * h + h/2);
   // Space.log("X=" + x);
   switch (r) {
     case 0:
-      newAT(true, width / 2 - x, -y, i * 0.2, angle);
+      newAT(true, width / 2 - x, -y, i * h, curAngle);
       break;
     case 1:
-      newAT(false, width / 2 - x, -y, i * 0.2, angle);
+      newAT(false, width / 2 - x, -y, i * h, curAngle);
       break;
     case 2:
-      newGC(true, width / 2 - x, -y, i * 0.2, angle);
+      newGC(true, width / 2 - x, -y, i * h, curAngle);
       break;
     case 3:
-      newGC(false, width / 2 - x, -y, i * 0.2, angle);
+      newGC(false, width / 2 - x, -y, i * h, curAngle);
       break;
   }
 }
