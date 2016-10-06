@@ -45,7 +45,7 @@ define(function () {
         this.anims.shift();
         if (this.anims.length > 0) {
           a = this.anims[0];
-          a.start(t);
+          a.start();
           //Space.log(a.toString() + " finished. Left " + this.anims.length + " animations");
         }
       }
