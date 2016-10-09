@@ -1,8 +1,8 @@
-define(['animation'], function (Animation, Animator) {
+define(['animation'], function (animation) {
   return function (animCreator, debug) {
     this.animCreator = animCreator;
     this.animation = this.animCreator();
-    this.animator = new Animator(debug);
+    this.animator = new animation.Animator(debug);
     this.animator.addAnimation(this.animation);
     var that = this;
     this.update = function () {
