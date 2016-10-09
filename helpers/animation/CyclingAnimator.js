@@ -12,7 +12,5 @@ define(['animation'], function (Animation, Animator) {
         this.animator.addAnimation(this.animation);
       }
     };
-
-    return this;
   };
 });
