@@ -4,12 +4,12 @@ define(['animation'], function (Animation, Animator) {
     this.animation = this.animCreator();
     this.animator = new Animator(debug);
     this.animator.addAnimation(this.animation);
-
+    var that = this;
     this.update = function () {
-      this.animator.update();
-      if (this.animation.finished) {
-        this.animation = this.animCreator();
-        this.animator.addAnimation(this.animation);
+      that.animator.update();
+      if (that.animation.finished) {
+        that.animation = that.animCreator();
+        that.animator.addAnimation(that.animation);
       }
     };
   };
