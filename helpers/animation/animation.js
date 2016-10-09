@@ -15,6 +15,7 @@ define(function () {
   Animation.prototype.start = function () {
     this.startTime = Space.currentTime();
     this.finished = false;
+    Space.log(this.toString() + " started");
   };
 
   Animation.prototype.update = function () {
