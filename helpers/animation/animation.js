@@ -38,8 +38,9 @@ define(function () {
     return 1 - timeLeft / this.duration;
   };
 
-  var Animator = function () {
+  var Animator = function (debug) {
     this.anims = [];
+    this.DEBUG = (typeof debug !== 'undefined') ?  debug : false;
   };
 
   Animator.prototype.update = function () {
