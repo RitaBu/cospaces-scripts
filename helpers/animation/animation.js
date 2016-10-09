@@ -1,5 +1,5 @@
 define(function () {
-§  var Animation = function (name, duration, exec, debug) {
+  var Animation = function (name, duration, exec, debug) {
     this.name = name;
     this.duration = duration;
     this.finished = true;
