@@ -9,25 +9,20 @@ Space.scheduleRepeating(function () {
   mainRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
   tailRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 10 * Math.PI / 180, true);
 }, 0);
+Space.setRenderShadows(false);
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['AnimatedEye'], function (AnimatedEye) {
-    var rightEye = new AnimatedEye(Space.item("Lnq7saT89i"), Space.item("lwi4GxxSuH"));
-    var leftEye = new AnimatedEye(Space.item("tbT09ciZTu"), Space.item("VZuD0QyXaD"));
-
-    var rightEB = new EyeBrow(Space.item("lwi4GxxSuH"), false);
-    var leftEB = new EyeBrow(Space.item("VZuD0QyXaD"), true);
+    var rightEye = new AnimatedEye(Space.item("Lnq7saT89i"), Space.item("lwi4GxxSuH"), false);
+    var leftEye = new AnimatedEye(Space.item("tbT09ciZTu"), Space.item("VZuD0QyXaD"), true);
 
 // Main game loop
 
     Space.scheduleRepeating(function () {
       leftEye.update();
       rightEye.update();
-      leftEB.update();
-      rightEB.update();
     }, 0);
 
-    var left = false;
     var currentPos = 2;
     var currentEBPos = 2;
 
