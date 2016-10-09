@@ -6,39 +6,32 @@ var Color = function (red, green, blue) {
   this.blue = blue;
 };
 
+var Sun = function () {
+  var sun = Space.createItem("Cloud", 0, 0, 0);
+  sun.setScale(4);
+  sun.setColor(255, 255, 0);
+  var sunCore = Space.createItem("Sphere", 0, 0, 0.25);
+  sunCore.setScale(3);
+  sunCore.setColor(255, 255, 0);
+};
+
 var Planet = function (scale, orbit, color, z) {
   this.item = Space.createItem("Sphere", orbit, 0, z);
   this.item.setScale(scale);
-  this.item.orbit = orbit;
+  this.orbit = orbit;
   this.item.setColor(color.red, color.green, color.blue);
+  this.z = z;
 };
 
 Planet.prototype.setPosition = function (x, y, z) {
   this.item.setPosition(x, y, z);
 };
 
-var sun = Space.createItem("Cloud", 0, 0, 0);
-sun.setScale(4);
-sun.setColor(255, 255, 0);
-var sunCore = Space.createItem("Sphere", 0, 0, 0.25);
-sunCore.setScale(3);
-sunCore.setColor(255, 255, 0);
+new Sun();
 
-var earthOrbit = 3;
-var earthZ = 0.5;
-var earth = new Planet(earthScale, 3, new Color(135, 206, 250), 1);
-
-var marsOrbit = 5;
-var marsZ = 1;
-var mars = Space.createItem("Sphere", marsOrbit, 0, marsZ);
-mars.setScale(earthScale * 0.53);
-mars.setColor(220, 20, 60);
-
-var jupiterOrbit = 17;
-var jupiterZ = -11.19/4;
-var jupiter = Space.createItem("Sphere", jupiterOrbit, 0, jupiterZ);
-jupiter.setScale(earthScale * 11.19);
-jupiter.setColor(105, 105, 105);
+var earth = new Planet(earthScale, 3, new Color(135, 206, 250), 0.5);
+var mars = new Planet(earthScale * 0.53, 5, new Color(220, 20, 60), 1);
+var jupiter = new Planet(earthScale * 11.19, 17, new Color(105, 105, 105), -11.19/4);
 
 var earthAnimator;
 var marsAnimator;
@@ -51,21 +44,21 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       return new animation.Animation("Orbit", 3, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
         // Space.log("Progress: " + p);
-        earth.setPosition(earthOrbit * Math.cos(p), earthOrbit * Math.sin(p), earthZ);
+        earth.setPosition(earth.orbit * Math.cos(p), earth.orbit * Math.sin(p), earth.z);
       });
     }
 
     function createMarsAnimation() {
       return new animation.Animation("Orbit", 6, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
-        mars.setPosition(marsOrbit * Math.cos(p), marsOrbit * Math.sin(p), marsZ);
+        mars.setPosition(mars.orbit * Math.cos(p), mars.orbit * Math.sin(p), mars.z);
       });
     }
 
     function createJupiterAnimation() {
       return new animation.Animation("Orbit", 16, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
-        jupiter.setPosition(jupiterOrbit * Math.cos(p), jupiterOrbit * Math.sin(p), jupiterZ);
+        jupiter.setPosition(jupiter.orbit * Math.cos(p), jupiter.orbit * Math.sin(p), jupiter.z);
       });
     }
 
