@@ -41,31 +41,16 @@ var jupiterAnimator;
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/animation/", function () {
   require(['animation', "CyclingAnimator"], function (animation, CyclingAnimator) {
 
-    function createEarthAnimation() {
-      return new animation.Animation("Orbit", earthAnimationDuration, function (anim) {
+    function createPlanetAnimation(planet, duration) {
+      return new animation.Animation("Orbit", duration, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
-        // Space.log("Progress: " + p);
-        earth.setPosition(earth.orbit * Math.cos(p), earth.orbit * Math.sin(p), earth.z);
+        planet.setPosition(planet.orbit * Math.cos(p), planet.orbit * Math.sin(p), planet.z);
       });
     }
 
-    function createMarsAnimation() {
-      return new animation.Animation("Orbit", earthAnimationDuration * 2, function (anim) {
-        var p = 360 * anim.getProgress() * Math.PI / 180;
-        mars.setPosition(mars.orbit * Math.cos(p), mars.orbit * Math.sin(p), mars.z);
-      });
-    }
-
-    function createJupiterAnimation() {
-      return new animation.Animation("Orbit", earthAnimationDuration * 5, function (anim) {
-        var p = 360 * anim.getProgress() * Math.PI / 180;
-        jupiter.setPosition(jupiter.orbit * Math.cos(p), jupiter.orbit * Math.sin(p), jupiter.z);
-      });
-    }
-
-    earthAnimator = new CyclingAnimator(createEarthAnimation);
-    marsAnimator = new CyclingAnimator(createMarsAnimation);
-    jupiterAnimator = new CyclingAnimator(createJupiterAnimation);
+    earthAnimator = new CyclingAnimator(function () {return createPlanetAnimation(earth, earthAnimationDuration)});
+    marsAnimator = new CyclingAnimator(function () {return createPlanetAnimation(mars, earthAnimationDuration * 2)});
+    jupiterAnimator = new CyclingAnimator(function () {return createPlanetAnimation(jupiter, earthAnimationDuration * 5)});
 
     Space.scheduleRepeating(function () {
       earthAnimator.update();
