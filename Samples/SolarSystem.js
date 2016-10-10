@@ -1,4 +1,5 @@
 var earthScale = 1;
+var earthAnimationDuration = 3;
 
 var Color = function (red, green, blue) {
   this.red = red;
@@ -31,7 +32,7 @@ new Sun();
 
 var earth = new Planet(earthScale, 3, new Color(135, 206, 250), 0.5);
 var mars = new Planet(earthScale * 0.53, 5, new Color(220, 20, 60), 1);
-var jupiter = new Planet(earthScale * 11.19, 17, new Color(105, 105, 105), -11.19/4);
+var jupiter = new Planet(earthScale * 11.19, 17, new Color(105, 105, 105), -11.19 / 4);
 
 var earthAnimator;
 var marsAnimator;
@@ -41,7 +42,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
   require(['animation', "CyclingAnimator"], function (animation, CyclingAnimator) {
 
     function createEarthAnimation() {
-      return new animation.Animation("Orbit", 3, function (anim) {
+      return new animation.Animation("Orbit", earthAnimationDuration, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
         // Space.log("Progress: " + p);
         earth.setPosition(earth.orbit * Math.cos(p), earth.orbit * Math.sin(p), earth.z);
@@ -49,14 +50,14 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
     }
 
     function createMarsAnimation() {
-      return new animation.Animation("Orbit", 6, function (anim) {
+      return new animation.Animation("Orbit", earthAnimationDuration * 2, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
         mars.setPosition(mars.orbit * Math.cos(p), mars.orbit * Math.sin(p), mars.z);
       });
     }
 
     function createJupiterAnimation() {
-      return new animation.Animation("Orbit", 16, function (anim) {
+      return new animation.Animation("Orbit", earthAnimationDuration * 5, function (anim) {
         var p = 360 * anim.getProgress() * Math.PI / 180;
         jupiter.setPosition(jupiter.orbit * Math.cos(p), jupiter.orbit * Math.sin(p), jupiter.z);
       });
