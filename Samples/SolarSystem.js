@@ -20,10 +20,10 @@ var Color = function (red, green, blue) {
 };
 
 var Sun = function () {
-  var sun = Space.createItem("Cloud", 0, 0, 0);
+  var sun = Space.createItem("Cloud", 0, 0, -1);
   sun.setScale(4);
   sun.setColor(255, 255, 0);
-  var sunCore = Space.createItem("Sphere", 0, 0, 0.25);
+  var sunCore = Space.createItem("Sphere", 0, 0, -0.75);
   sunCore.setScale(3);
   sunCore.setColor(255, 255, 0);
 };
@@ -31,8 +31,9 @@ var Sun = function () {
 var Planet = function (item, scale, orbit, color, z) {
   if (item !== null) {
     this.item = item;
+    this.item.setPosition(0, 0, z);
   } else {
-    this.item = Space.createItem("Sphere", orbit, 0, 0);
+    this.item = Space.createItem("Sphere", orbit, 0, 0, z);
     this.item.setScale(scale);
     this.item.setColor(color.red, color.green, color.blue);
   }
@@ -42,7 +43,7 @@ var Planet = function (item, scale, orbit, color, z) {
     this.orbitItem = Space.createItem("Torus", 0, 0, 0);
     this.orbitItem.setColor(128, 128, 128);
     this.orbitItem.setMajorX(orbit);
-    var d = 0.05;
+    var d = 0.02;
     this.orbitItem.setMinorX(d);
     this.orbitItem.setMinorZ(d);
   }
@@ -54,10 +55,10 @@ Planet.prototype.setPosition = function (x, y, z) {
 
 new Sun();
 
-var earth = new Planet(Space.item("aGsGCuq8k4"), earthScale, 3, new Color(135, 206, 250), 0.5);
-var mars = new Planet(null, earthScale * 0.53, 5, new Color(220, 20, 60), 1);
-var jupiter = new Planet(Space.item("7sN5plXgah"), earthScale * 11.19, 17, new Color(105, 105, 105), -11.19 / 4);
-var saturn = new Planet(Space.item("yXEVdXBOZJ"), earthScale * 11.19, 29, new Color(105, 255, 105), -11.19 / 4);
+var earth = new Planet(Space.item("Jqy4MACT23"), earthScale, 3, new Color(135, 206, 250), -0.5);
+var mars = new Planet(null, earthScale * 0.53, 5, new Color(220, 20, 60), -0.5);
+var jupiter = new Planet(Space.item("7sN5plXgah"), earthScale * 11.19, 17, new Color(105, 105, 105), -11.19 / 2);
+var saturn = new Planet(Space.item("yXEVdXBOZJ"), earthScale * 11.19, 29, new Color(105, 255, 105), -1);
 
 var earthAnimator;
 var marsAnimator;
