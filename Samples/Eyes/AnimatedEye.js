@@ -1,4 +1,4 @@
-define(['../helpers/animation/animation'], function (animation) {
+define(['../../helpers/animation/animation'], function (animation) {
   const STATE_OPEN = "OPEN";
   const STATE_CLOSED = "CLOSED";
   const BLINK_DURATION = 0.11;
