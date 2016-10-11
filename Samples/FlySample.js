@@ -1,4 +1,4 @@
-Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/Samples/", function () {
+Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['Fly'], function (Fly) {
 
     var fly = new Fly(Space.item("q5VWCw7hVA"));
