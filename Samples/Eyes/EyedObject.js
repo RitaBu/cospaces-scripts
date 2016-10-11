@@ -1,4 +1,4 @@
-define(['AnimatedEye'], function (AnimatedEye) {
+define(['./AnimatedEye'], function (AnimatedEye) {
   var EyedObject = function (item) {
     this.leftEye = new AnimatedEye(item.part("LeftEye"));
     this.rightEye = new AnimatedEye(item.part("RightEye"));
