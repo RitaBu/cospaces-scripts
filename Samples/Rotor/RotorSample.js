@@ -12,7 +12,7 @@ Space.scheduleRepeating(function () {
 Space.setRenderShadows(false);
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
-  require(['AnimatedEye'], function (AnimatedEye) {
+  require(['../Eyes/AnimatedEye'], function (AnimatedEye) {
     var rightEye = new AnimatedEye(Space.item("Lnq7saT89i"), Space.item("lwi4GxxSuH"), false);
     var leftEye = new AnimatedEye(Space.item("tbT09ciZTu"), Space.item("VZuD0QyXaD"), true);
 
