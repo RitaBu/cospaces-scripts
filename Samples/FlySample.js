@@ -38,13 +38,11 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       var r = getRandom(1, 3);
       if (r > currentPos) {
         for (var i = currentPos; i < r; i++) {
-          frog.leftEye.right();
-          frog.rightEye.right();
+          frog.right();
         }
       } else if (currentPos > r) {
         for (i = r; i < currentPos; i++) {
-          frog.leftEye.left();
-          frog.rightEye.left();
+          frog.left();
         }
       }
       currentPos = r;
