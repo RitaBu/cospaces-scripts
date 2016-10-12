@@ -4,7 +4,7 @@ var flySound = Space.loadSound("1df61e9d62778eaeccb6f521decbc6bae18e364bfc6dbc1b
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['Fly/Fly', 'Frog/Frog'], function (Fly, Frog) {
 
-    var fly = new Fly(Space.getItem("lgLludHrtX"));
+    var fly = new Fly(Space.getItem("9OMwazjWDz"));
     var frog = new Frog(Space.getItem("pmWoOSsnSi"));
 
     Space.scheduleRepeating(function () {
