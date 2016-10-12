@@ -13,11 +13,11 @@ define(['../../helpers/animation/animation'], function (animation) {
     var that = this;
     this.animator.addAnimation(new animation.Animation("Out", DURATION, (function () {
       var sizeZ = that.item.getSize()[2];
-      Space.log("sizeZ: " + sizeZ);
+      Project.log("sizeZ: " + sizeZ);
       const range = 0.5;
       return function (anim) {
         var p = anim.getProgress();
-        Space.log("Out: " + p + " " + (sizeZ + range * p));
+        Project.log("Out: " + p + " " + (sizeZ + range * p));
         that.item.setZ(sizeZ + range * p);
       };
     })()));
@@ -28,10 +28,10 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.animator.addAnimation(new animation.Animation("In", DURATION, (function () {
       const range = 0.5;
       var sizeZ = that.item.getSize()[2];
-      Space.log("sizeZ: " + sizeZ);
+      Project.log("sizeZ: " + sizeZ);
       return function (anim) {
         var p = anim.getProgress();
-        Space.log("In: " + p + " " + (sizeZ - range * p));
+        Project.log("In: " + p + " " + (sizeZ - range * p));
         that.item.setZ(sizeZ - range * p);
       };
     })()));
