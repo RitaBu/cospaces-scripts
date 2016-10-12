@@ -1,5 +1,8 @@
 #ifndef COLOR_JS
 #define COLOR_JS
+
+#include "lib/api_adapter.js"
+
 function Color(name,r,g,b) {
     this.name = name;
     this.r = r;

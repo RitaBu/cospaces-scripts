@@ -1,6 +1,8 @@
 #ifndef SOUND_MANAGER_JS
 #define SOUND_MANAGER_JS
 
+
+#include "lib/api_adapter.js"
 #include "lib/vector_utils.js"
 
 function playSound(sound, loop) {
@@ -86,7 +88,7 @@ function SoundManager(server) {
             var distance = vec3length(vec3sub(position, myPosition));
             distance /= 2;
             if(distance < 1) distance = 1;
-            soundToPlay.setVolume(1.0 / (distance * distance));
+            //soundToPlay.setVolume(1.0 / (distance * distance));
             return soundToPlay;
         } else {
             return null;

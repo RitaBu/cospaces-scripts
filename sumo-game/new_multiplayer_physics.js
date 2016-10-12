@@ -1,3 +1,4 @@
+#include "lib/api_adapter.js"
 #include "lib/server_framework.js"
 #include "lib/control.js"
 

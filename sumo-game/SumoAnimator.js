@@ -1,6 +1,8 @@
 #ifndef SUMO_ANIMATOR_JS
 #define SUMO_ANIMATOR_JS
 
+#include "lib/api_adapter.js"
+
 function SumoAnimator(item) {
     this.item = item;
 

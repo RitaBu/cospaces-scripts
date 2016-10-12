@@ -1,6 +1,8 @@
 #ifndef FOCUS_GAME_CAMERA_H
 #define FOCUS_GAME_CAMERA_H
 
+#include "api_adapter.js"
+
 #include "heartbeat_wrapper.js"
 #include "vector_utils.js"
 
@@ -50,7 +52,11 @@ var Camera = (function (){
             if(item === null) return;
             var pos = item.position();
             //myCamera.setPosition(pos[0], pos[1], pos[2] + 1.0);
-            var camDirection = myCamera.cameraDirection();
+            var camDirection = [];
+            var tempCamDir = myCamera.cameraDirection();
+            camDirection.push(tempCamDir.x);
+            camDirection.push(tempCamDir.y);
+            camDirection.push(tempCamDir.z);
             camDirection = vec3getNormal(camDirection);
             camDirection = vec3mul(camDirection, -1 * myCamera.getCameraDistance());
             myCamera.setPosition(pos[0] + camDirection[0], pos[1] + camDirection[1], pos[2] + camDirection[2] + myHeight);
@@ -62,7 +68,7 @@ var Camera = (function (){
 
         });};
 
-    DX.runLater(runLaterFunc, 0.1);
+    DX.schedule(runLaterFunc, 0.1);
 
     return {
         focusOn : focusOn,

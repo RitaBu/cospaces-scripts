@@ -1,6 +1,8 @@
 #ifndef OBJECT_UTILS_H
 #define OBJECT_UTILS_H
 
+#include "api_adapter.js"
+
 Object.prototype.getName = function() { //get "type" from object
   var funcNameRegex = /function (.{1,})\(/;
   var results = (funcNameRegex).exec((this).constructor.toString());

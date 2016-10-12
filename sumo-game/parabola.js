@@ -1,6 +1,8 @@
 #ifndef PARABOLA_JS
 #define PARABOLA_JS
 
+#include "lib/api_adapter.js"
+
 /**
  * Class to hit person ot jump
  * @param owner - type of GameItem

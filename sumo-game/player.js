@@ -1,6 +1,7 @@
 #ifndef PLAYER_JS
 #define PLAYER_JS
 
+#include "lib/api_adapter.js"
 #include "lib/server_framework.js"
 #include "parabola.js"
 #include "lib/control.js"
@@ -12,6 +13,8 @@
 #include "ButtonReadyTest.js"
 #include "SumoSoundManager.js"
 #include "ObjectCash.js"
+
+var sumoId = "%%37abed45d827ae4a0890b776ff33b36d6b468027bdacd5fffe18a4df7d752cd9";
 
 var server = new ServerFramework();
 
@@ -50,6 +53,7 @@ function setRotationAroundZAxis(itemId, angle) {
 }
 
 function Player() {
+    DX.log("player ctor");
     //item properties
     this.item = null;
     this.forwardVector = null;
@@ -162,7 +166,12 @@ Player.prototype.update = function(dt) {
 
     var camera = Camera.getCamera();
     if(camera != null) {
-        var axis = camera.cameraDirection();
+        //var axis = camera.cameraDirection();
+        var axis = [];
+        var tempAxis = camera.cameraDirection();
+        axis.push(tempAxis.x);
+        axis.push(tempAxis.y);
+        axis.push(tempAxis.z);
         var angle = getAngle(axis[0], axis[1]) - Math.PI / 2;
         var unitAxis = this.item.getAxisY();
         var unitAngle = getAngle(unitAxis[0], unitAxis[1]);
@@ -203,7 +212,8 @@ Player.prototype.checkOutOfRing = function() {
 }
 
 Player.prototype.start = function() {
-    server.initWithItem(DX.createItem("Sumo", 0, 0, 0));
+    DX.log("player start");
+    server.initWithItem(DX.createItem(sumoId, 0, 0, 0));
 
     sinkResolver.setPlayerId(server.getPlayerId());
     var that = this;
@@ -220,7 +230,7 @@ Player.prototype.start = function() {
     new ButtonReady(server.getPlayerId(),0.6,0.6,4, function (){
         server.sendReliableToServer({type: "ready"});
     });
-    DX.runLater(function(){
+    DX.schedule(function(){
         DX.log("sent buttons to server");
         var ids = Button.getButtonIds();
         server.sendReliableToServer({type: "buttons", ids: ids});
@@ -236,7 +246,7 @@ Player.prototype.jump = function() {
         var that = this;
         that.animator.setAnim(that.animator.jumpState);
         this.jumpCD = true;
-        DX.runLater(function(dt){
+        DX.schedule(function(dt){
             that.jumpCD = false;
         },that.jumpCDTime);
         this.forwardVector = this.item.getAxisY();
@@ -337,7 +347,7 @@ Player.prototype.checkWhoIsPunched = function() {
         //that.setAnim(that.pushState);
         that.animator.setAnim(that.animator.pushState);
         this.punchCD = true;
-        DX.runLater(function(dt){
+        DX.schedule(function(dt){
             that.punchCD = false;
         },that.punchCDTime);
         var listPlayersToPunch = [];
@@ -389,6 +399,8 @@ Player.prototype.stop = function() {
 //function movePlayer (itemId, dir, dt) {
 Player.prototype.movePlayer  = function(/*itemId,*/ dir, dt) {
 
+    DX.log("dt: " + dt);
+
     var zeroVec = {};
     zeroVec[0] = 0.0; zeroVec[1] = 0.0; zeroVec[2] = 0.0;
 
@@ -427,6 +439,7 @@ Player.prototype.movePlayer  = function(/*itemId,*/ dir, dt) {
             resDir = vec3add(axisX, axisY);
             break;
     }
+
 
     if(vec3lengthSquared(resDir) > 0) {
         resDir = vec3mul(resDir, 1.0 / Math.sqrt(vec3lengthSquared(resDir)) * speed * dt);

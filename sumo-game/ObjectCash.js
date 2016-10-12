@@ -1,6 +1,8 @@
 #ifndef OBJECT_CASH_JS
 #define OBJECT_CASH_JS
 
+#include "lib/api_adapter.js"
+
 function ObjectCash(obj) {
     var thisRef = this;
     this.temp = {};

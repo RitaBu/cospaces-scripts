@@ -1,6 +1,8 @@
 #ifndef VECTOR_UTILS_JS
 #define VECTOR_UTILS_JS
 
+#include "api_adapter.js"
+
 function vec3add(vec1, vec2) {
   var res = {};
   res[0] = vec1[0] + vec2[0];

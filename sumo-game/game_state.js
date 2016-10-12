@@ -1,6 +1,8 @@
 #ifndef GAME_STATE_JS
 #define GAME_STATE_JS
 
+#include "lib/api_adapter.js"
+
 #include "lib/heartbeat_wrapper.js"
 
 function GameState() {

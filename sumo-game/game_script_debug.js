@@ -5,6 +5,8 @@
 #include "game_state.js"
 #include "Color.js"
 
+#include "lib/api_adapter.js"
+
 var foodCount = 3;
 
 function ServerInfo() {
@@ -44,6 +46,7 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         player.update(dt);
     });
     DX.command(function (cmd) {
+        DX.log("command received");
         var it = DX.item(server.getPlayerId());
         if(it!=null) {
             var com = parseInt(cmd);
@@ -98,7 +101,8 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         }
         serverInfo.gameState.init(server);
         if(serverInfo.scene == null || DX.item(serverInfo.scene) === null) {
-            serverInfo.scene = DX.createItem("%%ffdbcebdf440742dc4eeeec4aeda03fb71623decf36e4f538ecf257bae4bc08a", 0, 0, 0); //sumo arena
+            //serverInfo.scene = DX.createItem("%%ffdbcebdf440742dc4eeeec4aeda03fb71623decf36e4f538ecf257bae4bc08a", 0, 0, 0); //sumo arena
+            serverInfo.scene = DX.createItem("%%c56c7c88ecfa6de9a9ed699fd0eed63808408a684284c19474cbff73673de0a4", 0, 0, 0); //sumo arena
         }
         foodFunc();
         colomns();
@@ -109,7 +113,7 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         controlManager.processControls();
     }
 
-
+    DX.log("starting player");
     player.start();
     controlManager.registerItemId(server.getPlayerId());
     var foodSpawnTime = 5;
@@ -143,17 +147,6 @@ if(info == null || info.gameState.getGameState() == "waiting") {
 
     foodFunc = function() {
         if (serverInfo.gameState.getGameState() != "playing") {
-            /*
-            if (serverInfo.food !== null) {
-                var foodItem = DX.item(serverInfo.food.id);
-                if (foodItem != null) {
-                    foodItem.remove();
-                }
-                serverInfo.food = null;
-                foodsp = true;
-            }
-            */
-            DX.log("food non-playing");
             for(i = 0; i < foodCount; i++) {
                 if(serverInfo.food[i] !== null) {
                     var foodItem = DX.item(serverInfo.food[i].id);
@@ -174,7 +167,7 @@ if(info == null || info.gameState.getGameState() == "waiting") {
                 foodsp[food_i] = false;
                 var temp_food_i = food_i;
                 (function(i){
-                    DX.runLater(function (dt) {
+                    DX.schedule(function (dt) {
                             DX.log("food_i in food runLater: " + i);
                             serverInfo.food[i] = new FoodClass(1);
                             serverInfo.food[i].init();

@@ -1,6 +1,8 @@
 #ifndef NEW_SERVER_LIBRARY_JS
 #define NEW_SERVER_LIBRARY_JS
 
+#include "api_adapter.js"
+
 #include "property_utils.js"
 #include "object_utils.js"
 #include "heartbeat_wrapper.js"
@@ -305,7 +307,7 @@ var ServerFramework = function() {
   }
 
   this.getDt = function() {
-    return dt;
+    return 1.0 / 60.0;
   }
 
   this.getPlayersList = function() {
@@ -478,7 +480,7 @@ var ServerFramework = function() {
   //INIT FUNCTIONS
   
   this.initWithItem = function(item) {
-    //DX.log("item: " + item);
+    DX.log("initializing server with item: " + item);
     thisPlayerId = item;
 
     DX.log("typeof item in server init: " + typeof item);
@@ -497,6 +499,7 @@ var ServerFramework = function() {
         serverCheckFunction(serverCheckPeriod);
       }
       frameFunction(argDt);
+      
       dt = argDt;
     });
     

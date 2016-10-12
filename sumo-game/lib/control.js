@@ -3,6 +3,8 @@
 
 //#include "property_utils.js"
 
+#include "api_adapter.js"
+
 var ControlManager = function() {
   var registeredItems = [];
 

@@ -1,6 +1,9 @@
 #ifndef FOOD_JS
 #define FOOD_JS
 
+#include "lib/api_adapter.js"
+
+
 #include "lib/server_framework.js"
 #include "Color.js"
 
@@ -17,7 +20,7 @@ function powerBuff(p) {
     p.scale += 0.3;
     p.strength += 3;
     p.item.setScale(p.scale);
-    DX.runLater(function (dt) {
+    DX.schedule(function (dt) {
         p.scale = Math.max(p.scale - 0.2, p.playerCash.scale);
         p.strength = Math.max(p.strength - 2, p.playerCash.strength);
         p.item.setScale(p.scale);
@@ -26,7 +29,7 @@ function powerBuff(p) {
 
 function jumpBuff(p) {
     p.jumpPower += 3;
-    DX.runLater(function (dt) {
+    DX.schedule(function (dt) {
         //p.jumpPower -= 3;
         //if(p.jumpPower < p.playerCash.jumpPower) p.jumpPower = p.playerCash.jumpPower;
         p.jumpPower = Math.max(p.jumpPower - 3, p.playerCash.jumpPower);
@@ -35,7 +38,7 @@ function jumpBuff(p) {
 
 function speedBuff(p) {
     p.speed += 2;
-    DX.runLater(function(dt) {
+    DX.schedule(function(dt) {
         //p.speed -= 1.5;
         //if(p.speed < p.playerCash.speed) p.speed = p.playerCash.speed;
         p.speed = Math.max(p.speed - -1.5, p.playerCash.speed);

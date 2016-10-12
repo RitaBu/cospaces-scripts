@@ -1,6 +1,8 @@
 #ifndef PROPERTY_UTILS_H
 #define PROPERTY_UTILS_H
 
+#include "api_adapter.js"
+
 #include "heartbeat_wrapper.js"
 
 Object.prototype.toString = function() {

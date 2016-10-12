@@ -1,6 +1,8 @@
 #ifndef SINK_RESOLVER_JS
 #define SINK_RESOLVER_JS
 
+#include "api_adapter.js"
+
 #include "heartbeat_wrapper.js"
 #include "vector_utils.js"
 

@@ -1,6 +1,8 @@
 #ifndef BUTTON_JS
 #define BUTTON_JS
 
+#include "lib/api_adapter.js"
+
 #include "lib/heartbeat_wrapper.js"
 #include "lib/FocusGameCamera.js"
 #include "lib/property_utils.js"
