@@ -1,5 +1,5 @@
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
-  require(['Fly', '../Eyes/EyedObject'], function (Fly, EyedObject) {
+  require(['Fly/Fly', 'Eyes/EyedObject'], function (Fly, EyedObject) {
 
     var fly = new Fly(Space.item("q5VWCw7hVA"));
     var frog = new EyedObject(Space.item("rmGHz2ajS6"));
