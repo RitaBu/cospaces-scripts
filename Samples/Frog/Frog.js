@@ -4,6 +4,7 @@ define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, Animate
     this.item = item;
     Space.setMood(0.5);
     this.eyedObject = new EyedObject(this.item);
+    Project.log("Tongue: " + this.item.getPart("Tongue"));
     this.tongue = new AnimatedTongue(this.item.getPart("Tongue"));
   };
 
