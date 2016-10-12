@@ -1,8 +1,8 @@
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
-  require(['Fly/Fly', 'Eyes/EyedObject'], function (Fly, EyedObject) {
+  require(['Fly/Fly', 'Frog/Frog'], function (Fly, Frog) {
 
     var fly = new Fly(Space.item("q5VWCw7hVA"));
-    var frog = new EyedObject(Space.item("rmGHz2ajS6"));
+    var frog = new Frog(Space.item("rmGHz2ajS6"));
 
     Space.scheduleRepeating(function () {
       fly.update();
@@ -24,8 +24,6 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
 
     function blinkR() {
       frog.blink();
-      // leftEye.blink();
-      // rightEye.blink();
       var r = getRandom(3, 5);
       Space.schedule(function () {
         blinkR();
@@ -38,11 +36,11 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       var r = getRandom(1, 3);
       if (r > currentPos) {
         for (var i = currentPos; i < r; i++) {
-          frog.right();
+          frog.lookRight();
         }
       } else if (currentPos > r) {
         for (i = r; i < currentPos; i++) {
-          frog.left();
+          frog.lookLeft();
         }
       }
       currentPos = r;
