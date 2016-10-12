@@ -1,7 +1,6 @@
 define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, AnimatedTongue) {
   var Frog = function (item) {
     this.item = item;
-    Space.setMood(0.5);
     this.eyedObject = new EyedObject(this.item);
     this.tongue = new AnimatedTongue(this.item.getPart("Tongue"));
   };

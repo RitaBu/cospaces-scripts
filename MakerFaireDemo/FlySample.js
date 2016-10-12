@@ -1,5 +1,5 @@
-//var frogSound = Space.loadSound("a01b4a147ef61b660f9bdecdb0eb54a031299b3dcf617a2bd84f893329c99122");
-//var flySound = Space.loadSound("1df61e9d62778eaeccb6f521decbc6bae18e364bfc6dbc1bcd1867a2826a95d6");
+var frogSound = Space.loadSound("a01b4a147ef61b660f9bdecdb0eb54a031299b3dcf617a2bd84f893329c99122");
+var flySound = Space.loadSound("1df61e9d62778eaeccb6f521decbc6bae18e364bfc6dbc1bcd1867a2826a95d6");
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['Fly/Fly', 'Frog/Frog'], function (Fly, Frog) {
@@ -66,6 +66,6 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
     tongueR();
   });
 
-  // frogSound.play(true);
-  // flySound.play(true);
+  frogSound.play(true);
+  flySound.play(true);
 });
