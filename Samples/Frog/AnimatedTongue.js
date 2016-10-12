@@ -3,6 +3,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   var AnimatedTongue = function (item) {
     this.item = item;
+    this.size = that.item.getSize();
     this.animator = new animation.Animator(false);
   };
 
@@ -12,28 +13,24 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   AnimatedTongue.prototype.out = function () {
     var that = this;
-    var sizeZ = that.item.getSize()[2];
     const range = 0.5;
     this.animator.addAnimation(new animation.Animation("Out", DURATION, (function () {
-      Project.log("sizeZ: " + sizeZ);
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("Out: " + p + " " + (sizeZ + range * p));
-        that.item.setZ(sizeZ + range * p);
+        Project.log("Out: " + p + " " + (this.size[2] + range * p));
+        that.item.setSize(this.size[0], this.size[1], this.size[2] + range * p);
       };
     })()));
   };
 
   AnimatedTongue.prototype.in = function () {
     var that = this;
-    var sizeZ = that.item.getSize()[2];
     const range = 0.5;
     this.animator.addAnimation(new animation.Animation("In", DURATION, (function () {
-      Project.log("sizeZ: " + sizeZ);
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("In: " + p + " " + (sizeZ - range * p));
-        that.item.setZ(sizeZ - range * p);
+        Project.log("In: " + p + " " + (this.size[2] - range * p));
+        that.item.setSize(this.size[0], this.size[1], this.size[2] + range * (1 - p));
       };
     })()));
   };
