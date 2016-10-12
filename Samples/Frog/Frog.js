@@ -2,7 +2,7 @@ define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, Animate
   var Frog = function (item) {
     this.item = item;
     this.eyedObject = new EyedObject(this.item);
-    this.tongue = new AnimatedTongue(this.item.part("Tongue"));
+    this.tongue = new AnimatedTongue(this.item.getPart("Tongue"));
   };
 
   Frog.prototype.update = function() {

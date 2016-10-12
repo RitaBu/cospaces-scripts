@@ -169,9 +169,9 @@ define(['../../helpers/animation/animation'], function (animation) {
   };
 
   var Eye = function (eyeItem, eyebrowItem, left) {
-    this.topEyelid = new Eyelid(eyeItem.part("topEyelid"), STATE_OPEN);
-    this.bottomEyelid = new Eyelid(eyeItem.part("bottomEyelid"), STATE_OPEN);
-    this.pupil = new Pupil(eyeItem.part("pupil"));
+    this.topEyelid = new Eyelid(eyeItem.getPart("topEyelid"), STATE_OPEN);
+    this.bottomEyelid = new Eyelid(eyeItem.getPart("bottomEyelid"), STATE_OPEN);
+    this.pupil = new Pupil(eyeItem.getPart("pupil"));
     if (eyebrowItem !== undefined) {
       this.eyebrow = new Eyebrow(eyebrowItem, left);
     }

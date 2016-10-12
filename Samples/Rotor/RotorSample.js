@@ -2,8 +2,8 @@ var s = Space.resource("899add87ab9b5d7f04d83c6e040abb581b6363bf90271af7a064e439
 s.setVolume(0.5);
 s.play(true);
 
-var mainRotorItem = Space.item("q7lQAi7BPE");
-var tailRotorItem = Space.item("d7eXQCxY5A");
+var mainRotorItem = Space.getItem("q7lQAi7BPE");
+var tailRotorItem = Space.getItem("d7eXQCxY5A");
 
 Space.scheduleRepeating(function () {
   mainRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
@@ -13,8 +13,8 @@ Space.setRenderShadows(false);
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['../Eyes/AnimatedEye'], function (AnimatedEye) {
-    var rightEye = new AnimatedEye(Space.item("Lnq7saT89i"), Space.item("lwi4GxxSuH"), false);
-    var leftEye = new AnimatedEye(Space.item("tbT09ciZTu"), Space.item("VZuD0QyXaD"), true);
+    var rightEye = new AnimatedEye(Space.getItem("Lnq7saT89i"), Space.getItem("lwi4GxxSuH"), false);
+    var leftEye = new AnimatedEye(Space.getItem("tbT09ciZTu"), Space.getItem("VZuD0QyXaD"), true);
 
 // Main game loop
 

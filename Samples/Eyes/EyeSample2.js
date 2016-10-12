@@ -1,8 +1,8 @@
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['EyedObject'], function (EyedObject) {
-    var elephant = new EyedObject(Space.item("imapObWTsT"));
-    var tree = new EyedObject(Space.item("Jsqj60uMeS"));
-    var tree2 = new EyedObject(Space.item("4tvtLJYadq"));
+    var elephant = new EyedObject(Space.getItem("imapObWTsT"));
+    var tree = new EyedObject(Space.getItem("Jsqj60uMeS"));
+    var tree2 = new EyedObject(Space.getItem("4tvtLJYadq"));
 
     Space.scheduleRepeating(function () {
       elephant.update();

@@ -1,7 +1,7 @@
 define(['./AnimatedEye'], function (AnimatedEye) {
   var EyedObject = function (item) {
-    this.leftEye = new AnimatedEye(item.part("LeftEye"));
-    this.rightEye = new AnimatedEye(item.part("RightEye"));
+    this.leftEye = new AnimatedEye(item.getPart("LeftEye"));
+    this.rightEye = new AnimatedEye(item.getPart("RightEye"));
   };
 
   EyedObject.prototype.blink = function () {

@@ -1,4 +1,4 @@
-for (var i = 0; i < 5; i++) {
+for (var i = 0; i < 50; i++) {
   var ellipsoid = Space.createItem("Hemiellipsoid");
   ellipsoid.setScale(1 + i*0.1);
   ellipsoid.rotateLocalAxis(0, 0, 0, 0, 1, 0, Math.PI/2, true);

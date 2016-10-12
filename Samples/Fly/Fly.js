@@ -2,8 +2,8 @@ define(['../../helpers/animation/animation'], function (animation) {
   var Fly = function (item) {
     this.animator = new animation.Animator(false);
     this.item = item;
-    this.rightWing = item.part("RightWing");
-    this.leftWing = item.part("LeftWing");
+    this.rightWing = item.getPart("RightWing");
+    this.leftWing = item.getPart("LeftWing");
   };
 
   Fly.prototype.update = function () {

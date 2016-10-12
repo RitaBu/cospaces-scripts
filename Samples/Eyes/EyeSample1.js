@@ -16,8 +16,8 @@ function blinkRepeat(eye) {
   }, 3);
 }
 
-var leftEye = Space.item("fdDAOhkXP5");
-var rightEye = Space.item("naihDdoqEK");
+var leftEye = Space.getItem("fdDAOhkXP5");
+var rightEye = Space.getItem("naihDdoqEK");
 
 blinkRepeat(leftEye);
 blinkRepeat(rightEye);

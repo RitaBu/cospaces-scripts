@@ -2,7 +2,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
   require(["Animator"]);
 });
 
-var pacman = Space.item("jpVlEPRfcw");
+var pacman = Space.getItem("jpVlEPRfcw");
 
 var Pacman = function (item) {
   this.item = item;

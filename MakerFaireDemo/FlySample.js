@@ -1,8 +1,8 @@
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/", function () {
   require(['Fly/Fly', 'Frog/Frog'], function (Fly, Frog) {
 
-    var fly = new Fly(Space.item("q5VWCw7hVA"));
-    var frog = new Frog(Space.item("E2K0fvL0Ix"));
+    var fly = new Fly(Space.getItem("q5VWCw7hVA"));
+    var frog = new Frog(Space.getItem("E2K0fvL0Ix"));
 
     Space.scheduleRepeating(function () {
       fly.update();
