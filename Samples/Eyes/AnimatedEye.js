@@ -78,10 +78,18 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.pos = this.white.getPosition();
     //Project.log(this.pos);
     this.axisZ = this.item.getAxisZ();
+    normalize(axisZ);
     Project.log("axisZ: ");
     Project.log(this.axisZ);
     this.animator = new animation.Animator();
   };
+
+  function normalize(axis){
+    var norm = Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+    axis.x = axis.x / norm;
+    axis.y = axis.y / norm;
+    axis.z = axis.z / norm;
+  }
 
   Pupil.prototype.left = function () {
     var that = this;
