@@ -118,7 +118,7 @@ for (var i = 0; i < numSteps; i++) {
   newSugarItem(width / 2 + x, y, i * h);
   newPhosphateItem(width / 2 - _x(curAngle + angle / 2), -_y(curAngle + angle / 2), i * h + h/2);
   newPhosphateItem(width / 2 + _x(curAngle + angle / 2), _y(curAngle + angle / 2), i * h + h/2);
-  // Space.log("X=" + x);
+  // Project.log("X=" + x);
   switch (r) {
     case 0:
       newAT(true, width / 2 - x, -y, i * h, curAngle);

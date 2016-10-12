@@ -85,7 +85,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
         return function (anim) {
           var p = lastProgress;
           lastProgress = angle * anim.getProgress();
-          //Space.log(anim.toString() + " lastProgress = " + lastProgress);
+          //Project.log(anim.toString() + " lastProgress = " + lastProgress);
           //planet.rotateLocalAxis(0, 0, 0, 0, 0, 1, Math.radians(-(lastProgress - p)), true);
         };
       })());

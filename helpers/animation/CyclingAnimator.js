@@ -1,7 +1,7 @@
 define(['animation'], function (animation) {
   return function (animCreator, debug) {
     if (debug) {
-      Space.log("CyclingAnimator.constructor");
+      Project.log("CyclingAnimator.constructor");
     }
     this.animCreator = animCreator;
     this.animation = this.animCreator();

@@ -18,7 +18,7 @@ define(['../../helpers/animation/animation'], function (animation) {
       return function (anim) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
-        // Space.log(anim.toString() + " lastProgress = " + lastProgress);
+        // Project.log(anim.toString() + " lastProgress = " + lastProgress);
         that.rightWing.rotateLocalAxis(1, 0, 0, 1, 0, 0, Math.radians(-(lastProgress - p)), true);
         that.leftWing.rotateLocalAxis(1, 0, 0, 1, 0, 0, -Math.radians(-(lastProgress - p)), true);
       };
@@ -34,7 +34,7 @@ define(['../../helpers/animation/animation'], function (animation) {
       return function (anim) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
-        // Space.log(anim.toString() + " lastProgress = " + lastProgress);
+        // Project.log(anim.toString() + " lastProgress = " + lastProgress);
         that.rightWing.rotateLocalAxis(1, 0, 0, 1, 0, 0, -Math.radians(-(lastProgress - p)), true);
         that.leftWing.rotateLocalAxis(1, 0, 0, 1, 0, 0, Math.radians(-(lastProgress - p)), true);
       };

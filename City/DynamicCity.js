@@ -135,7 +135,7 @@ function addTrafficLight(h, w, dt) {
   var x = pos.x;
   var y = pos.y;
   var d = 0.6 * bs;
-  Space.log(x + " " + y);
+  Project.log(x + " " + y);
   var item0 = Space.createItem(trafficLightModelId + states[0], x + d, y + d, 0);
   item0.setRotationOZ(1, 0, true);
   item0.setProperty("light", "red");

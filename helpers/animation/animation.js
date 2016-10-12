@@ -16,7 +16,7 @@ define(function () {
     this.startTime = Space.currentTime();
     this.finished = false;
     if (this.DEBUG) {
-      Space.log(this.toString() + " started");
+      Project.log(this.toString() + " started");
     }
   };
 
@@ -24,7 +24,7 @@ define(function () {
     if ((Space.currentTime() - this.startTime) > this.duration) {
       this.finished = true;
       if (this.DEBUG){
-        Space.log(this.toString() + " finished");
+        Project.log(this.toString() + " finished");
       }
     }
     this.exec(this);
@@ -34,8 +34,8 @@ define(function () {
     if (this.finished) return 1;
     var timeLeft = this.startTime + this.duration - Space.currentTime();
     if (this.DEBUG){
-      Space.log("Time left " + timeLeft);
-      Space.log("Duration " + this.duration);
+      Project.log("Time left " + timeLeft);
+      Project.log("Duration " + this.duration);
     }
     return 1 - timeLeft / this.duration;
   };
@@ -50,7 +50,7 @@ define(function () {
       var a = this.anims[0];
       a.update();
       if (this.DEBUG) {
-        Space.log(a.toString() + " Progress: " + a.getProgress());
+        Project.log(a.toString() + " Progress: " + a.getProgress());
       }
       if (a.finished) {
         this.anims.shift();
@@ -58,7 +58,7 @@ define(function () {
           a = this.anims[0];
           a.start();
           if (this.DEBUG) {
-            Space.log(a.toString() + " finished. Left " + this.anims.length + " animations");
+            Project.log(a.toString() + " finished. Left " + this.anims.length + " animations");
           }
         }
       }
@@ -67,7 +67,7 @@ define(function () {
 
   Animator.prototype.addAnimation = function (a) {
     if (this.DEBUG) {
-      Space.log("Added " + (this.anims.length + 1) + " animation");
+      Project.log("Added " + (this.anims.length + 1) + " animation");
     }
     this.anims.push(a);
     if (this.anims.length == 1) {
