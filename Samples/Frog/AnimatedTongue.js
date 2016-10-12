@@ -3,7 +3,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   var AnimatedTongue = function (item) {
     this.item = item;
-    this.size = that.item.getSize();
+    this.size = item.getSize();
     this.animator = new animation.Animator(false);
   };
 
