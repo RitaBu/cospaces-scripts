@@ -63,6 +63,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
     flySwing();
     blinkR();
     moveEyesR();
+    tongueR();
   });
 
   // frogSound.play(true);
