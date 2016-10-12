@@ -69,21 +69,27 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.down();
   };
 
-  var Pupil = function (item) {
+  var Pupil = function (item, eyeItem) {
     this.item = item;
+    this.white = eyeItem.getPart("white");
+    this.pos = this.white.getPosition();
+    this.axisZ = this.getAxisZ();
     this.animator = new animation.Animator();
+    Project.log("White: " + this.white);
+    Project.log("Pos: " + this.pos);
+    Project.log("axisZ: " + this.axisZ);
   };
 
   Pupil.prototype.left = function () {
     var that = this;
     this.animator.addAnimation(new animation.Animation("Left", BLINK_DURATION / 2, (function () {
       var lastProgress = 0;
-      const distance = 0.15;
+      const angle = 30;
       return function (anim) {
         var p = lastProgress;
-        lastProgress = distance * anim.getProgress();
+        lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.moveLocal(0, -(lastProgress - p), 0, true);
+        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(lastProgress - p), false);
       };
     })()));
   };
@@ -92,12 +98,12 @@ define(['../../helpers/animation/animation'], function (animation) {
     var that = this;
     this.animator.addAnimation(new animation.Animation("Right", BLINK_DURATION / 2, (function () {
       var lastProgress = 0;
-      const distance = 0.15;
+      const angle = 30;
       return function (anim) {
         var p = lastProgress;
-        lastProgress = distance * anim.getProgress();
+        lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.moveLocal(0, lastProgress - p, 0, true);
+        that.item.rotate(pos.x, pos.y, pos.z, 0, 0, 1, Math.radians(-(lastProgress - p)), true);
       };
     })()));
   };
@@ -171,7 +177,7 @@ define(['../../helpers/animation/animation'], function (animation) {
   var Eye = function (eyeItem, eyebrowItem, left) {
     this.topEyelid = new Eyelid(eyeItem.getPart("topEyelid"), STATE_OPEN);
     this.bottomEyelid = new Eyelid(eyeItem.getPart("bottomEyelid"), STATE_OPEN);
-    this.pupil = new Pupil(eyeItem.getPart("pupil"));
+    this.pupil = new Pupil(eyeItem.getPart("pupil"), eyeItem);
     if (eyebrowItem !== undefined) {
       this.eyebrow = new Eyebrow(eyebrowItem, left);
     }
