@@ -1,14 +1,3 @@
-/*
- var n = 50;
- for (var i = 0; i < n; i++) {
- var ellipsoid = Space.createItem("Hemiellipsoid");
- ellipsoid.setScale(1 + i*0.1);
- ellipsoid.rotateLocalAxis(0, 0, 0, 0, 1, 0, Math.PI/2, true);
- //ellipsoid.move(0, 0.01);
- var c = Math.ceil(255-i*255/n);
- ellipsoid.setColor(c, c, c);
- }
- */
 
 function generateSphere() {
   var n = 50;
