@@ -1,5 +1,6 @@
 define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, AnimatedTongue) {
   var Frog = function (item) {
+    Project.log("Frog created");
     this.item = item;
     this.eyedObject = new EyedObject(this.item);
     this.tongue = new AnimatedTongue(this.item.getPart("Tongue"));
