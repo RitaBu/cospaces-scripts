@@ -23,6 +23,7 @@ define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, Animate
   };
 
   Frog.prototype.tongueToggle = function () {
+    Project.log("Frog.tongueToggle");
     this.tongue.toggle();
   };
 
