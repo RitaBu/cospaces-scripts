@@ -72,12 +72,12 @@ define(['../../helpers/animation/animation'], function (animation) {
   var Pupil = function (item, eyeItem) {
     this.item = item;
     this.white = eyeItem.getPart("white");
-    this.pos = this.white.getPosition();
-    this.axisZ = this.getAxisZ();
-    this.animator = new animation.Animator();
     Project.log("White: " + this.white);
+    this.pos = this.white.getPosition();
     Project.log("Pos: " + this.pos);
-    Project.log("axisZ: " + this.axisZ);
+    //this.axisZ = this.getAxisZ();
+    //Project.log("axisZ: " + this.axisZ);
+    this.animator = new animation.Animator();
   };
 
   Pupil.prototype.left = function () {
@@ -89,7 +89,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(lastProgress - p), false);
+        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, 0, 0, 1, Math.radians(lastProgress - p), false);
       };
     })()));
   };
