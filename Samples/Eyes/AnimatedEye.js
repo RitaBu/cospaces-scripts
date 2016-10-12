@@ -103,7 +103,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotate(pos.x, pos.y, pos.z, 0, 0, 1, Math.radians(-(lastProgress - p)), true);
+        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, 0, 0, 1, Math.radians(-(lastProgress - p)), true);
       };
     })()));
   };
