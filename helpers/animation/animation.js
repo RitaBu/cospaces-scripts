@@ -6,6 +6,7 @@ define(function () {
     this.exec = exec;
     this.startTime = 0;
     this.DEBUG = (typeof debug !== 'undefined') ?  debug : false;
+    Project.log("Animation.DEBUG = " + this.DEBUG);
   };
 
   Animation.prototype.toString = function () {
