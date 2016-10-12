@@ -38,6 +38,7 @@ define(['../../helpers/animation/animation'], function (animation) {
   };
 
   AnimatedTongue.prototype.toggle = function () {
+    Project.log("AnimatedTongue.toggle");
     this.out();
     this.in();
   };
