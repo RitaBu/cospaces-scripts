@@ -2,7 +2,7 @@ define(['../../helpers/animation/animation'], function (animation) {
   var DURATION = 0.5;
 
   var AnimatedTongue = function (item) {
-    this.animator = new animation.Animator(false);
+    this.animator = new animation.Animator(true);
   };
 
   AnimatedTongue.prototype.update = function () {
