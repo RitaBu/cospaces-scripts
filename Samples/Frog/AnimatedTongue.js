@@ -1,5 +1,5 @@
 define(['../../helpers/animation/animation'], function (animation) {
-  var DURATION = 0.2;
+  var DURATION = 0.1;
 
   var AnimatedTongue = function (item) {
     this.item = item;
