@@ -2,7 +2,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
   require(['Fly/Fly', 'Frog/Frog'], function (Fly, Frog) {
 
     var fly = new Fly(Space.item("q5VWCw7hVA"));
-    var frog = new Frog(Space.item("rmGHz2ajS6"));
+    var frog = new Frog(Space.item("E2K0fvL0Ix"));
 
     Space.scheduleRepeating(function () {
       fly.update();
@@ -27,6 +27,14 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       var r = getRandom(3, 5);
       Space.schedule(function () {
         blinkR();
+      }, r);
+    }
+
+    function tongueR() {
+      frog.tongueToggle();
+      var r = getRandom(3, 5);
+      Space.schedule(function () {
+        tongueR();
       }, r);
     }
 

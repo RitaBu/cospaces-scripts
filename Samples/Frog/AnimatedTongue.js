@@ -1,4 +1,4 @@
-define(['../helpers/animation/animation'], function (animation) {
+define(['../../helpers/animation/animation'], function (animation) {
   var AnimatedTongue = function (item) {
     this.animator = new animation.Animator(false);
   };
