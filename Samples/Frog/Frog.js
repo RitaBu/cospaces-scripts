@@ -2,6 +2,7 @@ define(['../Eyes/EyedObject', './AnimatedTongue'], function (EyedObject, Animate
   var Frog = function (item) {
     Project.log("Frog created");
     this.item = item;
+    Space.getItem(this.item.id()).say("FFF")
     this.eyedObject = new EyedObject(this.item);
     this.tongue = new AnimatedTongue(this.item.getPart("Tongue"));
   };
