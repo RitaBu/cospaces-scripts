@@ -3,7 +3,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   var AnimatedTongue = function (item) {
     this.item = item;
-    this.animator = new animation.Animator(true);
+    this.animator = new animation.Animator(false);
   };
 
   AnimatedTongue.prototype.update = function () {
@@ -39,7 +39,6 @@ define(['../../helpers/animation/animation'], function (animation) {
   };
 
   AnimatedTongue.prototype.toggle = function () {
-    Project.log("AnimatedTongue.toggle");
     this.out();
     this.in();
   };
