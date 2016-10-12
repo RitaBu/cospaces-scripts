@@ -17,8 +17,8 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.animator.addAnimation(new animation.Animation("Out", DURATION, (function () {
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("Out: " + p + " " + (this.size[2] + range * p));
-        that.item.setSize(this.size[0], this.size[1], this.size[2] + range * p);
+        Project.log("Out: " + p + " " + (that.size[2] + range * p));
+        that.item.setSize(that.size[0], that.size[1], that.size[2] + range * p);
       };
     })()));
   };
@@ -29,8 +29,8 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.animator.addAnimation(new animation.Animation("In", DURATION, (function () {
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("In: " + p + " " + (this.size[2] - range * p));
-        that.item.setSize(this.size[0], this.size[1], this.size[2] + range * (1 - p));
+        Project.log("In: " + p + " " + (that.size[2] + range * p));
+        that.item.setSize(that.size[0], that.size[1], that.size[2] + range * (1 - p));
       };
     })()));
   };
