@@ -12,10 +12,10 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   AnimatedTongue.prototype.out = function () {
     var that = this;
+    var sizeZ = that.item.getSize()[2];
+    const range = 0.5;
     this.animator.addAnimation(new animation.Animation("Out", DURATION, (function () {
-      var sizeZ = that.item.getSize()[2];
       Project.log("sizeZ: " + sizeZ);
-      const range = 0.5;
       return function (anim) {
         var p = anim.getProgress();
         Project.log("Out: " + p + " " + (sizeZ + range * p));
@@ -26,9 +26,9 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   AnimatedTongue.prototype.in = function () {
     var that = this;
+    var sizeZ = that.item.getSize()[2];
+    const range = 0.5;
     this.animator.addAnimation(new animation.Animation("In", DURATION, (function () {
-      const range = 0.5;
-      var sizeZ = that.item.getSize()[2];
       Project.log("sizeZ: " + sizeZ);
       return function (anim) {
         var p = anim.getProgress();
