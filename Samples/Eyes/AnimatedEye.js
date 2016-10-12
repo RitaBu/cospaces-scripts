@@ -71,6 +71,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   var Pupil = function (item, eyeItem) {
     this.item = item;
+    Project.log("Pupil: " + item);
     this.white = eyeItem.getPart("white");
     Project.log("White: " + this.white);
     this.pos = this.white.getPosition();
