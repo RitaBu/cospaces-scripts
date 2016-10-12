@@ -1,5 +1,5 @@
 define(['../../helpers/animation/animation'], function (animation) {
-  var DURATION = 0.5;
+  var DURATION = 0.2;
 
   var AnimatedTongue = function (item) {
     this.item = item;
@@ -13,11 +13,10 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   AnimatedTongue.prototype.out = function () {
     var that = this;
-    const range = 0.5;
+    const range = 2;
     this.animator.addAnimation(new animation.Animation("Out", DURATION, (function () {
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("Out: " + p + " " + (that.size[2] + range * p));
         that.item.setSize(that.size[0], that.size[1], that.size[2] + range * p);
       };
     })()));
@@ -25,11 +24,10 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   AnimatedTongue.prototype.in = function () {
     var that = this;
-    const range = 0.5;
+    const range = 2;
     this.animator.addAnimation(new animation.Animation("In", DURATION, (function () {
       return function (anim) {
         var p = anim.getProgress();
-        Project.log("In: " + p + " " + (that.size[2] + range * p));
         that.item.setSize(that.size[0], that.size[1], that.size[2] + range * (1 - p));
       };
     })()));
