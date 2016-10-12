@@ -9,7 +9,7 @@ function blink(pupil) {
 }
 
 function blinkRepeat(eye) {
-  var pupil = eye.part("pupil");
+  var pupil = eye.getPart("pupil");
   blink(pupil);
   Space.schedule(function () {
     blinkRepeat(eye);

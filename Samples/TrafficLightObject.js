@@ -15,27 +15,27 @@ function setGray(light) {
 }
 
 function red() {
-  setRed(this.part("red"));
-  setGray(this.part("yellow"));
-  setGray(this.part("green"));
+  setRed(this.getPart("red"));
+  setGray(this.getPart("yellow"));
+  setGray(this.getPart("green"));
 }
 
 function yellowRed() {
-  setRed(this.part("red"));
-  setYellow(this.part("yellow"));
-  setGray(this.part("green"));
+  setRed(this.getPart("red"));
+  setYellow(this.getPart("yellow"));
+  setGray(this.getPart("green"));
 }
 
 function yellow() {
-  setGray(this.part("red"));
-  setYellow(this.part("yellow"));
-  setGray(this.part("green"));
+  setGray(this.getPart("red"));
+  setYellow(this.getPart("yellow"));
+  setGray(this.getPart("green"));
 }
 
 function green() {
-  setGray(this.part("red"));
-  setGray(this.part("yellow"));
-  setGreen(this.part("green"));
+  setGray(this.getPart("red"));
+  setGray(this.getPart("yellow"));
+  setGreen(this.getPart("green"));
 }
 
 Obj.red = red;
