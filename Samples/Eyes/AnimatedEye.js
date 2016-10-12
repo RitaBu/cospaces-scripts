@@ -71,13 +71,15 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   var Pupil = function (item, eyeItem) {
     this.item = item;
+    Project.log("Item Pupil:");
     Project.log(item);
     this.white = eyeItem.getPart("white");
-    Project.log(this.white);
+    //Project.log(this.white);
     this.pos = this.white.getPosition();
-    Project.log(this.pos);
-    //this.axisZ = this.getAxisZ();
-    //Project.log("axisZ: " + this.axisZ);
+    //Project.log(this.pos);
+    this.axisZ = this.getAxisZ();
+    Project.log("axisZ: ");
+    Project.log(his.axisZ);
     this.animator = new animation.Animator();
   };
 
