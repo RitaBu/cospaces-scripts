@@ -78,7 +78,7 @@ define(['../../helpers/animation/animation'], function (animation) {
     this.pos = this.white.getPosition();
     //Project.log(this.pos);
     this.axisZ = this.item.getAxisZ();
-    normalize(axisZ);
+    normalize(this.axisZ);
     Project.log("axisZ: ");
     Project.log(this.axisZ);
     this.animator = new animation.Animator();
