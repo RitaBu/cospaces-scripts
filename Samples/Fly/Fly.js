@@ -12,7 +12,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   Fly.prototype.wingsUp = function () {
     var that = this;
-    var a = new animation.Animation("Wings Up", 0.5, (function () {
+    var a = new animation.Animation("Wings Up", 5, (function () {
       var lastProgress = 0;
       const angle = 45;
       return function (anim) {
@@ -28,7 +28,7 @@ define(['../../helpers/animation/animation'], function (animation) {
 
   Fly.prototype.wingsDown = function () {
     var that = this;
-    var a = new animation.Animation("Wings Down", 0.5, (function () {
+    var a = new animation.Animation("Wings Down", 5, (function () {
       var lastProgress = 0;
       const angle = 45;
       return function (anim) {
