@@ -29,8 +29,8 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       var voices = tts.getVoices();
       var maleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Yuri", "Pavel", "Google русский", "#male", "l01"]);
       var femaleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Milena", "Irina", "Google русский", "#female", "f00"]);
-      var catVoice = VoiceHelper.getVoiceByName(voices, "en_GB", ["Female", "#female"])
-          || VoiceHelper.getVoiceByName(voices, "en_US", ["Samantha (Enhanced)", "Samantha", "Victoria", "#female"])
+      var catVoice = VoiceHelper.getVoiceByName(voices, "en_US", ["Samantha (Enhanced)", "Samantha", "Victoria", "#female"])
+          || VoiceHelper.getVoiceByName(voices, "en_GB", ["Female", "#female"])
           || VoiceHelper.getVoiceByLang(voices, "en");
 
       var male = Space.createItem("LP_Man", 0, 0, 0);
