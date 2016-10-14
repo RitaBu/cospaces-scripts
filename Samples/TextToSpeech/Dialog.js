@@ -48,9 +48,9 @@ Space.createSpeechSynthesis(function(tts) {
   start(tts, maleVoice, femaleVoice, function() {
     var catMsg = tts.createUtterance(catPhrase);
     catMsg.setVoice(catVoice);
-    cat.say(catPhrase);
+    cat.think(catPhrase);
     tts.say(catMsg, function() {
-      cat.say(null);
+      cat.think(null);
       Project.finishPlayMode();
     });
   });
