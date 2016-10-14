@@ -27,10 +27,10 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
   require(['Speaker', 'VoiceHelper'], function(Speaker, VoiceHelper) {
     Space.createSpeechSynthesis(function(tts) {
       var voices = tts.getVoices();
-      var maleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Yuri", "Pavel", "Google русский"]);
-      var femaleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Milena", "Irina", "Google русский"]);
-      var catVoice = VoiceHelper.getVoiceByName(voices, "en_GB", "Female")
-          || VoiceHelper.getVoiceByName(voices, "en_US", ["Samantha", "Victoria"])
+      var maleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Yuri", "Pavel", "Google русский", "#male", "l01"]);
+      var femaleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Milena", "Irina", "Google русский", "#female", "f00"]);
+      var catVoice = VoiceHelper.getVoiceByName(voices, "en_GB", ["Female", "#female"])
+          || VoiceHelper.getVoiceByName(voices, "en_US", ["Samantha (Enhanced)", "Samantha", "Victoria", "#female"])
           || VoiceHelper.getVoiceByLang(voices, "en");
 
       var male = Space.createItem("LP_Man", 0, 0, 0);
