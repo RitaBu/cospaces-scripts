@@ -21,8 +21,23 @@ define(function() {
     return null;
   };
 
+  var getVoiceByLang = function(voices, lang) {
+    for (var i = 0; i < voices.length; ++i) {
+      var voice = voices[i];
+      if (voice.lang() == lang || voice.lang().indexOf(lang + "_") == 0) {
+        return voice;
+      }
+    }
+
+    return null;
+  };
+
   return {
     getVoiceByLang: function(voices, lang) {
+      if (lang.indexOf("_") == -1) {
+        return getVoiceByLang(voices, lang);
+      }
+
       for (var i = 0; i < voices.length; ++i) {
         var voice = voices[i];
         if (voice.lang() == lang) {
