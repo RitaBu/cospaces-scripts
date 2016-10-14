@@ -1,8 +1,16 @@
 define(function() {
+  var langFits = function(source, target) {
+    if (source == target) {
+      return true;
+    }
+
+    return target.indexOf("_") == -1 && (source == target || source.indexOf(target + "_") == 0);
+  };
+
   var getVoiceByNameString = function(voices, lang, name) {
     for (var i = 0; i < voices.length; ++i) {
       var voice = voices[i];
-      if (voice.name().indexOf(name) != -1 && voice.lang() == lang) {
+      if (voice.name().indexOf(name) != -1 && langFits(voice.lang(), lang)) {
         return voice;
       }
     }
@@ -24,7 +32,7 @@ define(function() {
   var getVoiceByLang = function(voices, lang) {
     for (var i = 0; i < voices.length; ++i) {
       var voice = voices[i];
-      if (voice.lang() == lang || voice.lang().indexOf(lang + "_") == 0) {
+      if (langFits(voice.lang(), lang)) {
         return voice;
       }
     }
@@ -33,22 +41,7 @@ define(function() {
   };
 
   return {
-    getVoiceByLang: function(voices, lang) {
-      if (lang.indexOf("_") == -1) {
-        return getVoiceByLang(voices, lang);
-      }
-
-      for (var i = 0; i < voices.length; ++i) {
-        var voice = voices[i];
-        if (voice.lang() == lang) {
-          return voice;
-        }
-      }
-
-      return null;
-    },
-
-    getVoiceByName: function(voices, lang, name) {
+    getVoice: function(voices, lang, name) {
       if (typeof name == "string") {
         return getVoiceByNameString(voices, lang, name);
       }
@@ -57,11 +50,11 @@ define(function() {
         return getPreferredVoice(voices, lang, name);
       }
 
-      return null;
-    },
+      if (typeof name == "undefined") {
+        return getVoiceByLang(voices, lang);
+      }
 
-    getVoice: function(voices, lang, name) {
-      return this.getVoiceByName(voices, lang, name) || this.getVoiceByLang(voices, lang);
+      return null;
     }
   }
 });
