@@ -41,7 +41,8 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
 
       var voices = tts.getVoices();
       var getVoice = function(lang, preferredVoices) {
-        var voice = VoiceHelper.getVoice(voices, lang, preferredVoices);
+        var voice = VoiceHelper.getVoice(voices, lang, preferredVoices)
+            || VoiceHelper.getVoice(voices, lang);
         if (voice === null) {
           throw "Can not find appropriate voice for query lang = " + lang
           + "; preferredVoices = " + preferredVoices
