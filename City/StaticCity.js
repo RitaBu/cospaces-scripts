@@ -53,12 +53,12 @@ function addCarsToPath(vec, n, color) {
   var nl = vec.length;
   var car;
   for (var i = 0; i < n; i++) {
-    var line = Space.createCurveLineItem();
+    var line = Space.createCurveItem();
     for (var j = i; j <= i + nl; j++) {
       line.addVertex(vec[j % nl].id());
     }
     var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    car = Space.createItem(modelId, vec[i].position().x, vec[i].position().y, 0);
+    car = Space.createItem(modelId, vec[i].getPosition().x, vec[i].getPosition().y, 0);
     if (color != null)
       car.setColor(color[0], color[1], color[2]);
     car.addToBezier3DPathCurve(line.id());
@@ -130,8 +130,8 @@ function longPath(d, w1, h1, w2, h2) {
   return addCarsToPath(vec, 1, [100, 100, 100]);
 }
 
-Space.setRenderShadows(false);
-Space.setRenderServiceItems(false);
+Space.renderShadows(false);
+Space.renderServiceItems(false);
 
 var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:"
 var states = ["D", "C", "A", "B"];
@@ -164,7 +164,7 @@ path2(1, 10, 4);
 
 var focusCar = longPath(1, 10, 4, 4.5, 15);
 
-Space.setCarDriveController(1, 0.5);
+Space.createCarDriveController(1, 0.5);
 
 var index = 0;
 function tick() {
