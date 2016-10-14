@@ -23,22 +23,20 @@ var catPhrase = "Thanks god I do not speak Elvish.";
 function start(tts, maleVoice, femaleVoice, onFinish) {
   (function next(i) {
     var phrase = phrases[i];
-    var p = people[i % people.length];
-    (function(person, phrase, i) {
-      var msg = tts.createUtterance(phrase);
-      msg.setVoice(isMale(person) ? maleVoice : femaleVoice);
-      person.say(phrase);
-      tts.say(msg, function() {
-        person.say(null);
-        Space.schedule(function() {
-          if (i < phrases.length - 1) {
-            next((i + 1) % phrases.length);
-          } else {
-            onFinish();
-          }
-        }, 1);
-      });
-    })(p, phrase, i);
+    var person = people[i % people.length];
+    var msg = tts.createUtterance(phrase);
+    msg.setVoice(isMale(person) ? maleVoice : femaleVoice);
+    person.say(phrase);
+    tts.say(msg, function() {
+      person.say(null);
+      Space.schedule(function() {
+        if (i < phrases.length - 1) {
+          next(i + 1);
+        } else {
+          onFinish();
+        }
+      }, 1);
+    });
   })(0);
 }
 
