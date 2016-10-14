@@ -8,6 +8,12 @@ var phrases = [
 
 var catPhrase = "Thanks god I do not speak Elvish.";
 
+var preferredMaleVoices = ["Yuri", "Pavel", "Google русский", "#male", "l01"];
+var preferredFemaleVoices = ["Milena", "Irina", "Google русский", "Female", "#female", "f00"];
+var preferredCatVoices = ["Samantha (Enhanced)", "Samantha", "Victoria", "Female", "#female"];
+var peopleLang = "ru_RU";
+var catLang = "en";
+
 function iterate(speakers, onFinish) {
   (function next(i) {
     var speaker = speakers[i % speakers.length];
@@ -26,20 +32,34 @@ function iterate(speakers, onFinish) {
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/Samples/TextToSpeech/", function() {
   require(['Speaker', 'VoiceHelper'], function(Speaker, VoiceHelper) {
     Space.createSpeechSynthesis(function(tts) {
-      var voices = tts.getVoices();
-      var maleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Yuri", "Pavel", "Google русский", "#male", "l01"]);
-      var femaleVoice = VoiceHelper.getVoice(voices, "ru_RU", ["Milena", "Irina", "Google русский", "#female", "f00"]);
-      var catVoice = VoiceHelper.getVoiceByName(voices, "en_US", ["Samantha (Enhanced)", "Samantha", "Victoria", "#female"])
-          || VoiceHelper.getVoiceByName(voices, "en_GB", ["Female", "#female"])
-          || VoiceHelper.getVoiceByLang(voices, "en");
-
       var male = Space.createItem("LP_Man", 0, 0, 0);
-      male.rotate(-1, 0, 0, 0, 0, 1, Math.PI / 2, true);
-
       var female = Space.createItem("LP_Wom", 0, 0, 0);
+      var cat = Space.createItem("LP_Cat", 0, -3, 0);
+
+      male.rotate(-1, 0, 0, 0, 0, 1, Math.PI / 2, true);
       female.rotate(1, 0, 0, 0, 0, 1, - Math.PI / 2, true);
 
-      var cat = Space.createItem("LP_Cat", 0, -3, 0);
+      var voices = tts.getVoices();
+      var getVoice = function(lang, preferredVoices) {
+        var voice = VoiceHelper.getVoice(voices, lang, preferredVoices);
+        if (voice === null) {
+          throw "Can not find appropriate voice for query lang = " + lang
+          + "; preferredVoices = " + preferredVoices
+          + "; consider modifying this sample";
+        }
+        return voice;
+      };
+
+      var maleVoice, femaleVoice, catVoice;
+
+      try {
+        maleVoice = getVoice(peopleLang, preferredMaleVoices);
+        femaleVoice = getVoice(peopleLang, preferredFemaleVoices);
+        catVoice = getVoice(catLang, preferredCatVoices);
+      } catch (e) {
+        cat.say(e);
+        return;
+      }
 
       var speakers = [
         new Speaker(female, femaleVoice, tts),
