@@ -28,7 +28,7 @@ Game.prototype.playGameOverSequence = function() {
   this.soundClip.stop();
   this.soundZombieHorde.stop();
   Space.loadSound('8b5576a0df805516753735e697a2797a8df7526c9f842d124b1a503e84fdcdc8').play(function() {
-    Project.finishPlayMode(this.gameOverScreen);
+    Project.finishPlayMode(game.gameOverScreen);
   });
 };
 
