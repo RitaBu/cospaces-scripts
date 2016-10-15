@@ -76,8 +76,8 @@ Enemy.prototype.initAttack = function(enemyType) {
 };
 
 Enemy.prototype.followPlayer = function() {
-  this.gameItem.moveToItem(game.player.gameItem, this.gameItem.distanceToItem(game.player.gameItem));
-}
+  this.gameItem.moveToItem(game.player.gameItem, this.gameItem.distanceToItem(game.player.gameItem) - 1.5);
+};
 
 /********** Player **********/
 function Player(gameItem) {
