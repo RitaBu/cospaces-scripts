@@ -62,7 +62,7 @@ function newBase(left, l, x1, y1, z1, angle) {
   billboard.setFontSize(0.3);
   billboard.showPodium(false);
   billboard.setText(l);
-  //billboard.rotateLocalAxis(0, 1, 0, 0, 1, 0, radians(curAngle), true);
+  billboard.addRotation(0, 0, 0, 0, 0, 1, -radians(curAngle), true);
   switch (l) {
     case "A":
       bgA(billboard);
@@ -107,6 +107,8 @@ function _y(angle) {
   return Math.sin(radians(angle)) * width / 2;
 }
 
+Space.clear();
+
 for (var i = 0; i < numSteps; i++) {
   var angle = 10;
   var curAngle = angle * i;
@@ -114,23 +116,22 @@ for (var i = 0; i < numSteps; i++) {
   var r = getRandom(0, 3);
   var x = _x(curAngle);
   var y = _y(curAngle);
-  newSugarItem(width / 2 - x, -y, i * h);
-  newSugarItem(width / 2 + x, y, i * h);
-  newPhosphateItem(width / 2 - _x(curAngle + angle / 2), -_y(curAngle + angle / 2), i * h + h/2);
-  newPhosphateItem(width / 2 + _x(curAngle + angle / 2), _y(curAngle + angle / 2), i * h + h/2);
-  // Project.log("X=" + x);
+  newSugarItem(-x, -y, i * h);
+  newSugarItem( x, y, i * h);
+  newPhosphateItem(- _x(curAngle + angle / 2), -_y(curAngle + angle / 2), i * h + h/2);
+  newPhosphateItem(  _x(curAngle + angle / 2), _y(curAngle + angle / 2), i * h + h/2);
   switch (r) {
     case 0:
-      newAT(true, width / 2 - x, -y, i * h, curAngle);
+      newAT(true, -1, 0, i * h, curAngle);
       break;
     case 1:
-      newAT(false, width / 2 - x, -y, i * h, curAngle);
+      newAT(false, -1, 0, i * h, curAngle);
       break;
     case 2:
-      newGC(true, width / 2 - x, -y, i * h, curAngle);
+      newGC(true, -1, 0, i * h, curAngle);
       break;
     case 3:
-      newGC(false, width / 2 - x, -y, i * h, curAngle);
+      newGC(false, -1, 0, i * h, curAngle);
       break;
   }
 }
