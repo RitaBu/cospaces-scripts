@@ -138,19 +138,19 @@ var states = ["D", "C", "A", "B"];
 
 var d = 1.8;
 var item0 = Space.createItem(file + states[0], d, d, 0);
-item0.setRotationOZ(1, 0, true);
+item0.setHorizontalDirection(1, 0);
 item0.setProperty("light", "red");
 
 var item1 = Space.createItem(file + states[0], -d, -d, 0);
-item1.setRotationOZ(-1, 0, true);
+item1.setHorizontalDirection(-1, 0);
 item1.setProperty("light", "red");
 
 var item2 = Space.createItem(file + states[0], -d, d, 0);
-item2.setRotationOZ(0, 1, true);
+item2.setHorizontalDirection(0, 1);
 item2.setProperty("light", "red");
 
 var item3 = Space.createItem(file + states[0], d, -d, 0);
-item3.setRotationOZ(0, -1, true);
+item3.setHorizontalDirection(0, -1);
 item3.setProperty("light", "red");
 
 create(0, 5, 10, 4);
@@ -164,7 +164,7 @@ path2(1, 10, 4);
 
 var focusCar = longPath(1, 10, 4, 4.5, 15);
 
-Space.createCarDriveController(1, 0.5);
+Space.setCarDriveController(1, 0.5);
 
 var index = 0;
 function tick() {
@@ -209,4 +209,4 @@ function tick() {
 }
 
 Space.schedule(tick, 1);
-Space.focusOn(focusCar.id(), true);
+focusCar.focusOn(true);
