@@ -1,9 +1,12 @@
 define(function() {
-  return function(person, voice, tts) {
+  return function(person, voice, tts, rate) {
 
     var ttsSay = function(phrase, cb) {
       var utterance = tts.createUtterance(phrase);
       utterance.setVoice(voice);
+      if (typeof rate == 'number') {
+        utterance.setRate(rate);
+      }
       tts.say(utterance, cb);
     };
 
