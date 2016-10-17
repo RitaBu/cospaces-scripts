@@ -36,8 +36,8 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
       var female = Space.createItem("LP_Wom", 0, 0, 0);
       var cat = Space.createItem("LP_Cat", 0, -3, 0);
 
-      male.rotate(-1, 0, 0, 0, 0, 1, Math.PI / 2, true);
-      female.rotate(1, 0, 0, 0, 0, 1, - Math.PI / 2, true);
+      male.setPositionAngle(-1, 0, 0, 0, 0, 1, - Math.PI / 2);
+      female.setPositionAngle(1, 0, 0, 0, 0, 1, + Math.PI / 2);
 
       var voices = tts.getVoices();
       var getVoice = function(lang, preferredVoices) {
