@@ -122,16 +122,16 @@ for (var i = 0; i < numSteps; i++) {
   newPhosphateItem(  _x(curAngle + angle / 2), _y(curAngle + angle / 2), i * h + h/2);
   switch (r) {
     case 0:
-      newAT(true, -1, 0, i * h, curAngle);
+      newAT(true, -width/2, 0, i * h, curAngle);
       break;
     case 1:
-      newAT(false, -1, 0, i * h, curAngle);
+      newAT(false, -width/2, 0, i * h, curAngle);
       break;
     case 2:
-      newGC(true, -1, 0, i * h, curAngle);
+      newGC(true, -width/2, 0, i * h, curAngle);
       break;
     case 3:
-      newGC(false, -1, 0, i * h, curAngle);
+      newGC(false, -width/2, 0, i * h, curAngle);
       break;
   }
 }
