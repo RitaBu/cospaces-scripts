@@ -52,11 +52,12 @@ var Camera = (function (){
             if(item === null) return;
             var pos = item.position();
             //myCamera.setPosition(pos[0], pos[1], pos[2] + 1.0);
-            var camDirection = [];
-            var tempCamDir = myCamera.cameraDirection();
-            camDirection.push(tempCamDir.x);
-            camDirection.push(tempCamDir.y);
-            camDirection.push(tempCamDir.z);
+            //var camDirection = [];
+            //var tempCamDir = myCamera.cameraDirection();
+            //camDirection.push(tempCamDir.x);
+            //camDirection.push(tempCamDir.y);
+            //camDirection.push(tempCamDir.z);
+            var camDirection = myCamera.cameraDirection();
             camDirection = vec3getNormal(camDirection);
             camDirection = vec3mul(camDirection, -1 * myCamera.getCameraDistance());
             myCamera.setPosition(pos[0] + camDirection[0], pos[1] + camDirection[1], pos[2] + camDirection[2] + myHeight);

@@ -6,6 +6,7 @@
 #include "Color.js"
 
 #include "lib/api_adapter.js"
+#include "lib/extrapolator.js"
 
 var foodCount = 3;
 
@@ -25,6 +26,10 @@ var info = server.getServerObjectFromClient(ServerInfo);
 
 var colomns = function() {};
 var foodFunc = function() {};
+
+var extrapolators = {};
+var buttonIds = {};
+sinkResolver.setExtrapolatorsMap(extrapolators);
 
 if(info == null || info.gameState.getGameState() == "waiting") {
 
@@ -111,6 +116,30 @@ if(info == null || info.gameState.getGameState() == "waiting") {
 
     server.onFrame = function () {
         controlManager.processControls();
+        for(var id in extrapolators) {
+            if(!extrapolators.hasOwnProperty(id)) continue;
+            if(id == server.getPlayerId()) continue;
+            extrapolators[id].update(server.getDt());
+            var item = DX.item(id);
+            if(item !== null) {
+                var actualPos = extrapolators[id].getActualPosition();
+                item.setLocalPosition(actualPos[0], actualPos[1], actualPos[2]);
+                if(id in buttonIds) {
+                    if(buttonIds[id].length == 2) {
+                        var indicator = DX.item(buttonIds[id][1]);
+                        if(indicator != null) {
+                            indicator.setLocalPosition(actualPos[0], actualPos[1], actualPos[2] + 5);
+                        }
+
+                        var button = DX.item(buttonIds[id][0]);
+                        if(button != null) {
+                            button.setLocalPosition(0, 0, -100);
+                        }
+
+                    }
+                }
+            }
+        }
     }
 
     DX.log("starting player");
@@ -194,6 +223,28 @@ if(info == null || info.gameState.getGameState() == "waiting") {
             }
         }
     }
+    
+    server.addServerReceiveCallback(function(id, msg){
+        if(msg.type == "position_sync") {
+            var playersList = server.getPlayersList();
+            for(var i = 0; i < playersList.length; i++) {
+                server.sendToClient(playersList[i], {
+                    type : "position_sync",
+                    id : id,
+                    data : msg});
+            }
+        }
+        if(msg.type == "buttons") {
+            var playersList = server.getPlayersList();
+            for(var i = 0; i < playersList.length; i++) {
+                server.sendToClient(playersList[i], {
+                    type : "buttons",
+                    id : id,
+                    ids : msg.ids
+                });
+            }
+        }
+    });
 
     server.addClientReceiveCallback(function (msg) {
         if (msg.type == "teleport") {
@@ -213,6 +264,22 @@ if(info == null || info.gameState.getGameState() == "waiting") {
         if (msg.type == "buff") {
             DX.log("buff: " + msg.func);
             msg.func(player);
+        }
+
+        if (msg.type == "sync_disable") {
+            var item = DX.item(msg.id);
+            if(item !== null) {
+                item.disablePositionSync();
+            }
+        }
+        if(msg.type == "position_sync") {
+            if(!(msg.id in extrapolators)) {
+                extrapolators[msg.id] = new Extrapolator();
+            }
+            extrapolators[msg.id].set(msg.data.position, msg.data.velocity, msg.data.acceleration);
+        }
+        if(msg.type == "buttons") {
+            buttonIds[msg.id] = msg.ids;
         }
 
     });
@@ -240,6 +307,22 @@ if(info == null || info.gameState.getGameState() == "waiting") {
             it.setColor(color.r, color.g, color.b);
         }
 
+        var playersList = server.getPlayersList();
+        for(var player_it = 0; player_it < playersList.length; player_it++) {
+            if(playersList[player_it] === id) continue;
+            server.sendReliableToClient(playersList[player_it], {
+                type : "sync_disable",
+                id : id
+            });
+            if(serverInfo.gameState.getIndicatorIds(id) !== null) {
+                server.sendReliableToClient(playersList[player_it], {
+                    type: "buttons",
+                    id: id,
+                    ids: serverInfo.gameState.getIndicatorIds(id)
+                });
+            }
+        }
+
         DX.log(info.colorStack);
     });
 
@@ -251,6 +334,17 @@ if(info == null || info.gameState.getGameState() == "waiting") {
             info.colorMap[id] = null;
         }
     });
+
+    var players = server.getPlayersList();
+    for(var i = 0; i < players.length; i++) {
+        var item = DX.item(players[i]);
+        if(item !== null) {
+            item.disablePositionSync();
+        }
+    }
+
+    var thisItem = DX.item(server.getPlayerId());
+    thisItem.disablePositionSync();
 }
 
 

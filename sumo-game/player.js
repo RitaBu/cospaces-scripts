@@ -14,7 +14,8 @@
 #include "SumoSoundManager.js"
 #include "ObjectCash.js"
 
-var sumoId = "%%37abed45d827ae4a0890b776ff33b36d6b468027bdacd5fffe18a4df7d752cd9";
+//var sumoId = "%%37abed45d827ae4a0890b776ff33b36d6b468027bdacd5fffe18a4df7d752cd9"; //it crashes on mobile in createItem
+var sumoId = "Sumo";
 
 var server = new ServerFramework();
 
@@ -45,12 +46,7 @@ function getAngle(x, y) {
     }
 }
 
-function setRotationAroundZAxis(itemId, angle) {
-    var item = DX.item(itemId);
-    if(item === null) return;
-    var pos = item.position();
-    item.moveToPos(pos[0], pos[1], pos[2], 0, 0, Math.sin(angle / 2), Math.cos(angle / 2));
-}
+
 
 function Player() {
     DX.log("player ctor");
@@ -101,6 +97,13 @@ function Player() {
     this.isWaitingForPlayers = true;
     this.isFailed = false;
     this.isFalling = false;
+
+    //sync data
+    this.velocity = [0, 0, 0];
+    this.parabolaVelocity = [0, 0, 0];
+    this.acceleration = [0, 0, 0];
+    this.syncPeriod = 0.5;
+    this.syncTime = 0;
 }
 
 Player.prototype.setGameState = function(state) {
@@ -138,7 +141,23 @@ Player.prototype.restore = function() {
     this.item.setScale(this.scale);
 }
 
+Player.prototype.sync = function() {
+
+    server.sendToServer({
+        type : "position_sync",
+        position : this.item.position(),
+        velocity : vec3add(this.velocity, this.parabolaVelocity),
+        acceleration : this.acceleration
+    });
+}
+
 Player.prototype.update = function(dt) {
+    this.syncTime += dt;
+    if(this.syncTime > this.syncPeriod) {
+        this.syncTime = 0;
+        this.sync();
+    }
+
     if(!this.isFailed) {
         if (this.parabolaOnJump != null && !this.isFailed) {
             this.parabolaOnJump.update(dt);
@@ -166,12 +185,14 @@ Player.prototype.update = function(dt) {
 
     var camera = Camera.getCamera();
     if(camera != null) {
-        //var axis = camera.cameraDirection();
+        var axis = camera.cameraDirection();
+        /*
         var axis = [];
         var tempAxis = camera.cameraDirection();
         axis.push(tempAxis.x);
         axis.push(tempAxis.y);
         axis.push(tempAxis.z);
+        */
         var angle = getAngle(axis[0], axis[1]) - Math.PI / 2;
         var unitAxis = this.item.getAxisY();
         var unitAngle = getAngle(unitAxis[0], unitAxis[1]);
@@ -440,11 +461,20 @@ Player.prototype.movePlayer  = function(/*itemId,*/ dir, dt) {
             break;
     }
 
+    var lastVelocity = this.velocity;
 
     if(vec3lengthSquared(resDir) > 0) {
-        resDir = vec3mul(resDir, 1.0 / Math.sqrt(vec3lengthSquared(resDir)) * speed * dt);
+        this.velocity = vec3mul(vec3getNormal(resDir), speed);
+        //resDir = vec3mul(resDir, 1.0 / Math.sqrt(vec3lengthSquared(resDir)) * speed * dt);
         var pos = item.position();
+        resDir = vec3mul(this.velocity, dt);
         item.nonDiscreteTeleport(pos[0] + resDir[0], pos[1] + resDir[1], pos[2] + resDir[2]);
+    } else {
+        this.velocity = [0, 0, 0];
+    }
+
+    if(!vec3isEqual(lastVelocity, this.velocity)) {
+        this.sync();
     }
 }
 

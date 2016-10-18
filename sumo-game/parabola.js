@@ -79,15 +79,30 @@ ParabolaClass.prototype.execute = function(xComponent, yComponent, power, func) 
     this.onFly = true;
     this.owner.active = false;
     this.func = func;
+
+    //sync data
+    this.owner.acceleration = [0, 0, -this.g / 2];
+    this.owner.parabolaVelocity = [0, 0, 0];
+    this.owner.parabolaVelocity[0] = Math.cos(this.angle) *
+        (this.v0 * Math.cos(this.a / 180 * Math.PI));
+    this.owner.parabolaVelocity[1] = Math.sin(this.angle) *
+        (this.v0 * Math.cos(this.a / 180 * Math.PI));
+    this.owner.parabolaVelocity[2] = this.v0 * Math.sin(this.a / 180 * Math.PI);
+    this.owner.sync();
+    
 }
 
 ParabolaClass.prototype.finishImmediately = function () {
     this.onFly = false;
+    this.owner.acceleration = [0, 0, 0];
+    this.owner.parabolaVelocity = [0, 0, 0];
+    this.owner.sync();
 }
 
 ParabolaClass.prototype.update = function(dt) {
     if(this.onFly) {
         this.t += dt;
+       this.owner.parabolaVelocity[2] = this.v0 * Math.sin(this.a / 180 * Math.PI) - this.g * this.t;
         var x1 = this.dx(dt);
         var y1 = this.dy(dt);
         var z1 = this.z();
@@ -98,6 +113,9 @@ ParabolaClass.prototype.update = function(dt) {
             this.owner.item.nonDiscreteTeleport(pos[0],pos[1], this.deadline);
             this.onFly = false;
             this.owner.stunEnd();
+            this.owner.acceleration = [0, 0, 0];
+            this.owner.parabolaVelocity = [0, 0, 0];
+            this.owner.sync();
             this.func();
         }
     }

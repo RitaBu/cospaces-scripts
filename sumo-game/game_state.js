@@ -23,9 +23,9 @@ function GameState() {
     if(myServer !== null) return;
     myServer = server;
     server.addServerReceiveCallback(function(id, message) {
-      DX.log("server received message.");
-      DX.log("id: " + id);
-      DX.log("message: " + message);
+      //DX.log("server received message.");
+      //DX.log("id: " + id);
+      //DX.log("message: " + message);
 
       if(message.type === "buttons") {
         thisRef.indicatorIds[id] = message.ids;
@@ -142,6 +142,14 @@ function GameState() {
 
   this.getGameState = function () {
     return thisRef.state;
+  }
+  
+  this.getIndicatorIds = function(id) {
+    if(id in thisRef.indicatorIds) {
+      return thisRef.indicatorIds[id];
+    } else {
+      return null;
+    }
   }
   
 }

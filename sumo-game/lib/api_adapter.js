@@ -7,8 +7,8 @@ for(var dx_prop in Space) {
 }
 
 DX.log = function(str) {
-  if(console) {
-    if(console.log) {
+  if(console !== undefined && console !== null) {
+    if(console.log !== undefined && console !== null) {
       console.log("log: " + str);
     }
   }
@@ -22,7 +22,17 @@ DX.camera = function() {
   for(var camera_prop in temp) {
     res[camera_prop] = temp[camera_prop];
   }
-  res.cameraDirection = res.getDirection;
+  //res.cameraDirection = res.getDirection;
+  
+  res.cameraDirection = function() {
+    var resAxis = [];
+    var temp = res.getDirection();
+    resAxis.push(temp.x);
+    resAxis.push(temp.y);
+    resAxis.push(temp.z);
+    return resAxis;
+  }
+  
   res.position = function() {
     var resAxis = [];
     var axis = temp.getPosition();
@@ -47,7 +57,7 @@ DX.item = function(id) {
     res[item_prop] = temp[item_prop];
   }
   res.nonDiscreteTeleport = function(x, y, z) {
-    res.setPosition(x, y, z, false);
+    res.setLocalPosition(x, y, z);
   }
 
   res.getAxisX = function() {
