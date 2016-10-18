@@ -1,6 +1,6 @@
 //http://newcospaces.dx.labs.intellij.net/#Project:CkTcwhNsVW0.GWs1ktTIKDY:B89ljVSJD95.HE9vtcbV1x4
 
-var items = DX.items();
+var items = Space.getItems();
 var bool = [false, false, false, false, false, false, false, false];
 var free = [true, true, true, true, true, true, true, true];
 var treeIdxs = [-1, -1, -1, -1, -1, -1, -1, -1];
@@ -21,13 +21,12 @@ function fly(index, item) {
       treeIdxs[index] = treeIdx;
 
       var tree = items[treeIdx + 8];
-      var pos = tree.position()
-      item.flyLikeButterflyTo(pos[0], pos[1], 1.25);
+      item.flyLikeButterflyToObj(tree, "Butterfly");
     }
-    DX.runLater(fly(index, items[index]), Math.random() * 40);
+    Space.schedule(fly(index, items[index]), Math.random() * 40);
   };
 }
 
 for (i = 0; i < 8; i++) {
-  DX.runLater(fly(i, items[i]), Math.random() * 10);
+  Space.schedule(fly(i, items[i]), Math.random() * 10);
 }
