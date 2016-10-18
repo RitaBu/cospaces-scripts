@@ -2,7 +2,7 @@ var city = Space.createCity(4, 4, 2);
 var rs = city.getRoadSize() / 4;
 var bs = city.getBlockSize() / 2;
 
-var carScale = 0.3;
+var carScale = 1;
 
 function createPathFromPoints(points) {
   var vec = [];
@@ -42,9 +42,9 @@ function createPathFromPoints(points) {
     dx /= l;
     dy /= l;
 
-    var r = 2;
-    var v1 = Space.createVectorItem(x + dx * bs, y + dy * bs, 0, dx, dy, 0);
-    var v2 = Space.createVectorItem(nx - dx * bs * r, ny - dy * bs * r, 0, dx, dy, 0);
+    var r = bs / 2;
+    var v1 = Space.createVectorItem(x + dx * bs, y + dy * bs, 0, dx * r, dy * r, 0);
+    var v2 = Space.createVectorItem(nx - dx * bs, ny - dy * bs, 0, dx * r, dy * r, 0);
     vec.push(v1);
     vec.push(v2);
   }
@@ -52,30 +52,30 @@ function createPathFromPoints(points) {
 }
 
 /*
-City.addCarsToPath(vec, n, function (i) {
-  var car;
-  if (n < 5) {
-    car = Space.createItem("LP_Bus", 0, 0, 0);
-    car.setScale(0.5);
-    car.setColor(0, 255, 0);
-  } else {
-    car = Space.createItem("LP_Car", 0, 0, 0);
-    car.setColor(255, 255, 0);
-  }
-  return car;
-});
-*/
+ City.addCarsToPath(vec, n, function (i) {
+ var car;
+ if (n < 5) {
+ car = Space.createItem("LP_Bus", 0, 0, 0);
+ car.setScale(0.5);
+ car.setColor(0, 255, 0);
+ } else {
+ car = Space.createItem("LP_Car", 0, 0, 0);
+ car.setColor(255, 255, 0);
+ }
+ return car;
+ });
+ */
 
 function addCarsToPath(vec, n, color) {
   var nl = vec.length;
   var car;
   for (var i = 0; i < n; i++) {
-    var line = Space.createCurveLineItem();
+    var line = Space.createCurveItem();
     for (var j = i; j <= i + nl; j++) {
       line.addVertex(vec[j % nl].id());
     }
     var modelId = "LP_Car";
-    car = Space.createItem(modelId, vec[i].position().x, vec[i].position().y, 0);
+    car = Space.createItem(modelId, vec[i].getPosition().x, vec[i].getPosition().y, 0);
     if (color != null) {
       car.setColor(color[0], color[1], color[2]);
     }
@@ -208,6 +208,6 @@ addTrafficLight(1, 2, 1);
 addTrafficLight(2, 1, 1);
 addTrafficLight(2, 2, 0);
 
-Space.setCarDriveController(1, 0.5);
-Space.setRenderShadows(false);
-Space.setRenderServiceItems(true);
+Space.setCarDriveController(1, 0.6);
+Space.renderShadows(false);
+Space.renderServiceItems(false);

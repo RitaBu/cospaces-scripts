@@ -1,6 +1,4 @@
-Space.items().forEach(function (item) {
-  item.remove();
-});
+Space.clear();
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
   require(['samples/CircleOfSpirals'], function (CircleOfSpirals) {
@@ -9,7 +7,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
     (function newItem() {
       Space.schedule(function () {
         var next = formation.next();
-        Space.createItem("Sphere", next.x, next.y);
+        Space.createItem("Sphere", next.x, next.y, 0);
         if (++n < 100) {
           newItem();
         }

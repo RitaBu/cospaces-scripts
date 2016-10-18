@@ -30,7 +30,7 @@ define(['../../helpers/animation/animation'], function (animation) {
     var that = this;
     var a = new animation.Animation("Wings Down", 0.02, (function () {
       var lastProgress = 0;
-      const angle = 45;
+      const angle = 45
       return function (anim) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();

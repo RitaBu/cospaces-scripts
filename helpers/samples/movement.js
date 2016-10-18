@@ -1,13 +1,11 @@
-Space.items().forEach(function (item) {
-  item.remove();
-});
+Space.clear();
 
 Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
   require(['formations/Spiral', 'formations/Circle', 'formations/Rect'], function (Spiral, Circle, Rect) {
     var n = 50;
     var items = [];
     for (var i = 0; i < n; ++i) {
-      items.push(Space.createItem("Sphere"));
+      items.push(Space.createItem("Sphere", 0, 0, 0));
     }
 
     function getFormation(i) {
