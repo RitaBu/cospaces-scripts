@@ -132,7 +132,7 @@ function longPath(d, w1, h1, w2, h2) {
 Space.renderShadows(false);
 Space.renderServiceItems(false);
 
-var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:"
+var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:";
 var states = ["D", "C", "A", "B"];
 
 var d = 1.8;
