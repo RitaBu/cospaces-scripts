@@ -21,7 +21,7 @@ function fly(index, item) {
       treeIdxs[index] = treeIdx;
 
       var tree = items[treeIdx + 8];
-      item.flyLikeButterflyToObj(tree, "Butterfly");
+      item.flyLikeButterflyToObj(tree, "Top");
     }
     Space.schedule(fly(index, items[index]), Math.random() * 40);
   };
