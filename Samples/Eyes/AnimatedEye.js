@@ -95,7 +95,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(lastProgress - p), false);
+        that.item.addRotation(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(lastProgress - p), false);
       };
     })()));
   };
@@ -109,7 +109,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotate(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(-(lastProgress - p)), true);
+        that.item.addRotation(that.pos.x, that.pos.y, that.pos.z, that.axisZ.x, that.axisZ.y, that.axisZ.z, Math.radians(-(lastProgress - p)), true);
       };
     })()));
   };
