@@ -6,8 +6,8 @@ var mainRotorItem = Space.getItem("q7lQAi7BPE");
 var tailRotorItem = Space.getItem("d7eXQCxY5A");
 
 Space.scheduleRepeating(function () {
-  mainRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
-  tailRotorItem.rotateLocalAxis(0, 0, 0, 0, 0, 3, 10 * Math.PI / 180, true);
+  mainRotorItem.addLocalRotation(0, 0, 0, 0, 0, 3, 5 * Math.PI / 180, true);
+  tailRotorItem.addLocalRotation(0, 0, 0, 0, 0, 3, 10 * Math.PI / 180, true);
 }, 0);
 Space.setRenderShadows(false);
 

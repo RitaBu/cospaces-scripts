@@ -16,7 +16,7 @@ define(['../../helpers/animation/animation'], function (animation) {
       return function (anim) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
-        that.item.rotateLocalAxis(1, 0, 0, 1, 0, 0, Math.radians(-(lastProgress - p)), true);
+        that.item.addLocalRotation(1, 0, 0, 1, 0, 0, Math.radians(-(lastProgress - p)), true);
       };
     })(), false);
     this.animator.addAnimation(a);
@@ -30,7 +30,7 @@ define(['../../helpers/animation/animation'], function (animation) {
       return function (anim) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
-        that.item.rotateLocalAxis(1, 0, 0, 1, 0, 0, -Math.radians(-(lastProgress - p)), true);
+        that.item.addLocalRotation(1, 0, 0, 1, 0, 0, -Math.radians(-(lastProgress - p)), true);
       };
     })(), false);
     this.animator.addAnimation(a);

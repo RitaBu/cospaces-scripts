@@ -36,7 +36,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(-(lastProgress - p)), true);
+        that.item.addLocalRotation(0, 1, 0, 0, 1, 0, Math.radians(-(lastProgress - p)), true);
       };
     })()));
   };
@@ -54,7 +54,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+        that.item.addLocalRotation(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
       };
     })()));
   };
@@ -141,7 +141,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+        that.item.addLocalRotation(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
       };
     })()));
   };
@@ -158,7 +158,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+        that.item.addLocalRotation(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
       };
     })()));
   };
@@ -175,7 +175,7 @@ define(['../../helpers/animation/animation'], function (animation) {
         var p = lastProgress;
         lastProgress = angle * anim.getProgress();
         // Project.log(anim.toString() + " lastProgress = " + lastProgress);
-        that.item.rotateLocalAxis(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
+        that.item.addLocalRotation(0, 1, 0, 0, 1, 0, Math.radians(lastProgress - p), true);
       };
     })()));
   };
