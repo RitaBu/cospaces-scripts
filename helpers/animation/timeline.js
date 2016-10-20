@@ -22,6 +22,7 @@ define(function () {
     var that = this;
     this.startTime = Space.currentTime();
     this.lastUpdateTime = this.startTime;
+    this.update();
     this.scheduled = Space.scheduleRepeating(function () {
       that.update();
     }, 0);
@@ -30,12 +31,12 @@ define(function () {
   Timeline.prototype.update = function () {
     var that = this;
     var timePassed = Space.currentTime() - that.lastUpdateTime;
-    if ((timePassed) >= this.updateInterval) {
+    if (timePassed === 0 || (timePassed) >= this.updateInterval) {
       that.lastUpdateTime = Space.currentTime();
       that.allTimes.forEach(function (t, index) {
         var totalTimePassed = Space.currentTime() - that.startTime;
+        // Project.log("Total time passed: " + totalTimePassed);
         if (t >= (totalTimePassed)) {
-          //Project.log("Total time passed: " + totalTimePassed);
           var a = that.allAnims[index];
           that.runningAnims.push(a);
           that.allAnims.splice(index, 1);
