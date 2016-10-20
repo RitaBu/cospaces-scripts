@@ -83,7 +83,7 @@ function Animal(animalId, item) {
 
 function Sound(id, soundClipId) {
   this.id = id;
-  this.soundClip = Space.resource(soundClipId);
+  this.soundClip = Space.loadSound(soundClipId);
 
   this.getSoundId = function () {
     return this.id;

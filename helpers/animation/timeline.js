@@ -11,7 +11,7 @@ define(function () {
   };
 
   Timeline.prototype.addAnimation = function (a, time) {
-    this.times.push(time);
+    this.allTimes.push(time);
     this.allAnims.push(a);
   };
 
