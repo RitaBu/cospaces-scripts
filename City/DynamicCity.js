@@ -100,11 +100,23 @@ function createPath2() {
   tr.addNextDestination(0, 2);
   tr.addNextDestination(0, 1);
   tr.createTrajectory();
+  tr.addCars(8);
+}
+
+function createPath3() {
+  var tr = new Trajectory();
+  tr.addNextDestination(3, 2);
+  tr.addNextDestination(2, 2);
+  tr.addNextDestination(2, 1);
+  tr.addNextDestination(1, 1);
+  tr.addNextDestination(1, 2);
+  tr.createTrajectory();
   tr.addCars(5);
 }
 
 createPath1();
 createPath2();
+createPath3();
 
 var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:";
 var states = ["D", "C", "A", "B"];
@@ -181,6 +193,6 @@ addTrafficLight(1, 2, 1);
 addTrafficLight(2, 1, 1);
 addTrafficLight(2, 2, 0);
 
-Space.setCarDriveController(5, 3);
+Space.setCarDriveController(4, 2.5);
 Space.renderShadows(false);
 Space.renderServiceItems(false);
