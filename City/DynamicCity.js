@@ -181,6 +181,6 @@ addTrafficLight(1, 2, 1);
 addTrafficLight(2, 1, 1);
 addTrafficLight(2, 2, 0);
 
-Space.setCarDriveController(1.5, 0.8);
+Space.setCarDriveController(5, 3);
 Space.renderShadows(false);
 Space.renderServiceItems(false);
