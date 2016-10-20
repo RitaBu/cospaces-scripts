@@ -41,5 +41,5 @@ define(function () {
     }, 0);
   };
 
-  return {Timeline: Timeline};
+  return Timeline;
 });
