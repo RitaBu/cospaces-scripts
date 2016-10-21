@@ -5,6 +5,7 @@ define(function () {
     this.finished = true;
     this.exec = exec;
     this.startTime = 0;
+    this.numExecs = 0;
     this.DEBUG = (typeof debug !== 'undefined') ?  debug : false;
   };
 
@@ -28,6 +29,7 @@ define(function () {
       }
     }
     this.exec(this);
+    this.numExecs++;
   };
 
   Animation.prototype.getProgress = function () {

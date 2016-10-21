@@ -12,10 +12,11 @@ define(function () {
 
   Timeline.prototype.addAnimation = function (a, time) {
     if (this.startTime > 0 && ((Space.currentTime() - this.lastUpdateTime) > time)) {
-      Project.log("Time elapsed even before starting for " + a);
+      Project.log("Time elapsed before even starting for " + a);
+    } else {
+      this.allTimes.push(time);
+      this.allAnims.push(a);
     }
-    this.allTimes.push(time);
-    this.allAnims.push(a);
   };
 
   Timeline.prototype.start = function () {
