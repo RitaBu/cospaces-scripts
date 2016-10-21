@@ -36,7 +36,8 @@ define(function () {
       that.allTimes.forEach(function (t, index) {
         var totalTimePassed = Space.currentTime() - that.startTime;
         // Project.log("Total time passed: " + totalTimePassed);
-        if (t >= (totalTimePassed)) {
+        // Project.log("t: " + t);
+        if (totalTimePassed > t) {
           var a = that.allAnims[index];
           that.runningAnims.push(a);
           that.allAnims.splice(index, 1);
