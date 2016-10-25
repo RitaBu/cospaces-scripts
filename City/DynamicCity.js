@@ -1,6 +1,30 @@
-var city = Space.createCity(3, 3, 2);
+var city = Space.createCity(3, 3, 1);
+
+city.addTrees(1, 0, true);
+city.addTrees(3, 0, true);
+
+city.addTrees(3, 1, true);
+
+city.addTrees(1, 3, true);
+city.addTrees(2, 3, true);
+city.addTrees(3, 3, true);
+
+city.addTrees(0, 0, false);
+city.addTrees(0, 1, false);
+city.addTrees(0, 2, false);
+
+city.addTrees(1, 0, false);
+city.addTrees(1, 2, false);
+
+city.addTrees(3, 0, false);
+city.addTrees(3, 2, false);
+
+city.rebuild();
+
 var rs = city.roadSize() / 4;
 var bs = city.blockSize() / 2;
+
+var velocity = 2;
 
 function Trajectory() {
   this.vertices = [];
@@ -11,10 +35,10 @@ function Trajectory() {
     this.route.push([h, w]);
   };
 
-  var RIGHT = 0;
-  var UP = 1;
-  var LEFT = 2;
-  var DOWN = 3;
+  const RIGHT = 0;
+  const UP = 1;
+  const LEFT = 2;
+  const DOWN = 3;
 
   this.createTrajectory = function () {
     var n = this.route.length;
@@ -41,25 +65,26 @@ function Trajectory() {
       var inVec = this.createTurn(inRoad, -1);
       var outVec = this.createTurn(outRoad, 1);
 
-      var r1 = bs * 0.35;
-      var r2 = bs * 0.35;
-      var v1 = Space.createVectorItem(bp.x + inVec[0], bp.y + inVec[1], 0, inVec[2] * r1, inVec[3] * r1, 0);
-      var v2 = Space.createVectorItem(bp.x + outVec[0], bp.y + outVec[1], 0, outVec[2] * r2, outVec[3] * r2, 0);
+      var r1 = bs * 0.4;
+      var r2 = bs * 0.4;
+      var v1 = Space.createVectorItem(bp.x + inVec[0], bp.y + inVec[1], 0.1, inVec[2] * r1, inVec[3] * r1, 0);
+      var v2 = Space.createVectorItem(bp.x + outVec[0], bp.y + outVec[1], 0.1, outVec[2] * r2, outVec[3] * r2, 0);
       this.vertices.push(v1);
       this.vertices.push(v2);
     }
   };
 
   this.createTurn = function (pos, dir) {
+    var shift = 1.3;
     switch (pos) {
       case RIGHT:
-        return [bs, -dir * rs, dir, 0];
+        return [bs, -dir * rs * shift, dir, 0];
       case UP:
-        return [dir * rs, bs, 0, dir];
+        return [dir * rs * shift, bs, 0, dir];
       case LEFT:
-        return [-bs, dir * rs, -dir, 0];
+        return [-bs, dir * rs * shift, -dir, 0];
       case DOWN:
-        return [-dir * rs, -bs, 0, -dir];
+        return [-dir * rs * shift, -bs, 0, -dir];
       default:
         return [0, 0, 0];
     }
@@ -74,9 +99,9 @@ function Trajectory() {
         line.addVertex(this.vertices[j % nl].id());
       }
       var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-      car = Space.createItem(modelId, this.vertices[i].getPosition().x, this.vertices[i].getPosition().y, 0);
-      car.moveBezier([line.id()], 5, true);
-      car.setScale(1);
+      car = Space.createItem(modelId, this.vertices[i].getPosition().x, this.vertices[i].getPosition().y, 0.1);
+      car.moveBezier([line.id()], velocity, true);
+      car.setScale(0.8);
     }
     return car;
   };
@@ -125,20 +150,21 @@ function addTrafficLight(h, w, dt) {
   var pos = city.getBlockPosition(h, w);
   var x = pos.x;
   var y = pos.y;
-  var d = 0.6 * bs;
-  var item0 = Space.createItem(file + states[0], x + d, y + d, 0);
+  var d = 0.7 * bs;
+  var d2 = 0.5 * bs;
+  var item0 = Space.createItem(file + states[0], x + d, y + d2, 0);
   item0.setHorizontalDirection(1, 0);
   item0.setProperty("light", "red");
 
-  var item1 = Space.createItem(file + states[0], x - d, y - d, 0);
+  var item1 = Space.createItem(file + states[0], x - d, y - d2, 0);
   item1.setHorizontalDirection(-1, 0);
   item1.setProperty("light", "red");
 
-  var item2 = Space.createItem(file + states[0], x - d, y + d, 0);
+  var item2 = Space.createItem(file + states[0], x - d2, y + d, 0);
   item2.setHorizontalDirection(0, 1);
   item2.setProperty("light", "red");
 
-  var item3 = Space.createItem(file + states[0], x + d, y - d, 0);
+  var item3 = Space.createItem(file + states[0], x + d2, y - d, 0);
   item3.setHorizontalDirection(0, -1);
   item3.setProperty("light", "red");
 
@@ -193,6 +219,6 @@ addTrafficLight(1, 2, 1);
 addTrafficLight(2, 1, 1);
 addTrafficLight(2, 2, 0);
 
-Space.setCarDriveController(4, 2.5);
+Space.setCarDriveController(3, 1.5);
 Space.renderShadows(false);
 Space.renderServiceItems(false);
