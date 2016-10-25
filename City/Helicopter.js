@@ -26,4 +26,4 @@ var flightHeli = function() {
 
 };
 
-Space.schedule(flightHeli, 0);
+flightHeli();
