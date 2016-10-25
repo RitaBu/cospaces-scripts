@@ -4,9 +4,9 @@
 
 ## Project location
 
+[dev https://newcospaces.dx.labs.intellij.net/shorten/dmof](https://newcospaces.dx.labs.intellij.net/shorten/dmof)  
 [v0.3 https://cospac.es/aa8a](https://cospac.es/aa8a)  
-[v0.2 https://cospac.es/jAQC](https://cospac.es/jAQC)  
-[v0.1 https://cospac.es/g69a](https://cospac.es/g69a)  
+[v0.2 https://cospac.es/jAQC](https://cospac.es/jAQC)
 
 ## How to play the game
 
@@ -16,14 +16,3 @@
 4. To kill a zombie tap/click on it.
 5. Don't let the zombies come close to you or you will die!
 6. Kill as many zombies as you can!
-
-## Changelog
-
-v0.3
-- Enemies hurt the player when they come to close.
-- Player has health points and can die.
-- When the player dies the game ends.
-
-v0.2
-- New enemy: Flying Skull.
-- Mood slowly changes from day to night.
