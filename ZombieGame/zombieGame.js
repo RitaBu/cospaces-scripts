@@ -110,7 +110,7 @@ function Skull(gameItem, id, type) {
 
 Skull.prototype.initAttack = function() {
   this.gameItem.playIdleAnimation('Clicking');
-  this.gameItem.flyLikeButterflyTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, 1);
+  this.gameItem.moveBezierTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, 1, 1);
 };
 
 Skull.prototype.followPlayer = function() {
