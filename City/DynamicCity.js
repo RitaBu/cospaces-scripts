@@ -99,7 +99,9 @@ function Trajectory() {
         line.addVertex(this.vertices[j % nl].id());
       }
       var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-      car = Space.createItem(modelId, this.vertices[i].getPosition().x, this.vertices[i].getPosition().y, 0.1);
+      var vert = this.vertices[i];
+      car = Space.createItem(modelId, vert.getPosition().x, vert.getPosition().y, 0.1);
+      car.setHorizontalDirection(vert.getAxisY().x, vert.getAxisY.y);
       car.moveBezier([line.id()], velocity, true);
       car.setScale(0.8);
     }
@@ -115,7 +117,7 @@ function createPath1() {
   tr.addNextDestination(1, 3);
   tr.addNextDestination(1, 0);
   tr.createTrajectory();
-  tr.addCars(8);
+  tr.addCars(5);
 }
 
 function createPath2() {
@@ -125,7 +127,7 @@ function createPath2() {
   tr.addNextDestination(0, 2);
   tr.addNextDestination(0, 1);
   tr.createTrajectory();
-  tr.addCars(8);
+  tr.addCars(5);
 }
 
 function createPath3() {
@@ -133,15 +135,65 @@ function createPath3() {
   tr.addNextDestination(3, 2);
   tr.addNextDestination(2, 2);
   tr.addNextDestination(2, 1);
+  tr.addNextDestination(0, 1);
+  tr.addNextDestination(0, 0);
+  tr.addNextDestination(1, 0);
   tr.addNextDestination(1, 1);
-  tr.addNextDestination(1, 2);
+  tr.addNextDestination(1, 3);
+  tr.addNextDestination(3, 3);
   tr.createTrajectory();
   tr.addCars(5);
+}
+
+function createPath4() {
+  var tr = new Trajectory();
+  tr.addNextDestination(1, 0);
+  tr.addNextDestination(1, 2);
+  tr.addNextDestination(2, 2);
+  tr.addNextDestination(2, 3);
+  tr.addNextDestination(3, 3);
+  tr.addNextDestination(3, 0);
+  tr.createTrajectory();
+  tr.addCars(4);
+}
+
+function createPath5() {
+  var tr = new Trajectory();
+  tr.addNextDestination(1, 1);
+  tr.addNextDestination(1, 2);
+  tr.addNextDestination(2, 2);
+  tr.addNextDestination(2, 1);
+  tr.createTrajectory();
+  tr.addCars(2);
+}
+
+function createPath6() {
+  var tr = new Trajectory();
+  tr.addNextDestination(1, 2);
+  tr.addNextDestination(1, 1);
+  tr.addNextDestination(2, 1);
+  tr.addNextDestination(2, 2);
+  tr.createTrajectory();
+  tr.addCars(2);
+}
+
+function createPath7() {
+  var tr = new Trajectory();
+  tr.addNextDestination(2, 3);
+  tr.addNextDestination(2, 0);
+  tr.addNextDestination(3, 0);
+  tr.addNextDestination(3, 3);
+  tr.createTrajectory();
+  tr.addCars(3);
 }
 
 createPath1();
 createPath2();
 createPath3();
+createPath4();
+createPath5();
+createPath6();
+createPath7();
 
 var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:";
 var states = ["D", "C", "A", "B"];
