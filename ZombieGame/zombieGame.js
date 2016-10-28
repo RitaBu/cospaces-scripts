@@ -23,16 +23,6 @@ Game.prototype.spawnPlayerAt = function(xPos, yPos) {
   this.player = new Player(Space.createItem('LP_Man', xPos, yPos, 0), 10);
 };
 
-Game.prototype.playGameOverSequence = function() {
-  this.player.gameItem.setPosition(this.player.gameItem.getPosition().x, this.player.gameItem.getPosition().y, -1.4, true);
-  this.player.painSound.setVolume(0);
-  this.soundClip.stop();
-  this.soundZombieHorde.stop();
-  Space.loadSound('8b5576a0df805516753735e697a2797a8df7526c9f842d124b1a503e84fdcdc8').play(function() {
-    Project.finishPlayMode(game.gameOverScreen);
-  });
-};
-
 Game.prototype.spawnZombie = function() {
   var posXY = this.generateEnemySpawnPos(this.enemySpawnRadius);
   var posZ = 0;
@@ -50,7 +40,7 @@ Game.prototype.spawnZombie = function() {
 
 Game.prototype.spawnSkull = function() {
   var posXY = this.generateEnemySpawnPos(this.enemySpawnRadius);
-  var posZ = Math.random() * (4 - 1) + 1;
+  var posZ = Math.random() * (5 - 1) + 1;
 
   var newSkull = new Skull(Space.createItem(this.enemyModel2Id, posXY.x, posXY.y, posZ), this.enemyIdCounter, 'skull');
   newSkull.initAttack();
@@ -87,7 +77,7 @@ function Zombie(gameItem, id, type) {
 
 Zombie.prototype.initAttack = function() {
   this.gameItem.playIdleAnimation('Walk');
-  this.gameItem.moveToItem(game.player.gameItem, this.gameItem.distanceToItem(game.player.gameItem));
+  this.gameItem.moveLinear(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z, 1);
 };
 
 Zombie.prototype.followPlayer = function() {
@@ -96,8 +86,7 @@ Zombie.prototype.followPlayer = function() {
 
 Zombie.prototype.hurtPlayer = function() {
   if (this.gameItem.distanceToItem(game.player.gameItem) < 2) {
-    game.player.painSound.play();
-    game.player.hp--;
+    this.gameItem.deleteFromSpace();
   }
 };
 
@@ -106,36 +95,30 @@ function Skull(gameItem, id, type) {
   this.gameItem = gameItem;
   this.id = id;
   this.type = type;
-  this.velocity = Math.random() * (2.5 - 0.5) + 0.5;
   this.dyingSound = Space.loadSound('24777a1e286dbcae98d5593fd9c4bc6bbde60dba8a697fea85d94b961feac0a5');
 }
 
 Skull.prototype.initAttack = function() {
   this.gameItem.playIdleAnimation('Clicking');
-  this.gameItem.moveBezierTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, 1, this.velocity);
+  this.gameItem.moveLinear(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z, 1);
 };
 
 Skull.prototype.followPlayer = function() {
-  this.gameItem.moveBezierTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, 1, this.velocity);
+  this.gameItem.moveToItem(game.player.gameItem, this.gameItem.distanceToItem(game.player.gameItem) - 1.5);
 };
 
 Skull.prototype.hurtPlayer = function() {
   if (this.gameItem.distanceToItem(game.player.gameItem) < 2) {
-    game.player.painSound.play();
-    game.player.hp--;
+    this.gameItem.deleteFromSpace();
   }
 };
 
 /********** Player **********/
-function Player(gameItem, healthPoints) {
+function Player(gameItem) {
   this.gameItem = gameItem;
-  this.hp = healthPoints;
-  this.points = 0;
-  this.painSound = Space.loadSound('10277c4d0da546c233ee3f8474cda452b786dc358455ae7aaec445b480062ac9');
 }
 
 Player.prototype.killEnemy = function(enemy) {
-  this.points++;
   enemy.dyingSound.play();
   enemy.gameItem.deleteFromSpace();
 
@@ -151,10 +134,8 @@ Space.clear();
 var gameConfig = {
   enemyModelId: '%%370077d9c1b39305ae1b1989393e132e67259707eb06b3c17c5d07802d1e47ea', // Zombie
   enemyModel2Id: '%%abaf39a9e30c47b817a9bca6735591c3a840312b9ada82e4a0bb8bcaf36eb5ab', // Skull
-  enemySpawnRadius: 13,
-  enemySpawnInterval: 4,
-  gameOverScreen: '9b56e2de6c325c7bc4698dd9b34c24013a7f62edd114541ce1991d7399ad3038',
-  playerCanDie: false
+  enemySpawnRadius: 15,
+  enemySpawnInterval: 5
 };
 var game = new Game(gameConfig);
 game.playMusic();
@@ -167,19 +148,9 @@ Space.scheduleRepeating(function() {
   game.spawnSkull();
   game.enemies.forEach(function(enemy) {
     enemy.followPlayer();
+    enemy.hurtPlayer();
   });
 }, game.enemySpawnInterval);
-
-Space.scheduleRepeating(function() {
-  game.enemies.forEach(function(enemy) {
-    if (game.playerCanDie) {
-      enemy.hurtPlayer();
-    }
-    if (game.player.hp === 0) {
-      game.playGameOverSequence();
-    }
-  });
-}, 1.5);
 
 var mood = 1;
 Space.setMood(mood);
