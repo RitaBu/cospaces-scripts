@@ -6,8 +6,8 @@ function Game(config) {
   this.enemySpawnInterval = config.enemySpawnInterval;
   this.gameOverScreen = config.gameOverScreen;
   this.playerCanDie = config.playerCanDie;
-  this.soundClip = Space.loadSound('lv1Za8SS4reylWHZphWQv9cQTtgUlZ6iG4ukPufcn3Y');
-  this.soundZombieHorde = Space.loadSound('CQWfIZ490ULFXefpPefk8z7lVI8XGeF500J7fanjhFl');
+  this.soundClip = Space.loadSound('fd41215166bfb85049288d7c3d1cc4db68e8af0f805b0a5a9a36059a26adb3d3');
+  this.soundZombieHorde = Space.loadSound('5b5dce36e80b678a17cc5c8cff2a7426f2df55ab2fbc81c64978eb5ed554bfce');
   this.player = {};
   this.enemies = [];
   this.enemyIdCounter = 0;
@@ -28,7 +28,7 @@ Game.prototype.playGameOverSequence = function() {
   this.player.painSound.setVolume(0);
   this.soundClip.stop();
   this.soundZombieHorde.stop();
-  Space.loadSound('WJMZhghPfw9hLIG5DC8o0pL9MpXEBxT3UAZl6uo5v2x').play(function() {
+  Space.loadSound('8b5576a0df805516753735e697a2797a8df7526c9f842d124b1a503e84fdcdc8').play(function() {
     Project.finishPlayMode(game.gameOverScreen);
   });
 };
@@ -82,7 +82,7 @@ function Zombie(gameItem, id, type) {
   this.gameItem = gameItem;
   this.id = id;
   this.type = type;
-  this.dyingSound = Space.loadSound('U0dFtDMZdgBrvkfo5TclGdnctnLvuMQDkWeNmBBPPjX');
+  this.dyingSound = Space.loadSound('fa2832d97694e4650c1ecd6e6ade545a3fc41ff82f50d5e8a3a826015034f494');
 }
 
 Zombie.prototype.initAttack = function() {
@@ -107,7 +107,7 @@ function Skull(gameItem, id, type) {
   this.id = id;
   this.type = type;
   this.velocity = Math.random() * (2.5 - 0.5) + 0.5;
-  this.dyingSound = Space.loadSound('PBPyatro1u5omYzzqRI6zukxU5AqP32KqAxsMNDw8E8');
+  this.dyingSound = Space.loadSound('24777a1e286dbcae98d5593fd9c4bc6bbde60dba8a697fea85d94b961feac0a5');
 }
 
 Skull.prototype.initAttack = function() {
@@ -131,7 +131,7 @@ function Player(gameItem, healthPoints) {
   this.gameItem = gameItem;
   this.hp = healthPoints;
   this.points = 0;
-  this.painSound = Space.loadSound('Zgx9tDmYMQT4BixMwB1fJAIIcU6dXUESgQHYaKq5vP3');
+  this.painSound = Space.loadSound('10277c4d0da546c233ee3f8474cda452b786dc358455ae7aaec445b480062ac9');
 }
 
 Player.prototype.killEnemy = function(enemy) {
@@ -149,11 +149,11 @@ Player.prototype.killEnemy = function(enemy) {
 Space.clear();
 
 var gameConfig = {
-  enemyModelId: '%%8D0CeO2XCxTFbrLZU7gaXyJAovoTp4DOOBZYShmRD2d', // Zombie
-  enemyModel2Id: '%%v20E1yKYJwuW0eJnkOKtnQeoo0YPvyRknRPM6frG7IE', // Skull
-  enemySpawnRadius: 15,
+  enemyModelId: '%%370077d9c1b39305ae1b1989393e132e67259707eb06b3c17c5d07802d1e47ea', // Zombie
+  enemyModel2Id: '%%abaf39a9e30c47b817a9bca6735591c3a840312b9ada82e4a0bb8bcaf36eb5ab', // Skull
+  enemySpawnRadius: 13,
   enemySpawnInterval: 4,
-  gameOverScreen: 'MKjRwIp96ROpe10ifUzHiB8LkTlZndQ660jfDL2EOPA',
+  gameOverScreen: '9b56e2de6c325c7bc4698dd9b34c24013a7f62edd114541ce1991d7399ad3038',
   playerCanDie: false
 };
 var game = new Game(gameConfig);
