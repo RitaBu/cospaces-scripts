@@ -53,4 +53,8 @@ city.addSigns(5, 4);
 
 city.rebuild();
 
+city.createTrajectory([2, 0, 2, 2, 4, 2, 4, 0]);
+
 Space.renderShadows(false);
+Space.renderServiceItems(true);
+
