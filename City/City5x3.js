@@ -58,6 +58,13 @@ var bs = city.blockSize() / 2;
 
 var velocity = 2;
 
+function createCar(i, line) {
+    var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
+    var car = Space.createItem(modelId);
+    car.moveBezier(line.id(), velocity, true);
+    car.setScale(0.8);
+}
+
 function createPath(path) {
     var lineId = city.createTrajectory(path);
     var line = Space.getItem(lineId);
@@ -65,16 +72,11 @@ function createPath(path) {
     var n = path.length / 2;
     var i = 0;
 
-    var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    var car = Space.createItem(modelId);
-    car.moveBezier([line.id()], velocity, true);
+    createCar(i, line);
 
     for (i = 1; i < n; i++) {
         line = line.shift();
-
-        modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-        car = Space.createItem(modelId);
-        car.moveBezier([line.id()], velocity, true);
+        createCar(i, line);
     }
 }
 
