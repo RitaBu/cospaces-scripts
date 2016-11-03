@@ -54,7 +54,6 @@ Space.renderShadows(false);
 Space.renderServiceItems(true);
 
 //traffic light
-var rs = city.roadWidth() / 4;
 var bs = city.blockSize() / 2;
 
 var file = "%%98efa9b173c24d877a7d54f51889bc5a7d98d0b9b747c4e771cf53589e1b41fc:";
@@ -143,11 +142,10 @@ function createCar(i, line) {
     car.setScale(0.8);
 }
 
-function createPath(path) {
+function createPath(path, n) {
     var lineId = city.createTrajectory(path);
     var line = Space.getItem(lineId);
 
-    var n = path.length / 2;
     var i = 0;
 
     createCar(i, line);
@@ -158,6 +156,6 @@ function createPath(path) {
     }
 }
 
-createPath([0, 0, 0, 2, 2, 2, 2, 0]);
+createPath([0, 0, 0, 2, 2, 2, 2, 4, 4, 4, 4, 2, 2, 2, 2, 0], 4);
 
 Space.setCarDriveController(3, 1.5);
