@@ -1,4 +1,4 @@
-var heli = Space.createItem("LP_Helicopter");
+var heli = Space.getItem("EYJOH5zT0b");
 var building = Space.getItem("sDAMBMkTCaaSwhXczOyOdDP");
 var start = building.getPosition();
 
