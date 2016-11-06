@@ -1,6 +1,4 @@
-DX.items().forEach(function(item) {
-  item.remove();
-});
+Space.clear();
 
 function norm(vec){
   var n = [];
@@ -28,8 +26,7 @@ function vecToQuat(vec, angl){
 var a = 1;
 var first = true;
 for (var angle = 2 * Math.PI; angle < 6 * Math.PI; angle += Math.PI / 30) {
-  var id = DX.createItem("FxCd", 0, 0, 0);
-  var cuboid = DX.item(id);
+  var cuboid = Space.createItem("FxCd", 0, 0, 0);
   var quat;
   if (first) {
     quat = vecToQuat([1, 0, 0], -0.6);
@@ -38,8 +35,8 @@ for (var angle = 2 * Math.PI; angle < 6 * Math.PI; angle += Math.PI / 30) {
     quat = vecToQuat([0, 0, 1], angle);
   }
   cuboid.setSize(1, 0.3, 2.5);
-  cuboid.moveToPos(a * angle * Math.cos(angle), a * angle * Math.sin(angle), 0,
+  cuboid.setPositionQuat(a * angle * Math.cos(angle), a * angle * Math.sin(angle), 0,
       quat[0], quat[1], quat[2], quat[3]);
 }
 
-DX.setPhysicsEnabled(true);
+Space.setPhysicsEnabled(true);
