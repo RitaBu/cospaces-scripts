@@ -1,11 +1,11 @@
 // http://newcospaces.dx.labs.intellij.net/shorten/nNyw
 // https://cospac.es/YKGQ
 
-var tank1 = Space.item("tank1");
-var water1 = Space.item("water1");
-var water2 = Space.item("water2");
-var pipe = Space.item("pipe");
-var w = Space.item("weight");
+var tank1 = Space.getItem("tank1");
+var water1 = Space.getItem("water1");
+var water2 = Space.getItem("water2");
+var pipe = Space.getItem("pipe");
+var w = Space.getItem("weight");
 var h = tank1.getHeight();
 var weight = true;
 
@@ -19,37 +19,37 @@ var interval = 0.01;
 
 Space.schedule(update, interval);
 
-function update(){
+function update() {
   var step = 0.04;
   var h1 = water1.getHeight();
   var h2 = water2.getHeight();
-  if(weight){
-    if(h1 > 0){
+  if (weight) {
+    if (h1 > 0) {
       water1.setHeight(h1 - step);
       water2.setHeight(h2 + step);
       pos = water1.position();
       w.setPosition(pos[0], pos[1], pos[2] + water1.getHeight());
       Space.schedule(update, interval);
     }
-    else{
-      pipe.setColor(255,255,255);
+    else {
+      pipe.setColor(255, 255, 255);
       Space.schedule(resetWithoutWeight, 1);
     }
   }
-  else{
-    if(h2 > h1){
+  else {
+    if (h2 > h1) {
       water1.setHeight(h1 + step);
       water2.setHeight(h2 - step);
       Space.schedule(update, interval);
     }
-    else{
+    else {
       Space.schedule(resetWithWeight, 1);
     }
 
   }
 }
 
-function resetWithWeight(){
+function resetWithWeight() {
   water1.setHeight(h * 0.5 - 0.1);
   water2.setHeight(h * 0.5 - 0.1);
   pos = water1.position();
@@ -58,7 +58,7 @@ function resetWithWeight(){
   Space.schedule(update, interval);
 }
 
-function resetWithoutWeight(){
+function resetWithoutWeight() {
   pipe.setColor(0, 100, 255);
   w.setPosition(5, 0, 0);
   weight = false;
