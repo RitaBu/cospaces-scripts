@@ -5,7 +5,13 @@ var city = Space.createCity(0, 0);
 city.buildRoundRoad(13, 13, 1);
 city.fillGrid(4, 4, 1, 2, 2);
 
-city.setCell(9, 3, 2, 0);
+city.setCell(8, 3, 1, 0);
+city.setCell(8, 4, 4 * 16, 2);
+city.setCell(8, 2, 2 * 16, 1);
+
+city.addTrees(9, 3);
+city.addTrees(8, 3);
+city.addTrees(7, 3);
 
 city.setCell(0, 6, 4 * 16, 1);
 city.setCell(1, 6, 2 * 16, 1);
@@ -66,6 +72,8 @@ city.addLamps(8, 5);
 city.addLamps(8, 7);
 city.addLamps(8, 9);
 
+city.addLamps(7, 4);
+city.addLamps(9, 4);
 city.addLamps(9, 6);
 city.addLamps(9, 8);
 
