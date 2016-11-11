@@ -110,11 +110,84 @@ var line2 = Space.createInterval(pos1.x, pos1.y, 2, pos1.x, pos1.y, 40);
 //var line2 = Space.createInterval(pos1.x, pos1.y, 5, pos4.x, pos4.y, 20);
 var line3 = Space.createInterval(pos0.x, pos0.y, 1, pos4.x, pos4.y, 6);
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+var basis1 = Space.getItem("dQ6Fc5KfFg");
+function createRandomFly() {
+    var pos = city.getCellCenter(6, 6);
+    var x = getRandomInt(1, 5) * 2;
+    var y = getRandomInt(1, 5) * 2;
+    var pos1 = city.getCellCenter(x, y);
+    //var z0 = Math.random() * 30;
+    //var z1 = Math.random() * 10;
+    var z0 = Math.random() * 40;
+    var z1 = 0;
+    var dx = pos1.x - pos.x;
+    var dy = pos1.y - pos.y;
+    var dz = z0;
+    basis1.orientAlong(-dx, -dy, -dz);
+    return Space.createInterval(pos1.x, pos1.y, z1 + z0, pos.x, pos.y, z1);
+}
+
+function createRandomVerticalFly() {
+    var x = getRandomInt(1, 5) * 2;
+    var y = getRandomInt(1, 5) * 2;
+    var pos = city.getCellCenter(x, y);
+    var z0 = Math.random() * 30;
+    var z1 = Math.random() * 10;
+    return Space.createInterval(pos.x, pos.y, z0, pos.x, pos.y, z1 + z0);
+}
+
+function createRandomFlatHorizontalFly() {
+    var x = getRandomInt(1, 5) * 2;
+    var pos0 = city.getCellCenter(2, x);
+    var pos1 = city.getCellCenter(10, x);
+    var z0 = Math.random() * 20;
+    var z1 = Math.random() * 20;
+    return Space.createInterval(pos0.x, pos0.y, z0, pos1.x, pos1.y, z1 + z0);
+}
+
+function createRandomFlatVerticalFly() {
+    var x = getRandomInt(1, 5) * 2;
+    var pos0 = city.getCellCenter(x, 2);
+    var pos1 = city.getCellCenter(x, 10);
+    var z0 = Math.random() * 20;
+    var z1 = Math.random() * 20;
+    return Space.createInterval(pos0.x, pos0.y, z0, pos1.x, pos1.y, z1 + z0);
+}
 
 //var heli2 = Space.getItem("FOPlwoGGPl");
 var heli2 = Space.getItem("1rzE7rqIRs");
+var basis = Space.getItem("LoELPeANBf");
+//heli2.moveBezierWithOrientation(line2.id(), 0.5, false, Space.getItem("LoELPeANBf"));
+//heli2.moveBezierWithOrientation(line2.id(), 0.5, false, basis);
 
-heli2.moveBezierWithOrientation(line2.id(), 0.5, false, Space.getItem("LoELPeANBf"));
+var i = 0;
+function fly() {
+    var line;
+    var bas;
+    if (i % 4 === 0) {
+        line = createRandomFly();
+        bas = basis1;
+    } else if (i % 4 === 1) {
+        line = createRandomVerticalFly();
+        bas = basis;
+    } else if (i % 4 === 2) {
+        line = createRandomFlatVerticalFly();
+        bas = basis;
+    } else {
+        line = createRandomFlatHorizontalFly();
+        bas = basis;
+    }
+    //i++;
+    heli2.moveBezierWithOrientation(line.id(), 0.5, false, bas, fly);
+}
+
+fly();
 
 Space.schedule(function() {
     heli.startHelicopter();
@@ -230,10 +303,19 @@ function addTrafficLight(w, h, dt) {
     Space.schedule(tick, 1 + dt);
 }
 
+addTrafficLight(6, 4, 0);
+addTrafficLight(8, 4, 1);
+
+addTrafficLight(4, 6, 0);
 addTrafficLight(6, 6, 0);
 addTrafficLight(8, 6, 1);
+addTrafficLight(10, 6, 1);
+
 addTrafficLight(6, 8, 1);
 addTrafficLight(8, 8, 0);
+
+addTrafficLight(6, 10, 1);
+addTrafficLight(8, 10, 0);
 
 Space.setCarDriveController(3, 1.5);
 
