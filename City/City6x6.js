@@ -184,7 +184,7 @@ function fly() {
         bas = basis;
     }
     //i++;
-    heli2.moveBezierWithOrientation(line.id(), 0.5, false, bas, fly);
+    heli2.moveBezierWithQuat(line.id(), 0.5, false, [bas.id()], fly);
 }
 
 fly();
@@ -194,7 +194,7 @@ Space.schedule(function() {
     heli.moveBezier(line3.id(), 2, false);
 }, 1);
 
-//heli2.focusOn(true);
+heli2.focusOn(true);
 
 //cars
 var velocity = 2;
