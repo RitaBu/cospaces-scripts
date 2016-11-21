@@ -1,6 +1,4 @@
 //https://newcospaces.dx.labs.intellij.net/#Project:CkTcwhNsVW0.GWs1ktTIKDY:qFOLqjeQqJRgw29iCQA6Vd
-
-//var helicopter = Space.createItem("LP_Helicopter", 0, 0, 0);
 var city = Space.createCity(0, 0);
 city.buildRoundRoad(13, 13, 1);
 city.fillGrid(4, 4, 1, 2, 2);
@@ -98,17 +96,7 @@ city.rebuild();
 Space.renderServiceItems(false);
 
 //animation
-//var pos0 = city.getCellCenter(4, 2);
 var heli = Space.getItem("kNUFPcIlCb");
-
-var pos0 = city.getCellCenter(4, 6);
-var pos1 = city.getCellCenter(6, 6);
-var pos2 = city.getCellCenter(8, 6);
-var pos4 = city.getCellCenter(12, 6);
-
-var line2 = Space.createInterval(pos1.x, pos1.y, 2, pos1.x, pos1.y, 40);
-//var line2 = Space.createInterval(pos1.x, pos1.y, 5, pos4.x, pos4.y, 20);
-var line3 = Space.createInterval(pos0.x, pos0.y, 1, pos4.x, pos4.y, 6);
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -116,83 +104,59 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-var basis1 = Space.getItem("dQ6Fc5KfFg");
-function createRandomFly() {
-    var pos = city.getCellCenter(6, 6);
-    var x = getRandomInt(1, 5) * 2;
-    var y = getRandomInt(1, 5) * 2;
-    var pos1 = city.getCellCenter(x, y);
-    //var z0 = Math.random() * 30;
-    //var z1 = Math.random() * 10;
-    var z0 = Math.random() * 40;
-    var z1 = 0;
-    var dx = pos1.x - pos.x;
-    var dy = pos1.y - pos.y;
-    var dz = z0;
-    basis1.orientAlong(-dx, -dy, -dz);
-    return Space.createInterval(pos1.x, pos1.y, z1 + z0, pos.x, pos.y, z1);
-}
-
-function createRandomVerticalFly() {
-    var x = getRandomInt(1, 5) * 2;
-    var y = getRandomInt(1, 5) * 2;
-    var pos = city.getCellCenter(x, y);
-    var z0 = Math.random() * 30;
-    var z1 = Math.random() * 10;
-    return Space.createInterval(pos.x, pos.y, z0, pos.x, pos.y, z1 + z0);
-}
-
-function createRandomFlatHorizontalFly() {
-    var x = getRandomInt(1, 5) * 2;
-    var pos0 = city.getCellCenter(2, x);
-    var pos1 = city.getCellCenter(10, x);
-    var z0 = Math.random() * 20;
-    var z1 = Math.random() * 20;
-    return Space.createInterval(pos0.x, pos0.y, z0, pos1.x, pos1.y, z1 + z0);
-}
-
-function createRandomFlatVerticalFly() {
-    var x = getRandomInt(1, 5) * 2;
-    var pos0 = city.getCellCenter(x, 2);
-    var pos1 = city.getCellCenter(x, 10);
-    var z0 = Math.random() * 20;
-    var z1 = Math.random() * 20;
-    return Space.createInterval(pos0.x, pos0.y, z0, pos1.x, pos1.y, z1 + z0);
-}
-
 //var heli2 = Space.getItem("FOPlwoGGPl");
 var heli2 = Space.getItem("1rzE7rqIRs");
-var basis = Space.getItem("LoELPeANBf");
-//heli2.moveBezierWithOrientation(line2.id(), 0.5, false, Space.getItem("LoELPeANBf"));
-//heli2.moveBezierWithOrientation(line2.id(), 0.5, false, basis);
+//var heli2 = Space.getItem("GHZQErtp76");
 
+var sqrt2 = Math.sqrt(2) * 0.5;
 var i = 0;
 function fly() {
-    var line;
-    var bas;
-    if (i % 4 === 0) {
-        line = createRandomFly();
-        bas = basis1;
-    } else if (i % 4 === 1) {
-        line = createRandomVerticalFly();
-        bas = basis;
-    } else if (i % 4 === 2) {
-        line = createRandomFlatVerticalFly();
-        bas = basis;
+    //Project.log("i = " + i);
+    var path;
+    if (i % 6 === 1) {
+        var z = 10 + Math.random() * 30;
+        path = Space.createLinePath(0, 0, z, 0, 0, z + 15, -sqrt2, 0, 0, sqrt2, 15);
+    } else if (i % 6 === 2) {
+        var x = 6;
+        var y = 6;
+        while (x === 6 && y === 6) {
+            x = getRandomInt(2, 4) * 2;
+            y = getRandomInt(2, 4) * 2;
+        }
+        var pos = city.getCellCenter(x, y);
+        var z = 5 + Math.random() * 30;
+        path = Space.createLinePathWithDefaultOrientation(pos.x, pos.y, z, 0, 0, 0, 30);
+    } else if (i % 6 === 3) {
+        var x = getRandomInt(2, 4) * 2;
+        var pos0 = city.getCellCenter(x, 4);
+        var pos1 = city.getCellCenter(x, 8);
+
+        var z = 5 + Math.random() * 20;
+        path = Space.createLinePath(pos0.x, pos0.y, z, pos1.x, pos1.y, z + 10, -sqrt2, 0, 0, sqrt2, 30);
+    } else if (i % 6 === 5) {
+        var x = getRandomInt(2, 4) * 2;
+        var pos0 = city.getCellCenter(4, x);
+        var pos1 = city.getCellCenter(8, x);
+
+        var z = 5 + Math.random() * 20;
+        path = Space.createLinePath(pos0.x, pos0.y, z, pos1.x, pos1.y, z + 10, -sqrt2, 0, 0, sqrt2, 30);
     } else {
-        line = createRandomFlatHorizontalFly();
-        bas = basis;
+        path = Space.createSpiralPath(1, 1, 10, 20, Math.random() * 2 * Math.PI, 1, 6, 5, 240);
     }
-    //i++;
-    heli2.moveBezierWithQuat(line.id(), 0.5, false, [bas.id()], fly);
+    heli2.moveBezierPath(path, false);
+    i++;
+    Space.schedule(fly, 10);
+
 }
 
 fly();
 
-Space.schedule(function() {
-    heli.startHelicopter();
-    heli.moveBezier(line3.id(), 2, false);
-}, 1);
+/*
+ Space.schedule(function() {
+ heli.startHelicopter();
+ heli.moveBezier(line3.id(), 2, false);
+ }, 1);
+ */
 
 heli2.focusOn(true);
 
@@ -220,14 +184,14 @@ function createPath(path, n) {
     }
 }
 
-createPath([4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 6, 6, 6, 6, 4], 8);
-createPath([6, 4, 6, 6, 10, 6, 10, 4], 8);
-createPath([4, 6, 4, 8, 10, 8, 10, 6], 8);
-createPath([4, 8, 4, 10, 10, 10, 10, 8], 8);
+createPath([4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 6, 6, 6, 6, 4], 4);
+createPath([6, 4, 6, 6, 10, 6, 10, 4], 4);
+createPath([4, 6, 4, 8, 10, 8, 10, 6], 4);
+createPath([4, 8, 4, 10, 10, 10, 10, 8], 4);
 
-createPath([4, 6, 6, 6, 6, 10, 4, 10], 8);
-createPath([6, 4, 8, 4, 8, 10, 6, 10], 8);
-createPath([8, 4, 10, 4, 10, 10, 8, 10], 8);
+createPath([4, 6, 6, 6, 6, 10, 4, 10], 4);
+createPath([6, 4, 8, 4, 8, 10, 6, 10], 4);
+createPath([8, 4, 10, 4, 10, 10, 8, 10], 4);
 
 //traffic light
 var bs = city.blockSize() / 2;
@@ -318,4 +282,37 @@ addTrafficLight(6, 10, 1);
 addTrafficLight(8, 10, 0);
 
 Space.setCarDriveController(3, 1.5);
+
+var heli = Space.getItem("vJzwDTad2D");
+var building = Space.getItem("sDAMBMkTCaaSwhXczOyOdDP");
+var start = building.getPosition();
+
+var zFlight = 20;
+var radius = 12;
+var velocity = 3;
+
+var flightHeli = function() {
+
+    heli.startHelicopter();
+    Space.schedule(function() {
+        heli.moveBezierToWithCallback(start.x + 1, start.y, zFlight, velocity, function(){
+            heli.moveBezierCircle(0, 0, zFlight, radius, velocity);
+            Space.schedule(function() {
+                heli.moveBezierToObj(building, "Top", velocity, stopHeli);
+            }, 30);
+        });
+    }, 5);
+
+    var stopHeli = function() {
+        heli.stopHelicopter();
+        Space.schedule(flightHeli, 10);
+    }
+
+};
+
+flightHeli();
+
+var sound = Space.loadSound('PKEyAf8Zh9xOhya0ujrIaixWJDwC3C2Y7LZvu56ldZi');
+sound.play(true);
+
 
