@@ -281,33 +281,40 @@ addTrafficLight(8, 8, 0);
 addTrafficLight(6, 10, 1);
 addTrafficLight(8, 10, 0);
 
-Space.setCarDriveController(3, 1.5);
+Space.setCarDriveController(2, 1);
 
 var heli = Space.getItem("vJzwDTad2D");
 var building = Space.getItem("sDAMBMkTCaaSwhXczOyOdDP");
-var start = building.getPosition();
+var top = building.getSlotTransform("Top");
+var start = top.getPosition();
 
 var zFlight = 20;
 var radius = 12;
 var velocity = 3;
 
 var flightHeli = function() {
-
     heli.startHelicopter();
     Space.schedule(function() {
         heli.moveBezierToWithCallback(start.x + 1, start.y, zFlight, velocity, function(){
             heli.moveBezierCircle(0, 0, zFlight, radius, velocity);
-            Space.schedule(function() {
-                heli.moveBezierToObj(building, "Top", velocity, stopHeli);
-            }, 30);
+            Space.schedule(land, 30);
         });
     }, 5);
+};
 
-    var stopHeli = function() {
-        heli.stopHelicopter();
-        Space.schedule(flightHeli, 10);
+var land = function() {
+    var pos = heli.getPosition();
+    var d2 = (pos.x - start.x) * (pos.x - start.x) + (pos.y - start.y) * (pos.y - start.y);
+    if (d2 < 9) {
+        heli.moveBezierToObj(building, "Top", velocity, stopHeli);
+    } else {
+        Space.schedule(land, 2);
     }
+};
 
+var stopHeli = function() {
+    heli.stopHelicopter();
+    Space.schedule(flightHeli, 10);
 };
 
 flightHeli();
