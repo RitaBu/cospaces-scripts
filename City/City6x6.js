@@ -8,7 +8,6 @@ city.setCell(8, 4, 4 * 16, 2);
 city.setCell(8, 2, 2 * 16, 1);
 
 city.addTrees(9, 3);
-city.addTrees(8, 3);
 city.addTrees(7, 3);
 
 city.setCell(0, 6, 4 * 16, 1);
@@ -31,6 +30,7 @@ city.setCell(1, 2, 1, 0);
 city.setCell(1, 3, 1, 0);
 city.setCell(1, 4, 1, 0);
 city.setCell(1, 5, 1, 0);
+city.setCell(3, 5, 2, 0);
 
 city.addTrees(1, 2);
 city.addTrees(1, 3);
