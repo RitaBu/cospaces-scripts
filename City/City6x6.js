@@ -95,18 +95,15 @@ city.rebuild();
 
 Space.renderServiceItems(false);
 
-//animation
-var heli = Space.getItem("kNUFPcIlCb");
+//camera animation
+var camera = Space.getCameraItem();
+camera.setMovement("fixed");
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-//var heli2 = Space.getItem("FOPlwoGGPl");
-var heli2 = Space.getItem("1rzE7rqIRs");
-//var heli2 = Space.getItem("GHZQErtp76");
 
 var sqrt2 = Math.sqrt(2) * 0.5;
 var i = 0;
@@ -143,7 +140,7 @@ function fly() {
     } else {
         path = Space.createSpiralPath(1, 1, 10, 20, Math.random() * 2 * Math.PI, 1, 6, 5, 240);
     }
-    heli2.moveBezierPath(path, false);
+    camera.moveBezierPath(path, false);
     i++;
     Space.schedule(fly, 10);
 
@@ -157,8 +154,6 @@ fly();
  heli.moveBezier(line3.id(), 2, false);
  }, 1);
  */
-
-heli2.focusOn(true);
 
 //cars
 var velocity = 2;
