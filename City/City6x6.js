@@ -121,7 +121,7 @@ function fly() {
         var pos0 = city.getCellCenter(7, 6);
         path = Space.createLinePathWithTwoTargets(
             pos0.x, pos0.y, 1,
-            pos0.x, pos0.y, 3,
+            pos0.x + 2, pos0.y, 3,
             0, 0, 1, 0, 0, 3, 15);
     } else if (i === 2) {
         var pos0 = city.getCellCenter(5, 0);
@@ -150,6 +150,10 @@ function fly() {
 
         var z = 5 + Math.random() * 20;
         path = Space.createLinePath(pos0.x, pos0.y, z, pos1.x, pos1.y, z + 10, -sqrt2, 0, 0, sqrt2, 30);
+    } else if (i % 6 === 4) {
+        var z = 10;
+        var r = 20;
+        path = Space.createSpiralPath(1, 1, z, r, Math.random() * 2 * Math.PI, 1, 6, 1, 240);
     } else if (i % 6 === 5) {
         var x = getRandomInt(2, 4) * 2;
         var pos0 = city.getCellCenter(4, x);
@@ -158,7 +162,11 @@ function fly() {
         var z = 5 + Math.random() * 20;
         path = Space.createLinePath(pos0.x, pos0.y, z, pos1.x, pos1.y, z + 10, -sqrt2, 0, 0, sqrt2, 30);
     } else {
-        path = Space.createSpiralPath(1, 1, 10, 20, Math.random() * 2 * Math.PI, 1, 6, 1, 240);
+        var z = 10 + i * 0.1;
+        var r = 20 + i;
+        var time = r * 12;
+        path = Space.createSpiralPath(1, 1, z, r, Math.random() * 2 * Math.PI, 1, 6, 1, time);
+        //path = Space.createSpiralPath(1, 1, z, r, Math.random() * 2 * Math.PI, 500, 12, 1, 500);
     }
     camera.moveBezierPath(path, false);
     i++;
