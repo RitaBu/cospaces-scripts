@@ -10,7 +10,7 @@ var flightHeli = function() {
 
   heli.startHelicopter();
   Space.schedule(function() {
-    heli.moveBezierToWithCallback(start.x + 1, start.y, zFlight, velocity, function(){
+    heli.moveBezierTo(start.x + 1, start.y, zFlight, velocity, function(){
       heli.moveBezierCircle(0, 0, zFlight, radius, velocity);
       Space.schedule(function() {
         heli.moveBezierToObj(building, "Top", velocity, stopHeli);
