@@ -110,7 +110,27 @@ var i = 0;
 function fly() {
     //Project.log("i = " + i);
     var path;
-    if (i % 6 === 1) {
+    if (i === 0) {
+        var pos0 = city.getCellCenter(5, 2);
+        var pos1 = city.getCellCenter(6, 2);
+        path = Space.createLinePathWithTwoTargets(
+            (pos0.x + pos1.x) * 0.5, (pos0.y + pos1.y) * 0.5, 1,
+            pos1.x, pos1.y, 2,
+            0, 0, 0, 0, 0, 0, 20);
+    } else if (i === 1) {
+        var pos0 = city.getCellCenter(7, 6);
+        path = Space.createLinePathWithTwoTargets(
+            pos0.x, pos0.y, 1,
+            pos0.x, pos0.y, 3,
+            0, 0, 1, 0, 0, 3, 15);
+    } else if (i === 2) {
+        var pos0 = city.getCellCenter(5, 0);
+        var pos1 = city.getCellCenter(6, 0);
+        path = Space.createLinePathWithTwoTargets(
+            (pos0.x + pos1.x) * 0.5, (pos0.y + pos1.y) * 0.5, 2,
+            pos1.x, pos1.y, 3,
+            0, 0, 0, 0, 0, 0, 20);
+    } else if (i % 6 === 1) {
         var z = 10 + Math.random() * 30;
         path = Space.createLinePath(0, 0, z, 0, 0, z + 15, -sqrt2, 0, 0, sqrt2, 15);
     } else if (i % 6 === 2) {
