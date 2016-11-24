@@ -158,7 +158,7 @@ function fly() {
         var z = 5 + Math.random() * 20;
         path = Space.createLinePath(pos0.x, pos0.y, z, pos1.x, pos1.y, z + 10, -sqrt2, 0, 0, sqrt2, 30);
     } else {
-        path = Space.createSpiralPath(1, 1, 10, 20, Math.random() * 2 * Math.PI, 1, 6, 5, 240);
+        path = Space.createSpiralPath(1, 1, 10, 20, Math.random() * 2 * Math.PI, 1, 6, 1, 240);
     }
     camera.moveBezierPath(path, false);
     i++;
@@ -310,7 +310,7 @@ var velocity = 3;
 var flightHeli = function() {
     heli.startHelicopter();
     Space.schedule(function() {
-        heli.moveBezierToWithCallback(start.x + 1, start.y, zFlight, velocity, function(){
+        heli.moveBezierTo(start.x + 1, start.y, zFlight, velocity, function(){
             heli.moveBezierCircle(0, 0, zFlight, radius, velocity);
             Space.schedule(land, 30);
         });
