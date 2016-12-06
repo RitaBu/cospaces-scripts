@@ -1,4 +1,3 @@
-
 function randomPosition() {
   return {x: (Math.random() * 2 - 1) * radius, y: (Math.random() * 2 - 1) * radius, z: Math.random() * 2 * radius};
 }
