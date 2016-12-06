@@ -13,3 +13,9 @@ Space.createVectorItem(1, -3, 0, 3, 3, 3);
 Space.scheduleRepeating(function () {
   cube.addLocalRotation(0, 0, 0, 1, 1, 1, 0.01);
 }, 0);
+
+var cube4 = Space.createItem('Cube', 2, 2, 2);
+Space.createVectorItem(2, 1, 2, 3, 3, 0);
+Space.scheduleRepeating(function () {
+  cube4.addLocalRotation(1, 0, 0, 1, 1, 0, 0.01);
+}, 0);
