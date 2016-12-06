@@ -6,29 +6,29 @@ var radius = 5;
 
 var man = Space.createItem('LP_Man', 0, 0, radius);
 man.say('moveTo');
-var placeholder = Space.createItem("Sphere", 0, 0, 0);
-placeholder.setScale(0.5);
-placeholder.setColor(0, 0, 255);
+var target = Space.createItem("Sphere", 0, 0, 0);
+target.setScale(0.5);
+target.setColor(0, 0, 255);
 
 move();
 function move() {
   var pos = randomPosition();
-  placeholder.setPosition(pos.x, pos.y, pos.z);
+  target.setPosition(pos.x, pos.y, pos.z);
   man.moveTo(pos.x, pos.y, pos.z, move);
 }
 
 var woman = Space.createItem('LP_Wom', 0, 0, 0);
-var placeholder2 = Space.createItem('Sphere', 0, 0, 0);
-placeholder2.setScale(0.5);
-placeholder2.setColor(255, 0, 0);
+var target2 = Space.createItem('Sphere', 0, 0, 0);
+target2.setScale(0.5);
+target2.setColor(255, 0, 0);
 
 moveToItem();
 function moveToItem() {
   var pos = randomPosition();
-  placeholder2.setPosition(pos.x, pos.y, pos.z);
+  target2.setPosition(pos.x, pos.y, pos.z);
   woman.say('moveToItem');
-  var distance = woman.distanceToItem(placeholder2);
-  woman.moveToItem(placeholder2, distance, function () {
+  var distance = woman.distanceToItem(target2);
+  woman.moveToItem(target2, distance, function () {
     woman.say('Gotcha!!!');
     Space.schedule(moveToItem, 1);
   });
