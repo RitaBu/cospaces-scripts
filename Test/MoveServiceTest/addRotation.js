@@ -6,37 +6,34 @@ function randomVector(radius) {
   return v;
 }
 
-function normalize(v) {
-  var norm = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-  v.x /= norm;
-  v.y /= norm;
-  v.z /= norm;
-  return v;
-}
-
-var cube;
+var cube = Space.createItem("Cube", 0, 0, 0);
+var vector = Space.createVectorItem(0, 0, 0, 1, 0, 0);
 var radius = 5;
 var speed = 0.02;
 var angle;
-var pos;
-var dir;
+var pos = {};
+var dir = {};
 
 init();
 Space.scheduleRepeating(function () {
-  if (angle >= 2 * Math.PI) {
+  if (angle >= 4 * Math.PI) {
     init();
   }
   cube.addRotation(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, speed);
   angle += speed;
 }, 0);
 
-function init(){
-  Space.clear();
+function init() {
   pos = randomVector(radius);
+  pos.z += radius;
   dir = randomVector(1);
-  normalize(dir);
-  Space.createVectorItem(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z);
+  var norm = Math.sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+  dir.x /= norm;
+  dir.y /= norm;
+  dir.z /= norm;
   var posCube = randomVector(radius);
-  cube = Space.createItem("Cube", posCube.x, posCube.y, posCube.z + radius);
+  cube.setPosition(posCube.x, posCube.y, posCube.z + radius);
+  vector.deleteFromSpace();
+  vector = Space.createVectorItem(pos.x, pos.y, pos.z, dir.x * radius, dir.y * radius, dir.z * radius);
   angle = 0;
 }
