@@ -3,6 +3,7 @@ function randomPosition() {
 }
 
 var radius = 5;
+
 var man = Space.createItem('LP_Man', 0, 0, radius);
 man.say('moveBezierTo');
 var placeholder = Space.createItem("Sphere", 0, 0, 0);

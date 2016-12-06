@@ -1,5 +1,5 @@
 var man = Space.createItem('LP_Man', 0, 0, 0);
-man.say("Move linear");
+man.say("moveLinear");
 var cnt = 0;
 
 turnAndGo();
