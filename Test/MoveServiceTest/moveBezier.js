@@ -1,7 +1,7 @@
 var num = 8;
 var radius = 10;
 var vel = 3;
-var line = Space.createLineItem();
+var line = Space.createCurveItem();
 
 for (var i = 0; i < num; i++) {
   var dir = {
