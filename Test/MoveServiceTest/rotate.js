@@ -23,7 +23,7 @@ function rotate() {
   vector = Space.createVectorItem(pos.x, pos.y, pos.z, axis.x, axis.y, axis.z);
   transparent.addRotation(pos.x, pos.y, pos.z, axis.x, axis.y, axis.z, angle);
   man.say("angle: " + angle * (180 / Math.PI));
-  man.rotate(axis.x, axis.y, axis.z, angle, angle * 2, function(){
+  man.rotate(axis.x, axis.y, axis.z, angle, Math.abs(angle * 2), function(){
     Space.schedule(rotate, pause);
   });
 }
