@@ -2,8 +2,11 @@ var man = Space.createItem('LP_Man', 0, 0, 0);
 man.say("moveLinear");
 var cnt = 0;
 
-turnAndGo();
-function turnAndGo() {
+go();
+function turn() {
+  man.rotate(0, 0, 1, Math.PI * 0.5, 2, go);
+}
+function go() {
   if (cnt % 4 === 0) {
     distance = Math.random() * 8 + 2;
   }
@@ -16,5 +19,5 @@ function turnAndGo() {
   var targetY = position.y + dir.y * distance;
   var targetZ = position.z;
   cnt += 1;
-  man.moveLinear(targetX, targetY, targetZ, 1.5, turnAndGo);
+  man.moveLinear(targetX, targetY, targetZ, 1.5, turn);
 }
