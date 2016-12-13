@@ -17,7 +17,7 @@ var vector = Space.createVectorItem(0, 0, 0, 1, 0, 0);
 
 rotate();
 function rotate() {
-  var angle = Math.random() * Math.PI * 2;
+  var angle = Math.random() * Math.PI * 4 - Math.PI * 2;
   var axis = randomAxis();
   vector.deleteFromSpace();
   vector = Space.createVectorItem(pos.x, pos.y, pos.z, axis.x, axis.y, axis.z);
