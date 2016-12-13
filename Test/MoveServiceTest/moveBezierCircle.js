@@ -1,5 +1,6 @@
 var radius = 6;
 var sphere1 = Space.createItem("Sphere", 0, 0, radius);
+sphere1.say("Center");
 sphere1.setScale(0.5);
 sphere1.setColor(0, 255, 255);
 
