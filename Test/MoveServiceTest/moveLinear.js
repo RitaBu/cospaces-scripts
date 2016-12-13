@@ -1,3 +1,5 @@
+//test "moveLinear" and "rotate" animations
+
 var man = Space.createItem('LP_Man', 0, 0, 0);
 man.say("moveLinear");
 var cnt = 0;
