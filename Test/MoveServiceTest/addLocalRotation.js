@@ -79,7 +79,7 @@ group1.add(group0);
 group1.add(cube10);
 group1.setOrientationFrom(cube10);
 
-//TEST addLocalRotation FOR GROUPED OBJECTS
+//TEST addLocalRotation FOR NESTED GROUPS
 Space.scheduleRepeating(function () {
   group0.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 100);
   cube01.addLocalRotation(0, 0, 0.25, 1, 0, 0, Math.PI / 100);
