@@ -30,3 +30,7 @@ Space.scheduleRepeating(function () {
   cubeRed.addLocalRotation(0, 0, 0, 0, 0, 1, -Math.PI / 100);
   cubeYellow.addLocalRotation(0, 0, 0, 0, 0, 1, 0);
 }, 0);
+
+Space.schedule(function () {
+  group.moveLinear(0, 0, 10, 5);
+}, 2);
