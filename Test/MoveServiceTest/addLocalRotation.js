@@ -23,7 +23,7 @@ group.add(cubeWhite);
 group.add(cubeRed);
 group.add(cubeYellow);
 
-//group.setOrientationFrom(cubeYellow);
+group.setOrientationFrom(cubeYellow);
 
 Space.scheduleRepeating(function () {
   cubeWhite.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 200);
