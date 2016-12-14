@@ -1,6 +1,9 @@
+//ungrouped
 var cube1 = Space.createItem("Cube", 0, 0, 0);
 var cube2 = Space.createItem("Cube", 0, 0, 0.5);
 var cube3 = Space.createItem("Cube", 0, 0, 1);
+cube2.setColor(255, 0, 0);
+cube3.setColor(255, 255, 0);
 
 Space.scheduleRepeating(function () {
   cube1.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 200);
@@ -8,14 +11,22 @@ Space.scheduleRepeating(function () {
   cube3.addLocalRotation(0, 0, 0, 0, 0, 1, 0);
 }, 0);
 
-var cube = Space.createItem('Cube', 2, -2, 1);
-Space.createVectorItem(1, -3, 0, 3, 3, 3);
-Space.scheduleRepeating(function () {
-  cube.addLocalRotation(0, 0, 0, 1, 1, 1, 0.01);
-}, 0);
+//grouped
+var cubeWhite = Space.createItem("Cube", 2, 0, 0);
+var cubeRed = Space.createItem("Cube", 2, 0, 0.5);
+var cubeYellow = Space.createItem("Cube", 2, 0, 1);
+cubeRed.setColor(255, 0, 0); //red
+cubeYellow.setColor(255, 255, 0); //yellow
 
-var cube4 = Space.createItem('Cube', 2, 2, 2);
-Space.createVectorItem(2, 1, 2, 3, 3, 0);
+var group = Space.createGroup();
+group.add(cubeWhite);
+group.add(cubeRed);
+group.add(cubeYellow);
+
+//group.setOrientationFrom(cubeYellow);
+
 Space.scheduleRepeating(function () {
-  cube4.addLocalRotation(1, 0, 0, 1, 1, 0, 0.01);
+  cubeWhite.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 200);
+  cubeRed.addLocalRotation(0, 0, 0, 0, 0, 1, -Math.PI / 100);
+  cubeYellow.addLocalRotation(0, 0, 0, 0, 0, 1, 0);
 }, 0);
