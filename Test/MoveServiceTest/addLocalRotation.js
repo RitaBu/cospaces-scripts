@@ -3,7 +3,7 @@ var cube1 = Space.createItem("Cube", 0, 0, 0);
 var cube2 = Space.createItem("Cube", 0, 0, 0.5);
 var cube3 = Space.createItem("Cube", 0, 0, 1);
 cube2.setColor(255, 0, 0);   //red
-cube3.setColor(255, 255, 0); //yellow
+cube3.setColor(100, 100, 100); //black
 
 //TEST addLocalRotation FOR UNGROUPED OBJECTS
 Space.scheduleRepeating(function () {
@@ -19,9 +19,9 @@ cubeGreen.setColor(0, 255, 0); //green
 
 //TEST rotate & moveLinear
 var f = function () {
-  cubeGreen.rotate(0, 0, 1, Math.PI * 0.6, 2, function () {
+  cubeGreen.rotate(0, 0, 1, Math.PI * 0.25, 2, function () {
     cubeGreen.moveLinear(4, 0, 3, 2, function () {
-      cubeGreen.rotate(0, 0, 1, Math.PI * 1.4, 2, function () {
+      cubeGreen.rotate(0, 0, 1, Math.PI * 1.75, 2, function () {
         cubeGreen.moveLinear(4, 0, 0, 2, f);
             });
         });
@@ -32,25 +32,30 @@ f();
 /////////////////////-------------////////////////////////
 
 //grouped
-var cubeWhite = Space.createItem("Cube", 2, 0, 0);
-var cubeRed = Space.createItem("Cube", 2, 0, 0.5);
-var cubeYellow = Space.createItem("Cube", 2, 0, 1);
-cubeRed.setColor(255, 0, 0); //red
-cubeYellow.setColor(255, 255, 0); //yellow
+var cubeYel0 = Space.createItem("Cube", 2, 0, 0);
+var cubeYel1 = Space.createItem("Cube", 2, 0, 0.5);
+var cubeYel2 = Space.createItem("Cube", 2, 0, 1);
+cubeYel0.setColor(200, 200, 100); //yellow
+cubeYel1.setColor(200, 200, 40); //yellow
+cubeYel2.setColor(200, 200, 0); //yellow
+
+cubeYel0.setColor(100 + 40, 100 + 40, 100);
+cubeYel1.setColor(120 + 40, 120 + 40, 120);
+cubeYel2.setColor(160 + 40, 160 + 40, 160);
 
 //TEST setOrientationFrom
 var group = Space.createGroup();
-group.add(cubeWhite);
-group.add(cubeRed);
-group.add(cubeYellow);
+group.add(cubeYel0);
+group.add(cubeYel1);
+group.add(cubeYel2);
 
-group.setOrientationFrom(cubeYellow);
+group.setOrientationFrom(cubeYel2);
 
 //TEST addLocalRotation FOR GROUPED OBJECTS
 Space.scheduleRepeating(function () {
-  cubeWhite.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 200);
-  cubeRed.addLocalRotation(0, 0, 0, 0, 0, 1, -Math.PI / 100);
-  cubeYellow.addLocalRotation(0, 0, 0, 0, 0, 1, 0);
+  cubeYel0.addLocalRotation(0, 0, 0, 0, 0, 1, Math.PI / 200);
+  cubeYel1.addLocalRotation(0, 0, 0, 0, 0, 1, -Math.PI / 100);
+  cubeYel2.addLocalRotation(0, 0, 0, 0, 0, 1, 0);
 }, 0);
 
 /////////////////////-------------////////////////////////
@@ -89,42 +94,51 @@ Space.scheduleRepeating(function () {
 /////////////////////-------------////////////////////////
 
 //second group
-var cubeBlue = Space.createItem("Cube", 6, 0, 0);
-var cubeGray = Space.createItem("Cube", 6, 0, 0.5);
-cubeBlue.setColor(0, 0, 255); //blue
-cubeGray.setColor(150, 150, 150); //gray
+var cubeBlue10 = Space.createItem("Cube", 6, 0, 0);
 
-var group2 = Space.createGroup();
-group2.add(cubeBlue);
-group2.add(cubeGray);
+var cubeBlue01 = Space.createItem("Cube", 5.5, 0, 0.5);
+var cubeBlue11 = Space.createItem("Cube", 6.0, 0, 0.5);
+var cubeBlue21 = Space.createItem("Cube", 6.5, 0, 0.5);
 
-group2.setOrientationFrom(cubeBlue);
+cubeBlue10.setColor(50, 50, 50 + 20);
+cubeBlue01.setColor(100, 100, 100 + 40);
+cubeBlue11.setColor(120, 120, 120 + 40);
+cubeBlue21.setColor(160, 160, 160 + 40);
 
-//TEST rotate FOR GROUP
-group2.rotate(0, 0, 1, Math.PI * 0.6, 2, null);
+var groupBlue0 = Space.createGroup();
+groupBlue0.add(cubeBlue01);
+groupBlue0.add(cubeBlue11);
+groupBlue0.add(cubeBlue21);
+groupBlue0.setOrientationFrom(cubeBlue11);
 
-/*
+var groupBlue1 = Space.createGroup();
+groupBlue1.add(groupBlue0);
+groupBlue1.add(cubeBlue10);
+groupBlue1.setOrientationFrom(cubeBlue10);
+
+
+function move(distance) {
+  return function() {
+    var time = 1;
+    var item = groupBlue1;
+    var dir = item.getAxisZ();
+    var norm = Math.sqrt(
+        dir.x * dir.x +
+        dir.y * dir.y +
+        dir.z * dir.z
+    );
+    dir.x = dir.x / norm;
+    dir.y = dir.y / norm;
+    dir.z = dir.z / norm;
+    var position = item.getPosition();
+    var targetX = position.x + dir.x * distance;
+    var targetY = position.y + dir.y * distance;
+    var targetZ = position.z + dir.z * distance;
+    item.moveLinear(targetX, targetY, targetZ, time, function() {
+      item.rotate(0, 0, 1, Math.PI * 0.25, 1, move(-distance));
+    });
+  };
+}
+
 //move linear
-Space.schedule(function() {
-  var distance = 10;
-  var time = 1;
-  var item = group;
-  var dir = item.getAxisZ();
-  var norm = Math.sqrt(
-      dir.x * dir.x +
-      dir.y * dir.y +
-      dir.z * dir.z
-  );
-  dir.x = dir.x / norm;
-  dir.y = dir.y / norm;
-  dir.z = dir.z / norm;
-  var position = item.getPosition();
-  var targetX = position.x + dir.x * distance;
-  var targetY = position.y + dir.y * distance;
-  var targetZ = position.z + dir.z * distance;
-  Project.log("target x = " + targetX + " y = " + targetY + " z = " + targetZ + " time = " + time);
-  //item.moveLinear(targetX, targetY, targetZ, time, null);
-  item.rotate(0, 0, 1, Math.PI * 0.25, 2, null);
-
-}, 2);
-*/
+Space.schedule(move(3), 0);
