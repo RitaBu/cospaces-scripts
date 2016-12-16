@@ -53,6 +53,7 @@ city.rebuild();
 
 Space.renderShadows(false);
 Space.renderServiceItems(false);
+Space.renderLineItems(false);
 
 
 //traffic light
