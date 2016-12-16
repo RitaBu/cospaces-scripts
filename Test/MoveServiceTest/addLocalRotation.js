@@ -19,7 +19,7 @@ cubeGreen.setColor(0, 255, 0); //green
 
 //TEST rotate & moveLinear
 var f = function () {
-  cubeGreen.rotate(0, 0, 1, Math.PI * 0.25, 2, function () {
+  cubeGreen.rotate(0, 0, 1, Math.PI * 0.25, 0.5, function () {
     cubeGreen.moveLinear(4, 0, 3, 2, function () {
       cubeGreen.rotate(0, 0, 1, Math.PI * 1.75, 2, function () {
         cubeGreen.moveLinear(4, 0, 0, 2, f);
