@@ -1,6 +1,5 @@
 var city = Space.createCity(7, 7);
-city.fillGrid(3, 3, 1);
-city.rebuild();
+city.fillGrid(3, 3, 1, 0, 0);
 
 city.addTrees(1, 0);
 city.addTrees(1, 2);
