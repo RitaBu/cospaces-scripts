@@ -19,9 +19,9 @@ cubeGreen.setColor(0, 255, 0); //green
 
 //TEST rotate & moveLinear
 var f = function () {
-  cubeGreen.rotate(0, 0, 1, Math.PI * 0.25, 0.5, function () {
+  cubeGreen.rotateLocal(0, 0, 1, Math.PI * 0.25, 0.5, function () {
     cubeGreen.moveLinear(4, 0, 3, 2, function () {
-      cubeGreen.rotate(0, 0, 1, Math.PI * 1.75, 2, function () {
+      cubeGreen.rotateLocal(0, 0, 1, Math.PI * 1.75, 2, function () {
         cubeGreen.moveLinear(4, 0, 0, 2, f);
             });
         });
@@ -135,7 +135,7 @@ function move(distance) {
     var targetY = position.y + dir.y * distance;
     var targetZ = position.z + dir.z * distance;
     item.moveLinear(targetX, targetY, targetZ, time, function() {
-      item.rotate(0, 0, 1, Math.PI * 0.25, 1, move(-distance));
+      item.rotateLocal(0, 0, 1, Math.PI * 0.25, 1, move(-distance));
     });
   };
 }
