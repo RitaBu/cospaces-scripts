@@ -5,7 +5,7 @@ var cube11 = Space.createItem("Cube", -0.5, 0, 0.5);
 var legRight = Space.createGroup();
 legRight.add(cube01);
 legRight.add(cube11);
-legRight.setOrientationFrom(cube11);
+legRight.setPivot(cube11, "center");
 
 var cube03 = Space.createItem("Cube", 0.5, 0, 0);
 var cube13 = Space.createItem("Cube", 0.5, 0, 0.5);
@@ -13,7 +13,7 @@ var cube13 = Space.createItem("Cube", 0.5, 0, 0.5);
 var legLeft = Space.createGroup();
 legLeft.add(cube03);
 legLeft.add(cube13);
-legLeft.setOrientationFrom(cube13);
+legLeft.setPivot(cube13, "center");
 
 var cube12 = Space.createItem("Cube", 0, 0, 0.5);
 
@@ -21,7 +21,7 @@ var legs = Space.createGroup();
 legs.add(cube12);
 legs.add(legLeft);
 legs.add(legRight);
-legs.setOrientationFrom(cube12);
+legs.setPivot(cube12);
 
 //BODY
 var cube22 = Space.createItem("Cube", 0, 0, 1.0);
@@ -34,7 +34,7 @@ var cube30 = Space.createItem("Cube", -1, 0, 1.5);
 var handRight = Space.createGroup();
 handRight.add(cube30);
 handRight.add(cube20);
-handRight.setOrientationFrom(cube30);
+handRight.setPivot(cube30, "center");
 
 //LEFT HAND
 var cube24 = Space.createItem("Cube", 1, 0, 1.0);
@@ -43,7 +43,7 @@ var cube34 = Space.createItem("Cube", 1, 0, 1.5);
 var handLeft = Space.createGroup();
 handLeft.add(cube34);
 handLeft.add(cube24);
-handLeft.setOrientationFrom(cube34);
+handLeft.setPivot(cube34, "center");
 
 //SHOULDERS
 var cube31 = Space.createItem("Cube", -0.5, 0, 1.5);
@@ -57,7 +57,7 @@ hands.add(cube32);
 hands.add(cube33);
 hands.add(handRight);
 hands.add(handLeft);
-hands.setOrientationFrom(cube32);
+hands.setPivot(cube32);
 
 //HEAD
 var cubeH = Space.createItem("Cube", 0, 0, 2.0);
@@ -72,7 +72,7 @@ var head = Space.createGroup();
 head.add(cubeH);
 head.add(eyeRight);
 head.add(eyeLeft);
-head.setOrientationFrom(cubeH);
+head.setPivot(cubeH);
 
 //BODY
 var body = Space.createGroup();
@@ -80,7 +80,7 @@ body.add(legs);
 body.add(cube22);
 body.add(hands);
 body.add(head);
-body.setOrientationFrom(legs);
+body.setPivot(legs);
 
 //TEST rotateLocal FOR GROUPED OBJECTS
 var handLeftRotate = function() {
