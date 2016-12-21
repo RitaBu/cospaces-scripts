@@ -83,12 +83,20 @@ body.add(head);
 body.setPivot(legs);
 
 //TEST rotateLocal FOR GROUPED OBJECTS
+var flatHandLeftRotate = function() {
+    cube24.rotateLocal(0, 0, 1, Math.PI * 0.5, 2, flatHandLeftRotate);
+};
+
+var flatHandRightRotate = function() {
+    cube20.rotateLocal(0, 0, 1, -Math.PI * 0.5, 2, flatHandRightRotate);
+};
+
 var handLeftRotate = function() {
     Space.schedule(function() {
         handLeft.rotateLocal(1, 0, 0, -Math.PI * 0.5, 1, function() {
             handLeft.rotateLocal(1, 0, 0, Math.PI * 0.5, 1, handLeftRotate);
         });
-    }, 0.5);
+    }, 1.5);
 };
 
 var handRightRotate = function() {
@@ -96,16 +104,16 @@ var handRightRotate = function() {
         handRight.rotateLocal(1, 0, 0, -Math.PI * 0.5, 1, function() {
             handRight.rotateLocal(1, 0, 0, Math.PI * 0.5, 1, handRightRotate);
         });
-    }, 0.5);
+    }, 1.5);
 };
 
 var shouldersRotate = function () {
     Space.schedule(function () {
-        hands.rotateLocal(0, 0, 1, Math.PI * 0.2, 2, function () {
+        hands.rotateLocal(0, 0, 1, Math.PI * 0.1, 2, function () {
             Space.schedule(function () {
-                hands.rotateLocal(0, 0, 1, -Math.PI * 0.4, 2, function () {
+                hands.rotateLocal(0, 0, 1, -Math.PI * 0.2, 2, function () {
                     Space.schedule(function () {
-                        hands.rotateLocal(0, 0, 1, Math.PI * 0.2, 2, shouldersRotate);
+                        hands.rotateLocal(0, 0, 1, Math.PI * 0.1, 2, shouldersRotate);
                     }, 1);
                 });
             }, 1);
@@ -140,6 +148,9 @@ var eyeLeftRotate = function() {
     eyeLeft.rotateLocal(0, 1, 0, Math.PI * 0.5, 1, eyeLeftRotate);
 };
 
+
+//flatHandLeftRotate();
+//flatHandRightRotate();
 
 legRotate();
 handLeftRotate();
