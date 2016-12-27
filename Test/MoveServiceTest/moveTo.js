@@ -25,7 +25,7 @@ target2.setColor(255, 0, 0);
 moveToItem();
 function moveToItem() {
   var pos = randomPosition();
-  target2.setPosition(pos.x, pos.y, pos.z);
+  target2.setPosition(pos.x, pos.y, 0);
   woman.say('moveToItem');
   var distance = woman.distanceToItem(target2);
   woman.moveToItem(target2, distance, function () {
