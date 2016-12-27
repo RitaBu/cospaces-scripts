@@ -76,12 +76,14 @@ function Zombie(gameItem, id, type) {
 }
 
 Zombie.prototype.initAttack = function() {
+  this.gameItem.faceTo(game.player.gameItem);
   this.gameItem.playIdleAnimation('Walk');
-  this.gameItem.moveTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z);
+  this.followPlayer();
 };
 
 Zombie.prototype.followPlayer = function() {
-  this.gameItem.moveTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z);
+  var distanceToPlayer = this.gameItem.distanceToItem(game.player.gameItem) + 1;
+  this.gameItem.moveLinear(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z, distanceToPlayer);
 };
 
 Zombie.prototype.hurtPlayer = function() {
@@ -99,12 +101,14 @@ function Skull(gameItem, id, type) {
 }
 
 Skull.prototype.initAttack = function() {
+  this.gameItem.faceTo(game.player.gameItem);
   this.gameItem.playIdleAnimation('Clicking');
-  this.gameItem.moveTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z);
+  this.followPlayer();
 };
 
 Skull.prototype.followPlayer = function() {
-  this.gameItem.moveTo(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z);
+  var distanceToPlayer = this.gameItem.distanceToItem(game.player.gameItem) + 1;
+  this.gameItem.moveLinear(game.player.gameItem.getPosition().x, game.player.gameItem.getPosition().y, game.player.gameItem.getPosition().z, distanceToPlayer);
 };
 
 Skull.prototype.hurtPlayer = function() {
