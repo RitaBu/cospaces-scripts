@@ -71,7 +71,7 @@ Zombie.prototype.followPlayer = function() {
 
 Zombie.prototype.checkLimits = function() {
   var distanceToPlayer = this.item.distanceToItem(player.item);
-  if(distanceToPlayer < 1) {
+  if (distanceToPlayer < 1) {
     this.remove();
   }
   return this;
@@ -121,7 +121,7 @@ Space.scheduleRepeating(function() {
     enemy.followPlayer().checkLimits();
   });
 
-  if(mood > 0) {
+  if (mood > 0) {
     mood -= 0.001;
     Space.setMood(mood);
   }
