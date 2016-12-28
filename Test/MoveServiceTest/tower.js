@@ -10,7 +10,7 @@
 
         scale = scale * 0.8;
         if (prev != null) {
-            cube.adjustTo("bottom", prev, "top");
+            cube.adjustToItem("bottom", prev, "top");
         }
         prev = cube;
     }
@@ -28,7 +28,7 @@
 
         scale = scale * 0.9;
         if (prev != null) {
-            cube.adjustTo("bottom", prev, "top");
+            cube.adjustToItem("bottom", prev, "top");
         }
         prev = cube;
     }
