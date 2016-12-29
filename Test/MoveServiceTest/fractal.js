@@ -3,6 +3,7 @@ function fractal(item, level, scale) {
 
     item.setScale(scale);
     item.setColor(50 + level * 50, 50, 50);
+    item.addLocalRotation(0, 0, 0, 0, 0, 1, 0.1);
     if (level > 3) return;
 
     var cube0 = Space.createItem("cube", 0, 0, 0);
