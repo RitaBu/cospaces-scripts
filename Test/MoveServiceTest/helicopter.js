@@ -9,7 +9,7 @@ heli.setPosition(start.x, start.y, start.z);
 
 var zFlight = 4;
 var radius = 5;
-var velocity = 3;
+var time = 3;
 
 var h = start.z + zFlight;
 
@@ -18,9 +18,9 @@ var flightHeli = function() {
     heli.startHelicopter();
     Space.schedule(function() {
         building.say("takeoff");
-        heli.moveBezierTo(start.x, start.y, h, velocity, function(){
+        heli.moveBezierTo(start.x, start.y, h, time, function(){
             building.say("flying");
-            heli.moveBezierCircle(0, 0, h, radius, velocity);
+            heli.moveBezierCircle(0, 0, h, radius, time);
             Space.schedule(land, 10);
         });
     }, 5);
@@ -28,7 +28,7 @@ var flightHeli = function() {
 
 var land = function() {
     building.say("landing");
-    heli.moveBezierToObj(building, "Top", velocity, stopHeli);
+    heli.moveBezierToObj(building, "Top", time, stopHeli);
 };
 
 var stopHeli = function() {
