@@ -20,7 +20,7 @@ var flightHeli = function() {
         building.say("takeoff");
         heli.moveBezierTo(start.x, start.y, h, time, function(){
             building.say("flying");
-            heli.moveBezierCircle(0, 0, h, radius, time);
+            heli.moveBezierCircle(0, 0, h, radius, 30);
             Space.schedule(land, 10);
         });
     }, 5);
