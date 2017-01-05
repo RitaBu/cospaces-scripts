@@ -3,7 +3,7 @@
  * */
 
 var radius = 10;
-var ball = Space.createItem('Sphere', 0, 0, 0);
+var ball = Space.createItem('cube', 0, 0, 0);
 var vector = Space.createVectorItem(0, 0, 0, 0, 0, 1);
 
 throwBall();
