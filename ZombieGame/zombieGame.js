@@ -88,7 +88,6 @@ Zombie.prototype.remove = function() {
  * Skull constructor function
  *
  */
-
 function Skull() {
   this.item = {};
   this.modelId = '%%abaf39a9e30c47b817a9bca6735591c3a840312b9ada82e4a0bb8bcaf36eb5ab';
