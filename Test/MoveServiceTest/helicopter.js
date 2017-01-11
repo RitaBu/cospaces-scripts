@@ -2,7 +2,7 @@ var heli = Space.createItem("LP_Helicopter");
 heli.setColor(255, 255, 0); //yellow
 
 var building = Space.createItem("LP_Building3", 0, 0, 0);
-var top = building.getSlotTransform("Top");
+var top = building.getSlotTransform("top");
 var start = top.getPosition();
 
 heli.setPosition(start.x, start.y, start.z);
