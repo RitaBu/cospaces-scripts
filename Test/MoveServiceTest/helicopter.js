@@ -28,7 +28,7 @@ var flightHeli = function() {
 
 var land = function() {
     building.say("landing");
-    heli.moveBezierToObj(building, "Top", time, stopHeli);
+    heli.moveBezierToObj(building, "top", time, stopHeli);
 };
 
 var stopHeli = function() {
