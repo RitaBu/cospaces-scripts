@@ -4,14 +4,11 @@ Space.setPhysicsEnabled(true, true);
 Space.setPhysicsGravity(3);
 //Set vars
 //Used objects in Scene
-var mainCamera = Space.getItem("uNK0GQFFTd");
 var player = Space.getItem("5xMlA9TjGD");
 var pCharacter = Space.getItem("A88f7ggjYH");
-var pCharacterPosLast = pCharacter.getPosition();
 var posMarker = Space.getItem("qilvnkYE77");
 var orientationMarker = Space.getItem("P2jfYftnOG");
 var playArea = Space.getItem("mox5lyN0vo");
-var playAreaCollider = Space.getItem("jVtlHfIrnp");
 var christmasTree = Space.getItem("kfDr4j2uXI");
 var scoreScreen = Space.getItem("u2EynOkEJH");
 var snowman1 = Space.getItem("vZ7xVyaXE1");
@@ -19,6 +16,7 @@ var snowman2 = Space.getItem("k5Yi8KjL4w");
 var snowman3 = Space.getItem("yf0zcB33ac");
 var snowman4 = Space.getItem("n4KAmCMgL5");
 var snowmen = [snowman1, snowman2, snowman3, snowman4];
+var busySnowMen = [];
 var colliders = [snowman1, snowman2, snowman3, snowman4, christmasTree];
 var coins = [];
 //Metrics
@@ -31,7 +29,6 @@ var activeManagers = [];
 var collectionCheck;
 var gameOver = false;
 //Pictures/Sound
-var imgId = '67d45f92ab27de23acb9e4ae0e8b2536a96296b24b91a5a7990a05b7a173783d';
 var snowBallThrowSFX = Space.loadSound("x2ORHI81dty7NtMvMwwAWK1zTjiLKe9v0LvLAqCCaO");
 var snowBallImpactSFX = Space.loadSound("samJ7uxL10pCFvaQRoC7U7SFJ4qlrdsJTSddTrvCBX7");
 var coinSFX = Space.loadSound("6e93xmAKOgu7cAuSkUzPwPfoU0yNErF7l9zQoGxy61d");
@@ -43,7 +40,6 @@ var BGM = Space.loadSound("J6HGqSxIWxfsoDdmQX21Qk9FoZGpQVNJSpM6R6LGSwU");
 //Initial Game Parameters
 resetGame();
 var posMarkerPos = posMarker.getPosition();
-var pCharacterPos = pCharacter.getPosition();
 christmasTree.setPosition(0, 0, 0);
 christmasTree.addToPhysics();
 christmasTree.positionConstraint(0, 0, 0);
@@ -54,15 +50,16 @@ orientationMarker.setOpacity(0);
 scoreScreen.setFontSize(1);
 
 //Game Manager
-function startGame() {
-  var tickRate = 2;
+function startGame(tickRate) {
+  tickRate = ((Math.random() * 2) + 1);
   gameManager = Space.scheduleRepeating(function() {
     var selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)]
+    for (; isInArray(selectedSnowman, busySnowMen);) {
+      selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)];
+    }
+    busySnowMen.push(selectedSnowman);
     var snowmanPos = selectedSnowman.getPosition();
     ballThrow(selectedSnowman, snowmanPos, orientationMarker.getPosition());
-    if (tickRate >= 0.3) {
-      tickRate -= 0.1;
-    }
   }, tickRate);
   activeManagers.push(gameManager);
 }
@@ -112,7 +109,7 @@ function movementManager() {
     }
 
     //Set ChristmasTree Opacity when pCharacter is close to it
-    if (pCharacter.distanceToItem(christmasTree) < 6.5) {
+    if (pCharacter.distanceToItem(christmasTree) < 4.5) {
       christmasTree.setOpacity(0.7);
     } else {
       christmasTree.setOpacity(1);
@@ -147,12 +144,11 @@ function movementManager() {
 //Snowman Manager
 function ballThrow(snowman, origin, target) {
   var snowBall = Space.createItem('Sphere', origin.x, origin.y, 1.5);
-  var snowmanPos = snowman.getPosition();
   var bouncedUp = false;
-  //var velocityModifier = 0.25;
-  //var velocityUpMod = 3;
+  var velocityModifier = 0.25;
+  var velocityUpMod = 3;
 
-  //snowBall.addToPhysics();
+  snowBall.addToPhysics();
   snowman.faceTo(orientationMarker);
 
   //Bounces Snowman Up/Down, throw snowball
@@ -161,6 +157,7 @@ function ballThrow(snowman, origin, target) {
       bounce(snowman, 0, 0.25);
       if (snowman.getPosition().z <= 0.05) {
         bouncedUp = false;
+        busySnowMen.pop();
         bounceUpDown.dispose();
       }
     } else {
@@ -170,53 +167,18 @@ function ballThrow(snowman, origin, target) {
 
         //Throw snowball at current marker position (not character!)
         snowBallThrowSFX.play();
-        //target position minus origin pos
-        //== direction * strength
-        //++Z
-        //applyVelocity
-        //applyImpulse!
-        /*
-         var pos = snowBall.getPhysicsPosition();
-         var direction = {
-         x: (target.x - pos.x)*(snowBall.distanceToItem(posMarker)*velocityModifier),
-         y: (target.y - pos.y)*(snowBall.distanceToItem(posMarker)*velocityModifier),
-         z: (target.z - pos.z)*(snowBall.distanceToItem(posMarker)*velocityModifier)
-         };
+        var pos = snowBall.getPhysicsPosition();
+        var direction = {
+          x: (target.x - pos.x) * (snowBall.distanceToItem(posMarker) * velocityModifier),
+          y: (target.y - pos.y) * (snowBall.distanceToItem(posMarker) * velocityModifier),
+          z: (target.z - pos.z) * (snowBall.distanceToItem(posMarker) * velocityModifier)
+        };
 
-         var x = normalize(direction,1).x * snowBall.distanceToItem(posMarker) / (velocityUpMod*0.6);
-         var y = normalize(direction,1).y * snowBall.distanceToItem(posMarker) / (velocityUpMod*0.6);
-         snowBall.setVelocity(x,y,velocityUpMod);
-         */
-
-        snowBall.throwTo(target.x, target.y, 2, 3, function() {
-          var pos = snowBall.getPosition();
-          var velocityModifier = 0.5;
-          var velocity = [(pos.x - lastPos.x) * velocityModifier, (pos.y - lastPos.y) * velocityModifier, (pos.z - lastPos.z) * velocityModifier * (-4)];
-
-          //Check if snowBall is close enough to pCharacter to cause a hit
-          if (snowBall.distanceToItem(pCharacter) < 2.35) {
-            damagePlayer();
-            snowBall.deleteFromSpace();
-            snowBallImpactSFX.play();
-          } else {
-            //Otherwise enable physics on Snowball and let it roll out
-            Project.log((pos.z - lastPos.z) * velocityModifier * (-4));
-            snowBall.addToPhysics();
-            snowBall.setPhysicsPosition(pos.x, pos.y, pos.z);
-            snowBall.setVelocity(velocity[0], velocity[1], velocity[2]);
-          }
-          //Destroy snowBall after delay
-          var destroyBall = Space.schedule(function() {
-            if (snowBall !== undefined) {
-              snowBall.deleteFromSpace();
-            }
-          }, 2.5);
-        });
-
+        var x = normalize(direction, 1).x * snowBall.distanceToItem(posMarker) / (velocityUpMod * 0.6);
+        var y = normalize(direction, 1).y * snowBall.distanceToItem(posMarker) / (velocityUpMod * 0.6);
+        snowBall.setVelocity(x, y, velocityUpMod);
+        snowBallCollisionCheck(snowBall);
       }
-    }
-    if (snowBall !== null) {
-      var lastPos = snowBall.getPosition();
     }
   }, 0);
 }
@@ -230,7 +192,7 @@ function spawnCoins() {
     coins.push(coin);
     tweenCoinUp(coin);
     if (coinCollCheck(coin)) {
-      coins.pop()
+      coins.pop();
       coin.deleteFromSpace();
     }
   }
@@ -287,6 +249,26 @@ function showScoreScreen() {
   });
 }
 
+function snowBallCollisionCheck(snowBall) {
+  var collCheck = Space.scheduleRepeating(function() {
+    if (snowBall.distanceToPoint(pCharacter.getPosition().x, pCharacter.getPosition().y, pCharacter.getPosition().z + 2) < 0.5) {
+      snowBallImpactSFX.play();
+      damagePlayer();
+      snowBall.deleteFromSpace();
+      collCheck.dispose();
+    }
+  }, 0);
+  Space.schedule(function() {
+    if (snowBall !== undefined) {
+      collCheck.dispose();
+      snowBall.deleteFromSpace();
+      if (collCheck !== "undefined") {
+        collCheck.dispose();
+      }
+    }
+  }, 2.5);
+}
+
 function damagePlayer() {
   //Stop movement logic and update loop
   if (movementLogic !== undefined) {
@@ -323,15 +305,6 @@ function lerp(a, b, t) {
   return x;
 }
 
-//delta
-function getDeltaPos(pCharacterPos, pCharacterPosLast) {
-  return {
-    x: (pCharacterPos.x - pCharacterPosLast.x),
-    y: (pCharacterPos.y - pCharacterPosLast.y),
-    z: (pCharacterPos.z - pCharacterPosLast.z)
-  };
-};
-
 //Bounce
 function bounce(object, target, speed) {
   var objectPos = object.getPosition();
@@ -351,6 +324,10 @@ function normalize(point, scale) {
   }
 }
 
+//Check for Object in Array
+function isInArray(value, array) {
+  return array.indexOf(value) > -1;
+}
 //Reset parameters to default
 function resetGame() {
   gameOver = false;
@@ -384,7 +361,10 @@ function resetGame() {
   var startCheck = Space.scheduleRepeating(function() {
     if (posMarkerPos.x > posMarker.getPosition().x) {
       movementManager();
-      Space.schedule(startGame, 5);
+      Space.schedule(startGame, 10);
+      Space.schedule(startGame, 30);
+      Space.schedule(startGame, 90);
+      Space.schedule(startGame, 120);
       spawnCoins();
       coinDistanceCheck();
       posMarker.say('');
