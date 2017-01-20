@@ -19,9 +19,9 @@ cubeGreen.setColor(0, 255, 0); //green
 
 //TEST rotate & moveLinear
 var f = function () {
-  cubeGreen.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI * 0.25, 0.5, function () {
+  cubeGreen.rotateLocal(0, 0, 1, Math.PI * 0.25, 0.5, function () {
     cubeGreen.moveLinearLocal(0, 0, 3, 2, function () {
-      cubeGreen.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI * 1.75, 2, function () {
+      cubeGreen.rotateLocal(0, 0, 1, Math.PI * 1.75, 2, function () {
         cubeGreen.moveLinearLocal(0, 0, -3, 2, f);
       });
     });
@@ -135,7 +135,7 @@ function move(distance) {
     var targetY = position.y + dir.y * distance;
     var targetZ = position.z + dir.z * distance;
     item.moveLinear(targetX, targetY, targetZ, time, function() {
-      item.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI * 0.25, 1, move(-distance));
+      item.rotateLocal(0, 0, 1, Math.PI * 0.25, 1, move(-distance));
     });
   };
 }
@@ -147,21 +147,21 @@ Space.schedule(move(3), 0);
 var man = Space.createItem("LP_Man", -4, 0, 0);
 Space.schedule(function () {
   man.say("rotateLocal 180 CW");
-  man.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI, 3, function () {
+  man.rotateLocal(0, 0, 1, Math.PI, 3, function () {
     man.say("rotateLocal 180 CCW");
-    man.rotateLocal(0, 0, 0, 0, 0, 1, -Math.PI, 3, function () {
+    man.rotateLocal(0, 0, 1, -Math.PI, 3, function () {
       man.say("rotateLocal 90 CW");
-      man.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI * 0.5, 2, function () {
+      man.rotateLocal(0, 0, 1, Math.PI * 0.5, 2, function () {
         man.say("rotateLocal 90 CCW");
-        man.rotateLocal(0, 0, 0, 0, 0, 1, -Math.PI * 0.5, 2, function () {
+        man.rotateLocal(0, 0, 1, -Math.PI * 0.5, 2, function () {
           man.say("rotateLocal 360 CW");
-          man.rotateLocal(0, 0, 0, 0, 0, 1, 2 * Math.PI, 5, function () {
+          man.rotateLocal(0, 0, 1, 2 * Math.PI, 5, function () {
             man.say("rotateLocal 360 CCW");
-            man.rotateLocal(0, 0, 0, 0, 0, 1, -2 * Math.PI, 5, function () {
+            man.rotateLocal(0, 0, 1, -2 * Math.PI, 5, function () {
               man.say("rotateLocal 270 CW");
-              man.rotateLocal(0, 0, 0, 0, 0, 1, Math.PI * 1.5, 4, function () {
+              man.rotateLocal(0, 0, 1, Math.PI * 1.5, 4, function () {
                 man.say("rotateLocal 270 CCW");
-                man.rotateLocal(0, 0, 0, 0, 0, 1, -Math.PI * 1.5, 4, function () {
+                man.rotateLocal(0, 0, 1, -Math.PI * 1.5, 4, function () {
                 });
               });
             });
