@@ -97,7 +97,7 @@ Mover.prototype.checkLimits = function() {
 function Attractor() {
   this.item = Space.createItem('Cube', 0, 0, 20);
   this.item.setOpacity(0);
-  this.pos = new Vector(20, 20, 20);
+  this.pos = new Vector(Helper.randNumBetween(10, 20), Helper.randNumBetween(-20, -10), Helper.randNumBetween(20, 30));
   this.acc = new Vector(Helper.randNumBetween(-0.0005, 0.0005), Helper.randNumBetween(-0.0005, 0.0005), Helper.randNumBetween(-0.0005, 0.0005));
   this.vel = new Vector();
 }
@@ -144,6 +144,7 @@ function Bird() {
   this.acc = new Vector();
   this.vel = new Vector();
   this.limit = Helper.randNumBetween(0.13, 0.16);
+  this.initAnimation();
 }
 
 Helper.inheritsFrom(Bird, Mover);
@@ -164,6 +165,14 @@ Bird.prototype.checkLimits = function() {
   if (this.pos.z < 1) {
     this.pos.z = 1;
   }
+};
+
+Bird.prototype.initAnimation = function() {
+  var self = this;
+  var delay = Helper.randNumBetween(0, 1);
+  Space.schedule(function() {
+    self.item.playIdleAnimation('Fly');
+  }, delay);
 };
 
 // init
