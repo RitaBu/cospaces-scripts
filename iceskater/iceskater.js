@@ -52,13 +52,13 @@ function startGame(tickRate) {
   if (gameOver !== true) {
     tickRate = ((Math.random() * 2) + 1);
     gameManager = Space.scheduleRepeating(function() {
-      var selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)]
-      for (; isInArray(selectedSnowman, busySnowMen);) {
-        selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)];
+      var selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)];
+      //Skip throw if this snowman is already busy
+      if (!isInArray(selectedSnowman, busySnowMen)) {
+        busySnowMen.push(selectedSnowman);
+        ballThrow(selectedSnowman, selectedSnowman.getPosition(), orientationMarker.getPosition());
+        Project.log("Push");
       }
-      busySnowMen.push(selectedSnowman);
-      var snowmanPos = selectedSnowman.getPosition();
-      ballThrow(selectedSnowman, snowmanPos, orientationMarker.getPosition());
     }, tickRate);
     activeManagers.push(gameManager);
   }
@@ -248,7 +248,7 @@ function spawnstars() {
   }
 }
 
-//If a star is created too close to a snowman or the christmas tree, delete it 
+//If a star is created too close to a snowman or the christmas tree, delete it
 //and remove it from the game without adding to the player score
 function starCollCheck(star) {
   flag = false;
@@ -379,8 +379,8 @@ function resetGame() {
       gameOver = false;
       Space.schedule(startGame, 10);
       Space.schedule(startGame, 30);
+      Space.schedule(startGame, 60);
       Space.schedule(startGame, 90);
-      Space.schedule(startGame, 120);
       spawnstars();
       starDistanceCheck();
       posMarker.say('');
