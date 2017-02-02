@@ -1,19 +1,16 @@
-//TODO getItems() does not seem to function in NewCoSpaces app
-//var tpMarkerGroup = Space.getItems();
-
 //#region "Constructor Functions"
 //Camera constructor function
 function Camera() {
   //NOTE: returned item of Space.getCamera() differs from Space.getItem(cameraID)
-  //Motion-related functions like moveLinear() do not exist for Space.getCamera() objects.
+  //Motion-related functions like moveLinear() do not exist *yet* for Space.getCamera() objects.
   //In this script, cameraItem is used for getDirection(), which does not exist for objects returned by .getItem()
   this.cameraItem = Space.getCamera();
-  this.objectItem = Space.getItem("tLn6tPPKTq");
+  this.objectItem = Space.getItem("0QiMEUjZAo");
   this.pos = new Vector(this.objectItem.getPosition().x, this.objectItem.getPosition().y, this.objectItem.getPosition().z);
   this.dir = new Vector(0, 0, 0);
 }
-//Marker constructor
-function Marker(object) {
+//Pin constructor
+function Pin(object) {
   this.item = object;
   this.position = this.item.getPosition();
   this.visible = true;
@@ -33,9 +30,9 @@ Camera.prototype.update = function() {
 };
 //#endregion "Camera Functions"
 
-//#region "Marker Functions"
+//#region "Pin Functions"
 //Toggle visibility based on class property
-Marker.prototype.toggleVisibility = function() {
+Pin.prototype.toggleVisibility = function() {
   var self = this;
   if (this.visible === true) {
     self.item.setOpacity(1);
@@ -44,8 +41,8 @@ Marker.prototype.toggleVisibility = function() {
   }
 };
 
-//Updates marker position to face the camera
-Marker.prototype.setFacing = function() {
+//Updates pin position to face the camera
+Pin.prototype.setFacing = function() {
   var camPos = mainCamera.objectItem.getPosition();
   var targetHelper = Space.createItem("Cube", camPos.x, camPos.y, this.position.z);
   this.item.faceTo(targetHelper);
@@ -53,30 +50,29 @@ Marker.prototype.setFacing = function() {
 };
 
 //Move camera to this object, add positive Z offset
-Marker.prototype.moveCamera = function() {
-  var markerPosVector = {
+Pin.prototype.moveCamera = function() {
+  var pinPosVector = {
     x: this.position.x,
     y: this.position.y,
     z: this.position.z + heightOffset
   };
-  mainCamera.objectItem.moveLinear(markerPosVector.x, markerPosVector.y, markerPosVector.z, 0.15, function() {
-    MarkerManager.updateMarkers();
+  mainCamera.objectItem.moveLinear(pinPosVector.x, pinPosVector.y, pinPosVector.z, 0.15, function() {
+    PinManager.updatePins();
   });
 };
 
-Marker.prototype.setOpacity = function() {
+Pin.prototype.setOpacity = function() {
   var opacity = 1 - this.con.angleTo(mainCamera.dir) * 2;
   this.item.setOpacity(opacity);
-  torusOpacity = opacity;
 };
 
-Marker.prototype.update = function() {
+Pin.prototype.update = function() {
   this.con = Vector.sub(this.pos, mainCamera.pos);
   this.setOpacity();
 };
 
 //Creates onHover interaction to this object
-Marker.prototype.bindEvents = function() {
+Pin.prototype.bindEvents = function() {
   var self = this;
   var originPos = this.position;
   this.item.onHover(function(isHovered) {
@@ -86,16 +82,16 @@ Marker.prototype.bindEvents = function() {
       self.bouncing = true;
       self.bounceUpDown(originPos);
     } else {
-      self.item.setColor(255, 10, 10);
+      self.item.setColor(214, 84, 73);
       self.item.say("");
       self.bouncing = false;
     }
   });
 
   this.item.onActivate(function() {
-    //Flag all other markers as visible, hide selected one
-    tpMarkerGroup.forEach(function(tpMarker) {
-      tpMarker.visible = true;
+    //Flag all other pins as visible, hide selected one
+    pinGroup.forEach(function(pin) {
+      pin.visible = true;
     });
     self.visible = false;
     self.toggleVisibility();
@@ -103,7 +99,7 @@ Marker.prototype.bindEvents = function() {
   });
 };
 
-Marker.prototype.bounceUpDown = function(originPos) {
+Pin.prototype.bounceUpDown = function(originPos) {
   var self = this;
   if (self.bouncing) {
     switch (self.bounceDir) {
@@ -124,7 +120,7 @@ Marker.prototype.bounceUpDown = function(originPos) {
     }
   }
 };
-//#endregion "Marker Functions"
+//#endregion "Pin Functions"
 
 //#region "Vector3 Helper"
 //Vector constructor function
@@ -162,42 +158,41 @@ Vector.sub = function(v1, v2) {
 //#region "Init and Update"
 //Init
 //Objects in scene
-var tpMarker1 = Space.getItem("tpMarker1");
-var tpMarker2 = Space.getItem("tpMarker2");
-var tpMarker3 = Space.getItem("tpMarker3");
-var tpMarker4 = Space.getItem("tpMarker4");
-var tpMarker5 = Space.getItem("tpMarker5");
-var tpMarker6 = Space.getItem("tpMarker6");
-var tpMarkerGroup = [tpMarker1, tpMarker2, tpMarker3, tpMarker4, tpMarker5, tpMarker6];
+var pin1 = Space.getItem("pin1");
+var pin2 = Space.getItem("pin2");
+var pin3 = Space.getItem("pin3");
+var pin4 = Space.getItem("pin4");
+var pin5 = Space.getItem("pin5");
+var pin6 = Space.getItem("pin6");
+var pinGroup = [pin1, pin2, pin3, pin4, pin5, pin6];
 var mainCamera = new Camera();
 var heightOffset = 2;
-var torusOpacity = 0;
 
 mainCamera.cameraItem.setPlayerCamera();
 
-//Add existing markers in Stage to Marker class
-for (i = 0; i < tpMarkerGroup.length; i++) {
-  tpMarkerGroup[i] = new Marker(tpMarkerGroup[i]);
-  tpMarkerGroup[i].toggleVisibility();
-  tpMarkerGroup[i].setFacing();
-  tpMarkerGroup[i].bindEvents(i);
+//Add existing pins in Stage to Pin class
+for (i = 0; i < pinGroup.length; i++) {
+  pinGroup[i] = new Pin(pinGroup[i]);
+  pinGroup[i].toggleVisibility();
+  pinGroup[i].setFacing();
+  pinGroup[i].bindEvents(i);
 }
 
-var MarkerManager = {
-  updateMarkers: function() {
-    tpMarkerGroup.forEach(function(tpMarker) {
-      tpMarker.setFacing();
-      tpMarker.toggleVisibility();
+var PinManager = {
+  updatePins: function() {
+    pinGroup.forEach(function(pin) {
+      pin.setFacing();
+      pin.toggleVisibility();
     })
   }
 };
 
-//Update marker transparency
+//Update pin transparency
 Space.scheduleRepeating(function() {
   mainCamera.update();
-  tpMarkerGroup.forEach(function(tpMarker) {
-    if (tpMarker.visible == true) {
-      tpMarker.update();
+  pinGroup.forEach(function(pin) {
+    if (pin.visible == true) {
+      pin.update();
     }
   });
 }, 0);
