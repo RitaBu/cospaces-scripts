@@ -1,4 +1,18 @@
 //
+var says = ["Че те надо блядь?",
+            "Че ты на меня смотришь, сука?",
+            "Иди на хуй отсюда!",
+            "Ты сейчас пизды получишь!",
+            "Ты не понял, мудак, блядь?",
+            "Я тебе сейчас в ебало дам...",
+            "Пидор, блядь, сраный",
+            "Куда съебываешь?",
+            "Стой, пидор!",
+            "Уебок, блядь",
+            "Гондон",
+            "Сука, блядь, охуевшая"
+];
+
 var cube01 = Space.createItem("Cube", -0.5, 0, 0);
 var cube11 = Space.createItem("Cube", -0.5, 0, 0.5);
 
@@ -122,14 +136,20 @@ var shouldersRotate = function () {
 };
 
 var legTime = 0.8;
+var distance = 0.9;
 var legAngle = Math.PI * 0.25;
+var i = 0;
 var legRotate = function () {
     Space.schedule(function () {
+        body.moveLinearLocal(0, distance, 0, legTime * 2, null);
+        cubeH.say(says[i++]);
         legRight.rotateLocal(1, 0, 0, legAngle, legTime, null);
         legLeft.rotateLocal(1, 0, 0, -legAngle, legTime, function () {
             legRight.rotateLocal(1, 0, 0, -legAngle, legTime, null);
             legLeft.rotateLocal(1, 0, 0, legAngle, legTime, function () {
                 Space.schedule(function () {
+                    cubeH.say(says[i++]);
+                    body.moveLinearLocal(0, distance, 0, legTime * 2, null);
                     legRight.rotateLocal(1, 0, 0, -legAngle, legTime, null);
                     legLeft.rotateLocal(1, 0, 0, legAngle, legTime, function () {
                         legRight.rotateLocal(1, 0, 0, legAngle, legTime, null);
