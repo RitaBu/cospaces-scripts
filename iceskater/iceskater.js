@@ -15,9 +15,9 @@ var snowman3 = Space.getItem("Snowman3");
 var snowman4 = Space.getItem("Snowman4");
 //Arrays used for various checks
 var snowmen = [snowman1, snowman2, snowman3, snowman4];
-var busySnowMen = [];
 var colliders = [snowman1, snowman2, snowman3, snowman4, christmasTree];
 var stars = [];
+var snowmenClass = [];
 //Metrics (Gameplay Values)
 var movementSpeed = 0.025;
 var score = 0;
@@ -48,21 +48,130 @@ orientationMarker.setOpacity(0);
 scoreScreen.setFontSize(1);
 
 //Game Manager
-function startGame(tickRate) {
+function startGame() {
+
+  if (activeManagers.length > 6) {
+    return;
+  }
+
   if (gameOver !== true) {
-    tickRate = ((Math.random() * 2) + 1);
+    var difficultyTreshold = 0;
+    var tickRate = ((Math.random() * 2) + 1);
     gameManager = Space.scheduleRepeating(function() {
-      var selectedSnowman = snowmen[Math.floor(Math.random() * snowmen.length)];
-      //Skip throw if this snowman is already busy
-      if (!isInArray(selectedSnowman, busySnowMen)) {
-        busySnowMen.push(selectedSnowman);
-        ballThrow(selectedSnowman, selectedSnowman.getPosition(), orientationMarker.getPosition());
-        Project.log("Push");
+      var index = (Math.floor(Math.random() * snowmenClass.length));
+      var selectedSnowman = snowmenClass[index];
+      selectedSnowman.throw();
+      difficultyTreshold = difficultyTreshold + 1;
+      if (difficultyTreshold > 8) {
+        startGame();
+        difficultyTreshold = 0;
       }
     }, tickRate);
+
     activeManagers.push(gameManager);
   }
 }
+//Snowman Constructor
+function Snowman(object) {
+  this.item = object;
+  this.position = this.item.getPosition();
+  this.bouncing = false;
+  this.busy = false;
+}
+
+//Throwing logic
+Snowman.prototype.throw = function() {
+//Creates a snowBall at the Snowman's position, make it a physics object and throw it to the positionMarker's location
+  var self = this;
+
+  if (self.busy === true) {
+    return;
+  }
+
+  //Snowman is about to throw. Can't throw again
+  self.busy = true;
+
+  var snowBall = new Snowball(self.position);
+  var target = orientationMarker.getPosition();
+
+  //Orientate snowman to player
+  self.item.faceTo(orientationMarker);
+
+  //Bounces Snowman Up/Down, throw snowball
+  var bounceUpDown = Space.scheduleRepeating(function() {
+    if (self.bouncing === true) {
+      bounce(self.item, 0, 0.25);
+      if (self.item.getPosition().z <= 0.05) {
+        self.bouncing = false;
+        bounceUpDown.dispose();
+      }
+    } else {
+      bounce(self.item, 1.5, 0.3);
+      if (self.item.getPosition().z >= 1.35) {
+        self.bouncing = true;
+
+        //Throw snowball at current marker position (not character!)
+        snowBallThrowSFX.play();
+        snowBall.flyTo(target, self);
+        Space.schedule(function() {
+          self.clear();
+        }, 0.5);
+      }
+    }
+  }, 0);
+};
+
+//Sets snowman available to throw again
+Snowman.prototype.clear = function() {
+  this.busy = false;
+};
+
+function Snowball(spawnPosition) {
+  this.item = Space.createItem('Sphere', spawnPosition.x, spawnPosition.y, 1.5);
+  this.item.addToPhysics();
+}
+//Throws the snowball to the player
+Snowball.prototype.flyTo = function(target) {
+  var self = this;
+  var velocityModifier = 0.25;
+  var velocityUpMod = 3;
+
+  var pos = self.item.getPhysicsPosition();
+  var direction = {
+    x: (target.x - pos.x) * (self.item.distanceToItem(posMarker) * velocityModifier),
+    y: (target.y - pos.y) * (self.item.distanceToItem(posMarker) * velocityModifier),
+    z: (target.z - pos.z) * (self.item.distanceToItem(posMarker) * velocityModifier)
+  };
+
+  var x = normalize(direction, 1).x * self.item.distanceToItem(posMarker) / (velocityUpMod * 0.6);
+  var y = normalize(direction, 1).y * self.item.distanceToItem(posMarker) / (velocityUpMod * 0.6);
+  self.item.setVelocity(x, y, velocityUpMod);
+
+  self.collisionCheck();
+};
+
+//Checks if the snowman's snowball collides with the player
+Snowball.prototype.collisionCheck = function() {
+  var self = this;
+  var collCheck = Space.scheduleRepeating(function() {
+    if (self.item.distanceToPoint(pCharacter.getPosition().x, pCharacter.getPosition().y, pCharacter.getPosition().z + 2) < 0.75) {
+      snowBallImpactSFX.play();
+      damagePlayer();
+      self.item.deleteFromSpace();
+      collCheck.dispose();
+    }
+  }, 0);
+
+  Space.schedule(function() {
+    if (self.item !== undefined) {
+      collCheck.dispose();
+      self.item.deleteFromSpace();
+      if (collCheck !== "undefined") {
+        collCheck.dispose();
+      }
+    }
+  }, 2);
+};
 
 //Movement Manager - Player
 function movementManager() {
@@ -143,70 +252,6 @@ function movementManager() {
   }, 0);
 }
 
-//Snowman Manager
-function ballThrow(snowman, origin, target) {
-  //Creates a snowBall at the Snowman's position, make it a physics object and throw it to the positionMarker's location
-  var snowBall = Space.createItem('Sphere', origin.x, origin.y, 1.5);
-  var bouncedUp = false;
-  var velocityModifier = 0.25;
-  var velocityUpMod = 3;
-
-  snowBall.addToPhysics();
-  snowman.faceTo(orientationMarker);
-
-  //Bounces Snowman Up/Down, throw snowball
-  var bounceUpDown = Space.scheduleRepeating(function() {
-    if (bouncedUp === true) {
-      bounce(snowman, 0, 0.25);
-      if (snowman.getPosition().z <= 0.05) {
-        bouncedUp = false;
-        busySnowMen.pop();
-        bounceUpDown.dispose();
-      }
-    } else {
-      bounce(snowman, 1.5, 0.3);
-      if (snowman.getPosition().z >= 1.35) {
-        bouncedUp = true;
-
-        //Throw snowball at current marker position (not character!)
-        snowBallThrowSFX.play();
-        var pos = snowBall.getPhysicsPosition();
-        var direction = {
-          x: (target.x - pos.x) * (snowBall.distanceToItem(posMarker) * velocityModifier),
-          y: (target.y - pos.y) * (snowBall.distanceToItem(posMarker) * velocityModifier),
-          z: (target.z - pos.z) * (snowBall.distanceToItem(posMarker) * velocityModifier)
-        };
-
-        var x = normalize(direction, 1).x * snowBall.distanceToItem(posMarker) / (velocityUpMod * 0.6);
-        var y = normalize(direction, 1).y * snowBall.distanceToItem(posMarker) / (velocityUpMod * 0.6);
-        snowBall.setVelocity(x, y, velocityUpMod);
-        snowBallCollisionCheck(snowBall);
-      }
-    }
-  }, 0);
-}
-
-//Checks if the snowman's snowball collides with the player
-function snowBallCollisionCheck(snowBall) {
-  var collCheck = Space.scheduleRepeating(function() {
-    if (snowBall.distanceToPoint(pCharacter.getPosition().x, pCharacter.getPosition().y, pCharacter.getPosition().z + 2) < 0.5) {
-      snowBallImpactSFX.play();
-      damagePlayer();
-      snowBall.deleteFromSpace();
-      collCheck.dispose();
-    }
-  }, 0);
-  Space.schedule(function() {
-    if (snowBall !== undefined) {
-      collCheck.dispose();
-      snowBall.deleteFromSpace();
-      if (collCheck !== "undefined") {
-        collCheck.dispose();
-      }
-    }
-  }, 2.5);
-}
-
 function damagePlayer() {
   //Stop all managers and other update loops
   if (movementLogic !== undefined) {
@@ -238,7 +283,7 @@ function spawnstars() {
   //Always have five stars in the game to collect. Add it to the array of existing stars.
   //If collected by the player, bounce it upwards, remove it from list and destroy the object.
   for (; stars.length < 5;) {
-    var star = Space.createItem("LP_Star", generateRandomSpawnPos(7).x, generateRandomSpawnPos(7).y, -1);
+    var star = Space.createItem("LP_Star", generateRandomSpawnPos(5).x, generateRandomSpawnPos(5).y, -1);
     stars.push(star);
     tweenstarUp(star);
     if (starCollCheck(star)) {
@@ -338,11 +383,6 @@ function normalize(point, scale) {
   }
 }
 
-//Check for a value in an array
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
-}
-
 //Reset all game related parameters to their default value
 function resetGame() {
   pCharacterHit = false;
@@ -373,14 +413,17 @@ function resetGame() {
   stars = [];
   posMarkerPos.x = posMarker.getPosition().x;
 
+  //Assigns snowmen to the Snowman class
+  snowmen.forEach(function(snowman) {
+    snowman = new Snowman(snowman);
+    snowmenClass.push(snowman);
+  });
+
   var startCheck = Space.scheduleRepeating(function() {
     if (posMarkerPos.x > posMarker.getPosition().x) {
       movementManager();
       gameOver = false;
       Space.schedule(startGame, 10);
-      Space.schedule(startGame, 30);
-      Space.schedule(startGame, 60);
-      Space.schedule(startGame, 90);
       spawnstars();
       starDistanceCheck();
       posMarker.say('');
