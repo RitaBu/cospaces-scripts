@@ -97,7 +97,7 @@ Space.renderServiceItems(false);
 Space.renderLineItems(false);
 
 //camera animation
-var camera = Space.getCameraItem();
+var camera = Space.getCamera();
 camera.setMovement("fixed");
 
 function getRandomInt(min, max) {
@@ -192,27 +192,14 @@ fly();
  */
 
 //cars
-var velocity = 2;
-
-function createCar(i, line) {
-    var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    var car = Space.createItem(modelId);
-    car.moveBezier(line.id(), velocity, true);
-    car.setScale(0.8);
-}
+var velocity = 1.5;
 
 function createPath(path, n) {
-    var lineId = city.createTrajectory(path);
-    var line = Space.getItem(lineId);
-
-    var i = 0;
-
-    createCar(i, line);
-
-    for (i = 1; i < n; i++) {
-        line = line.shift();
-        createCar(i, line);
-    }
+  var line = city.createTrajectory(path);
+  for (var i = 0; i < n; i++) {
+    var model = i % 2 == 0 ? "LP_Bus" : "LP_Car";
+    city.addCar(model, line, velocity);
+  }
 }
 
 createPath([4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8, 6, 6, 6, 6, 4], 4);

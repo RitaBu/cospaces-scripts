@@ -133,29 +133,16 @@ addTrafficLight(2, 4, 1);
 addTrafficLight(4, 4, 0);
 
 //cars
-var velocity = 2;
-
-function createCar(i, line) {
-    var modelId = i % 2 === 0 ? "LP_Car" : "LP_Bus";
-    var car = Space.createItem(modelId);
-    car.moveBezier(line.id(), velocity, true);
-    car.setScale(0.8);
-}
+var velocity = 1.5;
 
 function createPath(path, n) {
-    var lineId = city.createTrajectory(path);
-    var line = Space.getItem(lineId);
-
-    var i = 0;
-
-    createCar(i, line);
-
-    for (i = 1; i < n; i++) {
-        line = line.shift();
-        createCar(i, line);
-    }
+  var line = city.createTrajectory(path);
+  for (var i = 0; i < n; i++) {
+    var model = i % 2 == 0 ? "LP_Bus" : "LP_Car";
+    city.addCar(model, line, velocity);
+  }
 }
 
 createPath([0, 0, 0, 2, 2, 2, 2, 4, 4, 4, 4, 2, 2, 2, 2, 0], 4);
 
-Space.setCarDriveController(3, 1.5);
+Space.setCarDriveController(1.5, 0.7);
