@@ -23,7 +23,7 @@ function Host(item) {
   this.bindEvents = function () {
     var self = this;
 
-    this.item.activate(function () {
+    this.item.onActivate(function () {
       if (self.isClickable) {
         self.item.say('');
         self.isClickable = false;
@@ -57,7 +57,7 @@ function Animal(animalId, item) {
   this.bindEvents = function () {
     var self = this;
 
-    this.item.activate(function () {
+    this.item.onActivate(function () {
       if (!host.isClickable) {
         game.removeAllSpeechBubbles();
         if (game.isRightChoice(self.getAnimalId())) {
@@ -147,14 +147,14 @@ function Game(host, animals, sounds) {
 var host = new Host(Space.item('FJNpNV30CN'));
 
 var animals = [
-  new Animal('elephant', Space.item('9np5tnExpc')),
-  new Animal('dog', Space.item('VIkx0xO2XE')),
-  new Animal('cat', Space.item('RbGraO0IGj')),
-  new Animal('bear', Space.item('xVXDONVw9d')),
-  new Animal('camel', Space.item('PTIQD6TUWU')),
-  new Animal('horse', Space.item('EOBZ04u457')),
-  new Animal('mouse', Space.item('LQMTggrwRe')),
-  new Animal('lion', Space.item('kbSkFnaMZ5'))
+  new Animal('elephant', Space.getItem('9np5tnExpc')),
+  new Animal('dog', Space.getItem('VIkx0xO2XE')),
+  new Animal('cat', Space.getItem('RbGraO0IGj')),
+  new Animal('bear', Space.getItem('xVXDONVw9d')),
+  new Animal('camel', Space.getItem('PTIQD6TUWU')),
+  new Animal('horse', Space.getItem('EOBZ04u457')),
+  new Animal('mouse', Space.getItem('LQMTggrwRe')),
+  new Animal('lion', Space.getItem('kbSkFnaMZ5'))
 ];
 
 var sounds = [
