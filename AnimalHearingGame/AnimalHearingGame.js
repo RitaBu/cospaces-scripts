@@ -144,7 +144,7 @@ function Game(host, animals, sounds) {
 }
 
 // Initialize application.
-var host = new Host(Space.item('FJNpNV30CN'));
+var host = new Host(Space.getItem('FJNpNV30CN'));
 
 var animals = [
   new Animal('elephant', Space.getItem('9np5tnExpc')),
