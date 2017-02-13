@@ -12,6 +12,9 @@ polished locations while preventing players to trail off.
 Currently in studio.CoSpaces:
 [https://cospac.es/vwZd](https://cospac.es/vwZd)
 
+And in newCoSpaces:
+[http://tinyurl.com/newCoSpacesPinSample](http://tinyurl.com/newCoSpacesPinSample)
+
 ## How to use
 
 1. Look around the stage
