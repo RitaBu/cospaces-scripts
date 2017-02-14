@@ -1,6 +1,7 @@
 // Helpers
 var N = 21;
 var finished = false;
+var DELTA = 0.001;
 
 function normalize(x, y) {
     var len = Math.sqrt(x * x + y * y);
@@ -27,9 +28,16 @@ function PlayerEnv(me, opponent) {
     this.getAims = function () {
         return itemCoords;
     };
+    this.getTargets = function () {
+        return itemCoords;
+    };
     this.move = function (x, y) {
-        var v = normalize(x, y);
-        me.setVelocity(v.x, v.y, 0);
+        if (Math.abs(x) < DELTA && Math.abs(y) < DELTA) {
+            me.setVelocity(0, 0, 0);
+        } else {
+            var v = normalize(x, y);
+            me.setVelocity(v.x, v.y, 0);
+        }
     };
     this.log = Project.log;
     this.score = 0;
