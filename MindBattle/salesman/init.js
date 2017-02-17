@@ -43,7 +43,7 @@ function PlayerEnv(me, opponent) {
     this.score = 0;
 }
 // Helpers END
-Space.setPhysicsEnabled(true);
+Space.setPhysicsEnabled(true, false);
 
 var p1Obj = Space.createItem("Sphere", 11, 0, 0);
 p1Obj.setColor(255, 0, 0);
@@ -57,7 +57,7 @@ for (var i = 0; i < N; i++) {
     var aim = Space.createItem("Sphere", x, y, 0);
     aim.setColor(0, 255, 0);
     aim.setScale(0.85);
-    aim.setStatic();
+    aim.setStatic(true);
     items.push(aim);
     itemCoords.push(aim.getPhysicsPosition());
 }
