@@ -5,14 +5,14 @@ function dist(aim) {
     return Math.sqrt(dx*dx + dy*dy);
 }
 
-var aims = env.getAims();
+var targets = env.getTargets();
 var minDist = 10000;
-var aim = {x:0, y:0};
-for (var i = 0; i < aims.length; i++) {
-    var d = dist(aims[i]);
+var target = {x:0, y:0};
+for (var i = 0; i < targets.length; i++) {
+    var d = dist(targets[i]);
     if (d < minDist) {
-        aim = aims[i];
+        target = targets[i];
         minDist = d;
     }
 }
-env.move(aim.x - pos.x, aim.y - pos.y);
+env.move(target.x - pos.x, target.y - pos.y);

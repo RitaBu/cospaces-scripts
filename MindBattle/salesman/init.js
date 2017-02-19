@@ -54,12 +54,12 @@ var itemCoords = [];
 for (var i = 0; i < N; i++) {
     var x = Math.random() * 20 - 10;
     var y = Math.random() * 20 - 10;
-    var aim = Space.createItem("Sphere", x, y, 0);
-    aim.setColor(0, 255, 0);
-    aim.setScale(0.85);
-    aim.setStatic(true);
-    items.push(aim);
-    itemCoords.push(aim.getPhysicsPosition());
+    var target = Space.createItem("Sphere", x, y, 0);
+    target.setColor(0, 255, 0);
+    target.setScale(0.85);
+    target.setStatic(true);
+    items.push(target);
+    itemCoords.push(target.getPhysicsPosition());
 }
 
 Obj.publish(new CheckerEnv(p1Obj, p2Obj, items, itemCoords));
