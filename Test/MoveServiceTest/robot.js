@@ -13,100 +13,74 @@ var says = ["Че те надо блядь?",
             "Сука, блядь, охуевшая"
 ];
 
-var cube01 = Space.createItem("Cube", -0.5, 0, 0);
-var cube11 = Space.createItem("Cube", -0.5, 0, 0.5);
+var footRight = Scene.createItem("Cube");
+var legRight = Scene.createItem("Cube");
+footRight.connectToItem("top", legRight, "bottom");
 
-var legRight = Space.createGroup();
-legRight.add(cube01);
-legRight.add(cube11);
-legRight.setPivot(cube11, "center");
+var footLeft = Scene.createItem("Cube");
+var legLeft = Scene.createItem("Cube");
+footLeft.connectToItem("top", legLeft, "bottom");
 
-var cube03 = Space.createItem("Cube", 0.5, 0, 0);
-var cube13 = Space.createItem("Cube", 0.5, 0, 0.5);
-
-var legLeft = Space.createGroup();
-legLeft.add(cube03);
-legLeft.add(cube13);
-legLeft.setPivot(cube13, "center");
-
-var cube12 = Space.createItem("Cube", 0, 0, 0.5);
-
-var legs = Space.createGroup();
-legs.add(cube12);
-legs.add(legLeft);
-legs.add(legRight);
-legs.setPivot(cube12);
+var legs = Scene.createItem("Cube");
+legLeft.connectToItem("right", legs, "left");
+legRight.connectToItem("left", legs, "right");
 
 //BODY
-var cube22 = Space.createItem("Cube", 0, 0, 1.0);
-cube22.setColor(200, 200, 200);
+var body = Scene.createItem("Cube", 0, 0, 1.0);
+body.setColor(200, 200, 200);
+
+legs.connectToItem("top", body, "bottom");
 
 //RIGHT HAND
-var cube20 = Space.createItem("Cube", -1, 0, 1.0);
-var cube30 = Space.createItem("Cube", -1, 0, 1.5);
+var palmRight = Scene.createItem("Cube");
+var handRight = Scene.createItem("Cube");
+palmRight.connectToItem("top", handRight, "bottom");
 
-var handRight = Space.createGroup();
-handRight.add(cube30);
-handRight.add(cube20);
-handRight.setPivot(cube30, "center");
 
 //LEFT HAND
-var cube24 = Space.createItem("Cube", 1, 0, 1.0);
-var cube34 = Space.createItem("Cube", 1, 0, 1.5);
-
-var handLeft = Space.createGroup();
-handLeft.add(cube34);
-handLeft.add(cube24);
-handLeft.setPivot(cube34, "center");
+var palmLeft = Scene.createItem("Cube");
+var handLeft = Scene.createItem("Cube");
+palmLeft.connectToItem("top", handLeft, "bottom");
 
 //SHOULDERS
-var cube31 = Space.createItem("Cube", -0.5, 0, 1.5);
-var cube32 = Space.createItem("Cube", 0, 0, 1.5);
-var cube33 = Space.createItem("Cube", 0.5, 0, 1.5);
+var shoulderRight = Scene.createItem("Cube");
+var shoulderLeft = Scene.createItem("Cube");
+
+handLeft.connectToItem("right", shoulderLeft, "left");
+handRight.connectToItem("left", shoulderRight, "right");
 
 //HANDS
-var hands = Space.createGroup();
-hands.add(cube31);
-hands.add(cube32);
-hands.add(cube33);
-hands.add(handRight);
-hands.add(handLeft);
-hands.setPivot(cube32);
+var hands = Scene.createItem("Cube");
+shoulderLeft.connectToItem("right", hands, "left");
+shoulderRight.connectToItem("left", hands, "right");
+
+hands.connectToItem("bottom", body, "top");
 
 //HEAD
-var cubeH = Space.createItem("Cube", 0, 0, 2.0);
-var eyeRight = Space.createItem("Cube", -0.125, 0.25, 2.25);
+var head = Scene.createItem("Cube", 0, 0, 2.0);
+var eyeRight = Scene.createItem("Cube", -0.125, 0.25, 2.25);
 eyeRight.setScale(0.25);
 eyeRight.setColor(255, 0, 0);
-var eyeLeft = Space.createItem("Cube", 0.125, 0.25, 2.25);
+var eyeLeft = Scene.createItem("Cube", 0.125, 0.25, 2.25);
 eyeLeft.setScale(0.25);
 eyeLeft.setColor(255, 0, 0);
 
-var head = Space.createGroup();
-head.add(cubeH);
 head.add(eyeRight);
 head.add(eyeLeft);
-head.setPivot(cubeH);
 
-//BODY
-var body = Space.createGroup();
-body.add(legs);
-body.add(cube22);
-body.add(hands);
-body.add(head);
-body.setPivot(legs);
+head.connectToItem("bottom", hands, "top");
 
 //TEST rotateLocal FOR GROUPED OBJECTS
 var flatHandLeftRotate = function() {
-    cube24.rotateLocal(0, 0, 1, Math.PI * 0.5, 2, flatHandLeftRotate);
+    palmLeft.rotateLocal(0, 0, 1, Math.PI * 0.5, 2, flatHandLeftRotate);
 };
 
 var flatHandRightRotate = function() {
-    cube20.rotateLocal(0, 0, 1, -Math.PI * 0.5, 2, flatHandRightRotate);
+    palmRight.rotateLocal(0, 0, 1, -Math.PI * 0.5, 2, flatHandRightRotate);
 };
 
 var handLeftRotate = function() {
-    Space.schedule(function() {
+    Scene.schedule(function() {
         handLeft.rotateLocal(1, 0, 0, -Math.PI * 0.5, 1, function() {
             handLeft.rotateLocal(1, 0, 0, Math.PI * 0.5, 1, handLeftRotate);
         });
@@ -114,7 +88,7 @@ var handLeftRotate = function() {
 };
 
 var handRightRotate = function() {
-    Space.schedule(function() {
+    Scene.schedule(function() {
         handRight.rotateLocal(1, 0, 0, -Math.PI * 0.5, 1, function() {
             handRight.rotateLocal(1, 0, 0, Math.PI * 0.5, 1, handRightRotate);
         });
@@ -122,11 +96,11 @@ var handRightRotate = function() {
 };
 
 var shouldersRotate = function () {
-    Space.schedule(function () {
+    Scene.schedule(function () {
         hands.rotateLocal(0, 0, 1, Math.PI * 0.1, 2, function () {
-            Space.schedule(function () {
+            Scene.schedule(function () {
                 hands.rotateLocal(0, 0, 1, -Math.PI * 0.2, 2, function () {
-                    Space.schedule(function () {
+                    Scene.schedule(function () {
                         hands.rotateLocal(0, 0, 1, Math.PI * 0.1, 2, shouldersRotate);
                     }, 1);
                 });
@@ -140,15 +114,15 @@ var distance = 0.9;
 var legAngle = Math.PI * 0.25;
 var i = 0;
 var legRotate = function () {
-    Space.schedule(function () {
+    Scene.schedule(function () {
         body.moveLinearLocal(0, distance, 0, legTime * 2, null);
-        cubeH.say(says[i++]);
+        head.say(says[i++]);
         legRight.rotateLocal(1, 0, 0, legAngle, legTime, null);
         legLeft.rotateLocal(1, 0, 0, -legAngle, legTime, function () {
             legRight.rotateLocal(1, 0, 0, -legAngle, legTime, null);
             legLeft.rotateLocal(1, 0, 0, legAngle, legTime, function () {
-                Space.schedule(function () {
-                    cubeH.say(says[i++]);
+                Scene.schedule(function () {
+                    head.say(says[i++]);
                     body.moveLinearLocal(0, distance, 0, legTime * 2, null);
                     legRight.rotateLocal(1, 0, 0, -legAngle, legTime, null);
                     legLeft.rotateLocal(1, 0, 0, legAngle, legTime, function () {
@@ -167,7 +141,6 @@ var eyeRightRotate = function() {
 var eyeLeftRotate = function() {
     eyeLeft.rotateLocal(0, 1, 0, Math.PI * 0.5, 1, eyeLeftRotate);
 };
-
 
 //flatHandLeftRotate();
 //flatHandRightRotate();
