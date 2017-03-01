@@ -1,11 +1,11 @@
 //#region "Constructor Functions"
 //Camera constructor function
 function Camera() {
-  //NOTE: returned item of Space.getCamera() differs from Space.getItem(cameraID)
-  //Motion-related functions like moveLinear() do not exist *yet* for Space.getCamera() objects.
+  //NOTE: returned item of Stage.getCamera() differs from Stage.getItem(cameraID)
+  //Motion-related functions like moveLinear() do not exist *yet* for Stage.getCamera() objects.
   //In this script, cameraItem is used for getDirection(), which does not exist for objects returned by .getItem()
-  this.cameraItem = Space.getCamera();
-  this.objectItem = Space.getItem("0QiMEUjZAo");
+  this.cameraItem = Stage.getCamera();
+  this.objectItem = Stage.getItem("0QiMEUjZAo");
   this.pos = new Vector(this.objectItem.getPosition().x, this.objectItem.getPosition().y, this.objectItem.getPosition().z);
   this.dir = new Vector(0, 0, 0);
 }
@@ -44,9 +44,9 @@ Pin.prototype.toggleVisibility = function() {
 //Updates pin position to face the camera
 Pin.prototype.setFacing = function() {
   var camPos = mainCamera.objectItem.getPosition();
-  var targetHelper = Space.createItem("Cube", camPos.x, camPos.y, this.position.z);
+  var targetHelper = Stage.createItem("Cube", camPos.x, camPos.y, this.position.z);
   this.item.faceTo(targetHelper);
-  targetHelper.deleteFromSpace();
+  targetHelper.deleteFromStage();
 };
 
 //Move camera to this object, add positive Z offset
@@ -116,7 +116,7 @@ Pin.prototype.bounceUpDown = function(originPos) {
         });
         break;
       default:
-        Project.log("Bounce out of bounds!");
+        Stage.log("Bounce out of bounds!");
     }
   }
 };
@@ -158,12 +158,12 @@ Vector.sub = function(v1, v2) {
 //#region "Init and Update"
 //Init
 //Objects in scene
-var pin1 = Space.getItem("pin1");
-var pin2 = Space.getItem("pin2");
-var pin3 = Space.getItem("pin3");
-var pin4 = Space.getItem("pin4");
-var pin5 = Space.getItem("pin5");
-var pin6 = Space.getItem("pin6");
+var pin1 = Stage.getItem("pin1");
+var pin2 = Stage.getItem("pin2");
+var pin3 = Stage.getItem("pin3");
+var pin4 = Stage.getItem("pin4");
+var pin5 = Stage.getItem("pin5");
+var pin6 = Stage.getItem("pin6");
 var pinGroup = [pin1, pin2, pin3, pin4, pin5, pin6];
 var mainCamera = new Camera();
 var heightOffset = 2;
@@ -188,7 +188,7 @@ var PinManager = {
 };
 
 //Update pin transparency
-Space.scheduleRepeating(function() {
+Stage.scheduleRepeating(function() {
   mainCamera.update();
   pinGroup.forEach(function(pin) {
     if (pin.visible == true) {

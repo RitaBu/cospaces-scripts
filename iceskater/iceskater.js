@@ -1,18 +1,18 @@
 //#region "Setup"
 //Physics Settings
-Space.setPhysicsEnabled(true, true);
-Space.setPhysicsGravity(3);
+Stage.setPhysicsEnabled(true, true);
+Stage.setPhysicsGravity(3);
 //Used objects in the scene
-var pCharacter = Space.getItem("IceSkaterWoman");
-var posMarker = Space.getItem("PositionMarker");
-var orientationMarker = Space.getItem("OrientationMarker");
-var playArea = Space.getItem("playArea");
-var christmasTree = Space.getItem("Christmas_Tree");
-var scoreScreen = Space.getItem("ScoreScreen");
-var snowman1 = Space.getItem("Snowman1");
-var snowman2 = Space.getItem("Snowman2");
-var snowman3 = Space.getItem("Snowman3");
-var snowman4 = Space.getItem("Snowman4");
+var pCharacter = Stage.getItem("IceSkaterWoman");
+var posMarker = Stage.getItem("PositionMarker");
+var orientationMarker = Stage.getItem("OrientationMarker");
+var playArea = Stage.getItem("playArea");
+var christmasTree = Stage.getItem("Christmas_Tree");
+var scoreScreen = Stage.getItem("ScoreScreen");
+var snowman1 = Stage.getItem("Snowman1");
+var snowman2 = Stage.getItem("Snowman2");
+var snowman3 = Stage.getItem("Snowman3");
+var snowman4 = Stage.getItem("Snowman4");
 //Arrays used for various checks
 var snowmen = [snowman1, snowman2, snowman3, snowman4];
 var colliders = [snowman1, snowman2, snowman3, snowman4, christmasTree];
@@ -28,11 +28,11 @@ var activeManagers = [];
 var collectionCheck;
 var gameOver = false;
 //Pictures/Sound
-var snowBallThrowSFX = Space.loadSound("x2ORHI81dty7NtMvMwwAWK1zTjiLKe9v0LvLAqCCaO");
-var snowBallImpactSFX = Space.loadSound("samJ7uxL10pCFvaQRoC7U7SFJ4qlrdsJTSddTrvCBX7");
-var starSFX = Space.loadSound("6e93xmAKOgu7cAuSkUzPwPfoU0yNErF7l9zQoGxy61d");
-var iceSkateSFX = Space.loadSound("6BVhZ7I6jEK7aXVPfPSBTzsl7r3kj4mVKDMEB51JvBc");
-var BGM = Space.loadSound("J6HGqSxIWxfsoDdmQX21Qk9FoZGpQVNJSpM6R6LGSwU");
+var snowBallThrowSFX = Stage.loadSound("x2ORHI81dty7NtMvMwwAWK1zTjiLKe9v0LvLAqCCaO");
+var snowBallImpactSFX = Stage.loadSound("samJ7uxL10pCFvaQRoC7U7SFJ4qlrdsJTSddTrvCBX7");
+var starSFX = Stage.loadSound("6e93xmAKOgu7cAuSkUzPwPfoU0yNErF7l9zQoGxy61d");
+var iceSkateSFX = Stage.loadSound("6BVhZ7I6jEK7aXVPfPSBTzsl7r3kj4mVKDMEB51JvBc");
+var BGM = Stage.loadSound("J6HGqSxIWxfsoDdmQX21Qk9FoZGpQVNJSpM6R6LGSwU");
 //#endregion "Setup"
 
 //#region "General Game Logic"
@@ -57,7 +57,7 @@ function startGame() {
   if (gameOver !== true) {
     var difficultyTreshold = 0;
     var tickRate = ((Math.random() * 2) + 1);
-    gameManager = Space.scheduleRepeating(function() {
+    gameManager = Stage.scheduleRepeating(function() {
       var index = (Math.floor(Math.random() * snowmenClass.length));
       var selectedSnowman = snowmenClass[index];
       selectedSnowman.throw();
@@ -98,7 +98,7 @@ Snowman.prototype.throw = function() {
   self.item.faceTo(orientationMarker);
 
   //Bounces Snowman Up/Down, throw snowball
-  var bounceUpDown = Space.scheduleRepeating(function() {
+  var bounceUpDown = Stage.scheduleRepeating(function() {
     if (self.bouncing === true) {
       bounce(self.item, 0, 0.25);
       if (self.item.getPosition().z <= 0.05) {
@@ -113,7 +113,7 @@ Snowman.prototype.throw = function() {
         //Throw snowball at current marker position (not character!)
         snowBallThrowSFX.play();
         snowBall.flyTo(target, self);
-        Space.schedule(function() {
+        Stage.schedule(function() {
           self.clear();
         }, 0.5);
       }
@@ -127,7 +127,7 @@ Snowman.prototype.clear = function() {
 };
 
 function Snowball(spawnPosition) {
-  this.item = Space.createItem('Sphere', spawnPosition.x, spawnPosition.y, 1.5);
+  this.item = Stage.createItem('Sphere', spawnPosition.x, spawnPosition.y, 1.5);
   this.item.addToPhysics();
 }
 //Throws the snowball to the player
@@ -153,19 +153,19 @@ Snowball.prototype.flyTo = function(target) {
 //Checks if the snowman's snowball collides with the player
 Snowball.prototype.collisionCheck = function() {
   var self = this;
-  var collCheck = Space.scheduleRepeating(function() {
+  var collCheck = Stage.scheduleRepeating(function() {
     if (self.item.distanceToPoint(pCharacter.getPosition().x, pCharacter.getPosition().y, pCharacter.getPosition().z + 2) < 0.75) {
       snowBallImpactSFX.play();
-      damagePlayer();
-      self.item.deleteFromSpace();
+      //damagePlayer();
+      self.item.deleteFromStage();
       collCheck.dispose();
     }
   }, 0);
 
-  Space.schedule(function() {
+  Stage.schedule(function() {
     if (self.item !== undefined) {
       collCheck.dispose();
-      self.item.deleteFromSpace();
+      self.item.deleteFromStage();
       if (collCheck !== "undefined") {
         collCheck.dispose();
       }
@@ -176,7 +176,7 @@ Snowball.prototype.collisionCheck = function() {
 //Movement Manager - Player
 function movementManager() {
   //Execute this code every frame
-  movementLogic = Space.scheduleRepeating(function() {
+  movementLogic = Stage.scheduleRepeating(function() {
     var pCharacterPos = pCharacter.getPosition();
     var markerPos = posMarker.getPosition();
     var markerPosVector = [markerPos.x, markerPos.y, markerPos.z];
@@ -271,7 +271,7 @@ function damagePlayer() {
 
   pCharacter.say("Ouch!");
   if (!gameOver) {
-    Space.schedule(showScoreScreen, 2);
+    Stage.schedule(showScoreScreen, 2);
   }
   gameOver = true;
 }
@@ -283,12 +283,12 @@ function spawnstars() {
   //Always have five stars in the game to collect. Add it to the array of existing stars.
   //If collected by the player, bounce it upwards, remove it from list and destroy the object.
   for (; stars.length < 5;) {
-    var star = Space.createItem("LP_Star", generateRandomSpawnPos(5).x, generateRandomSpawnPos(5).y, -1);
+    var star = Stage.createItem("LP_Star", generateRandomSpawnPos(5).x, generateRandomSpawnPos(5).y, -1);
     stars.push(star);
     tweenstarUp(star);
     if (starCollCheck(star)) {
       stars.pop();
-      star.deleteFromSpace();
+      star.deleteFromStage();
     }
   }
 }
@@ -307,7 +307,7 @@ function starCollCheck(star) {
 
 //Smoothly emerges the star from the ground when it is created
 function tweenstarUp(star) {
-  var bouncestar = Space.scheduleRepeating(function() {
+  var bouncestar = Stage.scheduleRepeating(function() {
     bounce(star, 0.30, 0.1);
     if (star.getPosition().z >= 0.25) {
       bouncestar.dispose();
@@ -318,7 +318,7 @@ function tweenstarUp(star) {
 //Checks the distance of every star to pCharacter.
 //If close enough, play a sound and start the collectstar function
 function starDistanceCheck() {
-  collectionCheck = Space.scheduleRepeating(function() {
+  collectionCheck = Stage.scheduleRepeating(function() {
     for (i = 0; i < stars.length; i++) {
       if (pCharacter.distanceToItem(stars[i]) < 1) {
         collectstar(stars[i], i);
@@ -332,10 +332,10 @@ function starDistanceCheck() {
 //bounce the star up when it is collected, add to the player score and create new stars
 function collectstar(star, index) {
   stars.splice(index, 1);
-  var bouncestar = Space.scheduleRepeating(function() {
+  var bouncestar = Stage.scheduleRepeating(function() {
     bounce(star, 3, 0.1);
     if (star.getPosition().z >= 2.90) {
-      star.deleteFromSpace();
+      star.deleteFromStage();
       bouncestar.dispose();
       score++;
       spawnstars();
@@ -406,7 +406,7 @@ function resetGame() {
     }
   }
   for (i = 0; i < stars.length; i++) {
-    stars[i].deleteFromSpace();
+    stars[i].deleteFromStage();
   }
 
   activeManagers = [];
@@ -419,11 +419,11 @@ function resetGame() {
     snowmenClass.push(snowman);
   });
 
-  var startCheck = Space.scheduleRepeating(function() {
+  var startCheck = Stage.scheduleRepeating(function() {
     if (posMarkerPos.x > posMarker.getPosition().x) {
       movementManager();
       gameOver = false;
-      Space.schedule(startGame, 10);
+      Stage.schedule(startGame, 10);
       spawnstars();
       starDistanceCheck();
       posMarker.say('');
