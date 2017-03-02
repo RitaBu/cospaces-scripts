@@ -1,11 +1,11 @@
 //#region "Constructor Functions"
 //Camera constructor function
 function Camera() {
-  //NOTE: returned item of Stage.getCamera() differs from Stage.getItem(cameraID)
-  //Motion-related functions like moveLinear() do not exist *yet* for Stage.getCamera() objects.
+  //NOTE: returned item of Scene.getCamera() differs from Scene.getItem(cameraID)
+  //Motion-related functions like moveLinear() do not exist *yet* for Scene.getCamera() objects.
   //In this script, cameraItem is used for getDirection(), which does not exist for objects returned by .getItem()
-  this.cameraItem = Stage.getCamera();
-  this.objectItem = Stage.getItem("0QiMEUjZAo");
+  this.cameraItem = Scene.getCamera();
+  this.objectItem = Scene.getItem("0QiMEUjZAo");
   this.pos = new Vector(this.objectItem.getPosition().x, this.objectItem.getPosition().y, this.objectItem.getPosition().z);
   this.dir = new Vector(0, 0, 0);
 }
@@ -44,7 +44,7 @@ Pin.prototype.toggleVisibility = function() {
 //Updates pin position to face the camera
 Pin.prototype.setFacing = function() {
   var camPos = mainCamera.objectItem.getPosition();
-  var targetHelper = Stage.createItem("Cube", camPos.x, camPos.y, this.position.z);
+  var targetHelper = Scene.createItem("Cube", camPos.x, camPos.y, this.position.z);
   this.item.faceTo(targetHelper);
   targetHelper.deleteFromStage();
 };
@@ -116,7 +116,7 @@ Pin.prototype.bounceUpDown = function(originPos) {
         });
         break;
       default:
-        Stage.log("Bounce out of bounds!");
+        Scene.log("Bounce out of bounds!");
     }
   }
 };
@@ -158,19 +158,19 @@ Vector.sub = function(v1, v2) {
 //#region "Init and Update"
 //Init
 //Objects in scene
-var pin1 = Stage.getItem("pin1");
-var pin2 = Stage.getItem("pin2");
-var pin3 = Stage.getItem("pin3");
-var pin4 = Stage.getItem("pin4");
-var pin5 = Stage.getItem("pin5");
-var pin6 = Stage.getItem("pin6");
+var pin1 = Scene.getItem("pin1");
+var pin2 = Scene.getItem("pin2");
+var pin3 = Scene.getItem("pin3");
+var pin4 = Scene.getItem("pin4");
+var pin5 = Scene.getItem("pin5");
+var pin6 = Scene.getItem("pin6");
 var pinGroup = [pin1, pin2, pin3, pin4, pin5, pin6];
 var mainCamera = new Camera();
 var heightOffset = 2;
 
 mainCamera.cameraItem.setPlayerCamera();
 
-//Add existing pins in Stage to Pin class
+//Add existing pins in Scene to Pin class
 for (i = 0; i < pinGroup.length; i++) {
   pinGroup[i] = new Pin(pinGroup[i]);
   pinGroup[i].toggleVisibility();
@@ -188,7 +188,7 @@ var PinManager = {
 };
 
 //Update pin transparency
-Stage.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   mainCamera.update();
   pinGroup.forEach(function(pin) {
     if (pin.visible == true) {
