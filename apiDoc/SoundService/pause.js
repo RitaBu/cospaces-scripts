@@ -1,10 +1,10 @@
 var soundClipId = 'fca0f8181c05ed9068334996fce96c9396974277bf8bf066bd7dd104a11b4ac2';
-var soundClip = Space.loadSound(soundClipId);
+var soundClip = Scene.loadSound(soundClipId);
 var isPlaying = false;
 
 soundClip.play();
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   if(isPlaying) {
     soundClip.pause();
   } else {

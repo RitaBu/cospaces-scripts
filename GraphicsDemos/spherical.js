@@ -36,7 +36,7 @@ Vector.prototype.add = function (v) {
  *
  */
 function Mover(xPos, yPos, zPos, theta, phi) {
-  this.item = Space.createItem('LP_Sphere', xPos, yPos, zPos);
+  this.item = Scene.createItem('LP_Sphere', xPos, yPos, zPos);
   this.item.setScale(0.2);
   this.item.setRandomColor();
   this.angle = theta * phi;
@@ -84,6 +84,6 @@ function draw() {
 }
 
 init();
-Space.scheduleRepeating(function () {
+Scene.scheduleRepeating(function () {
   draw();
 }, 0);

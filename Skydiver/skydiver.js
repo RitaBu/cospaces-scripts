@@ -21,12 +21,12 @@ function Player() {
     y: 0,
     z: this.startHeight
   };
-  this.item = Space.createItem('LP_Wom', this.pos.x, this.pos.y, this.pos.z);
+  this.item = Scene.createItem('LP_Wom', this.pos.x, this.pos.y, this.pos.z);
   this.hittedGround = false;
   this.soundWindId = 'Qw5olrniAGKQFgJUyIpRWtNNx2awStGtxor7EnBesLz';
   this.soundSplatId = 'KnX0aodGouC3bbuXXLUtUH2MTXHFffYLqaWFC3wi8iW';
-  this.soundWind = Space.loadSound(this.soundWindId);
-  this.soundSplat = Space.loadSound(this.soundSplatId);
+  this.soundWind = Scene.loadSound(this.soundWindId);
+  this.soundSplat = Scene.loadSound(this.soundSplatId);
 }
 
 Player.prototype.init = function() {
@@ -62,11 +62,11 @@ function Gem() {
     y: Helper.randNumBetween(-10, 10),
     z: Helper.randNumBetween(100, 900)
   };
-  this.item = Space.createItem('LP_Sphere', this.pos.x, this.pos.y, this.pos.z);
+  this.item = Scene.createItem('LP_Sphere', this.pos.x, this.pos.y, this.pos.z);
   this.item.setColor(255, 255, 0);
   this.item.setScale(6);
   this.soundPickupId = '52OmStfuWCSzWX7Lpr8vY124kv2V1xvg84qsDoSTOga';
-  this.soundPickup = Space.loadSound(this.soundPickupId);
+  this.soundPickup = Scene.loadSound(this.soundPickupId);
 }
 
 Gem.prototype.isCollected = function() {
@@ -76,7 +76,7 @@ Gem.prototype.isCollected = function() {
 Gem.prototype.remove = function() {
   var index = gems.indexOf(this);
   gems.splice(index, 1);
-  this.item.deleteFromSpace();
+  this.item.deleteFromScene();
   this.soundPickup.play();
 };
 
@@ -91,13 +91,13 @@ function Mover(modelId, scale, startPos, dir, speed, soundId) {
   this.pos = startPos;
   this.dir = dir;
   this.speed = speed;
-  this.sound = Space.loadSound(soundId);
+  this.sound = Scene.loadSound(soundId);
   this.soundWasPlayed = false;
   this.create();
 }
 
 Mover.prototype.create = function() {
-  this.item = Space.createItem(this.modelId, this.pos.x, this.pos.y, this.pos.z);
+  this.item = Scene.createItem(this.modelId, this.pos.x, this.pos.y, this.pos.z);
   this.item.setScale(this.scale);
 };
 
@@ -110,7 +110,6 @@ Mover.prototype.update = function() {
 
   if (Math.round(this.pos.z) < Math.round(player.pos.z) && Math.round(this.pos.z) > Math.round(player.pos.z) - 150) {
     if (!this.soundWasPlayed) {
-      Project.log('test');
       this.sound.play();
       this.soundWasPlayed = true;
     }
@@ -136,7 +135,7 @@ Cloud.prototype.create = function() {
   var index = Math.round(Math.random() * 2);
   var scale = Helper.randNumBetween(1, 7);
   var rotation = Helper.randNumBetween(0, Math.PI / 4);
-  this.item = Space.createItem(this.modelIds[index], this.pos.x, this.pos.y, this.pos.z);
+  this.item = Scene.createItem(this.modelIds[index], this.pos.x, this.pos.y, this.pos.z);
   this.item.addLocalRotation(0, 0, 0, 0, 0, 1, rotation);
   this.item.setScale(scale);
 };
@@ -147,7 +146,7 @@ Cloud.prototype.create = function() {
  */
 var gems = [];
 var movers = [];
-var camera = Space.getCamera();
+var camera = Scene.getCamera();
 var player = new Player();
 player.init();
 
@@ -168,7 +167,7 @@ movers.push(
   }, 0.3, 'FlOjs7Lne0atXQBOz0mpBl5pMdYtByDxw9ipDvjAPfg')
 );
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   gems.forEach(function(gem) {
     if (gem.isCollected()) {
       gem.remove();

@@ -66,12 +66,12 @@ Vector.sub = function(v1, v2) {
 };
 
 // script
-var camera = Space.getCamera();
+var camera = Scene.getCamera();
 var sphere, pointer;
 var movers = [];
 
 function Mover() {
-  this.item = Space.createItem('Cube', 0, 20, 1.6);
+  this.item = Scene.createItem('Cube', 0, 20, 1.6);
   this.item.setScale(0.2);
   this.item.setColor(0, 255, 0);
   this.pos = new Vector(Helper.randNumBetween(-4, 4), Helper.randNumBetween(17, 23), Helper.randNumBetween(0, 6));
@@ -109,7 +109,7 @@ function init() {
   pointer = new Vector(camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
   pointer.mult(20);
 
-  sphere = Space.createItem('Sphere', pointer.x, pointer.y, pointer.z);
+  sphere = Scene.createItem('Sphere', pointer.x, pointer.y, pointer.z);
   sphere.setScale(0.2);
   sphere.setColor(255, 0, 0);
 
@@ -130,6 +130,6 @@ function draw() {
 }
 
 init();
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   draw();
 }, 0);

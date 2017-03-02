@@ -72,7 +72,7 @@ Vector.div = function(v, d) {
  *
  */
 function Mover() {
-  this.item = Space.createItem('Cube', 0, 0, 0);
+  this.item = Scene.createItem('Cube', 0, 0, 0);
   this.pos = new Vector(0, 0, Helper.randNumBetween(0, 2));
   this.acc = new Vector();
   this.vel = new Vector();
@@ -95,7 +95,7 @@ Mover.prototype.checkLimits = function() {
  *
  */
 function Attractor() {
-  this.item = Space.createItem('Cube', 0, 0, 20);
+  this.item = Scene.createItem('Cube', 0, 0, 20);
   this.item.setOpacity(0);
   this.pos = new Vector(Helper.randNumBetween(10, 20), Helper.randNumBetween(-20, -10), Helper.randNumBetween(20, 30));
   this.acc = new Vector(Helper.randNumBetween(-0.0005, 0.0005), Helper.randNumBetween(-0.0005, 0.0005), Helper.randNumBetween(-0.0005, 0.0005));
@@ -139,7 +139,7 @@ Attractor.prototype.checkLimits = function() {
  *
  */
 function Bird() {
-  this.item = Space.createItem('LP_BlackBird', Helper.randNumBetween(-5, 5), Helper.randNumBetween(-5, 5), Helper.randNumBetween(3, 8));
+  this.item = Scene.createItem('LP_BlackBird', Helper.randNumBetween(-5, 5), Helper.randNumBetween(-5, 5), Helper.randNumBetween(3, 8));
   this.pos = new Vector(Helper.randNumBetween(-15, 5), Helper.randNumBetween(-15, 5), Helper.randNumBetween(15, 20));
   this.acc = new Vector();
   this.vel = new Vector();
@@ -170,7 +170,7 @@ Bird.prototype.checkLimits = function() {
 Bird.prototype.initAnimation = function() {
   var self = this;
   var delay = Helper.randNumBetween(0, 1);
-  Space.schedule(function() {
+  Scene.schedule(function() {
     self.item.playIdleAnimation('Fly');
   }, delay);
 };
@@ -198,6 +198,6 @@ function draw() {
 }
 
 init();
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   draw();
 }, 0);

@@ -1,4 +1,4 @@
-var groupItem = Space.getItem('S1fczGn4tH');
+var groupItem = Scene.getItem('S1fczGn4tH');
 
 var chip = groupItem.getPart('chip');
 var sphere = groupItem.getPart('sphere');

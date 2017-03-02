@@ -14,7 +14,7 @@ class Player {
   private item: ShapeItem;
 
   constructor() {
-    this.item = Space.createItem('LP_Wom', 0, 0, 0);
+    this.item = Scene.createItem('LP_Wom', 0, 0, 0);
     this.item.focusOn(true)
   }
 
@@ -42,7 +42,7 @@ class Enemy {
   constructor(player: Player, modelId: string, groanSound: string, spawnPosZ: number) {
     this.player = player;
     this.modelId = modelId;
-    this.groanSound = Space.loadSound(groanSound);
+    this.groanSound = Scene.loadSound(groanSound);
     this.spawnPosZ = spawnPosZ;
     this.spawn();
   }
@@ -54,7 +54,7 @@ class Enemy {
 
   protected spawn(): void {
     let spawnPos = this.getSpawnPos();
-    this.item = Space.createItem(this.modelId, spawnPos.x, spawnPos.y, spawnPos.z);
+    this.item = Scene.createItem(this.modelId, spawnPos.x, spawnPos.y, spawnPos.z);
     this.item.faceTo(this.player.getItem());
     this.bindEvents();
   }
@@ -90,7 +90,7 @@ class Enemy {
   }
 
   public remove(): void {
-    this.item.deleteFromSpace();
+    this.item.deleteFromScene();
     this.groanSound.play();
   }
 }
@@ -129,9 +129,9 @@ class Game {
   constructor() {
     this.player = new Player();
     this.enemies = [];
-    this.earth = Space.getItem('rYDXxZtgpm');
-    this.music = Space.loadSound('34yFnUWFVP4i7qWKXoroyieQjZ2eG99e1RAd3wbrxth');
-    this.backgroundSound = Space.loadSound('5b5dce36e80b678a17cc5c8cff2a7426f2df55ab2fbc81c64978eb5ed554bfce');
+    this.earth = Scene.getItem('rYDXxZtgpm');
+    this.music = Scene.loadSound('34yFnUWFVP4i7qWKXoroyieQjZ2eG99e1RAd3wbrxth');
+    this.backgroundSound = Scene.loadSound('5b5dce36e80b678a17cc5c8cff2a7426f2df55ab2fbc81c64978eb5ed554bfce');
     this.backgroundSound.setVolume(0.3);
   }
 
@@ -149,7 +149,7 @@ class Game {
   }
 
   private spawnEnemies(): void {
-    Space.scheduleRepeating(() => {
+    Scene.scheduleRepeating(() => {
       let zombie: Zombie = new Zombie(this.player);
       let skull: Skull = new Skull(this.player);
 
@@ -158,7 +158,7 @@ class Game {
   }
 
   private update(): void {
-    Space.scheduleRepeating(() => {
+    Scene.scheduleRepeating(() => {
       this.enemies.forEach((enemy, index) => {
         enemy.update();
         if (enemy.isKilled) {

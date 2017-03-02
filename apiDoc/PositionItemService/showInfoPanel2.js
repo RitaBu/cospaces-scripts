@@ -1,4 +1,4 @@
-var lion = Space.createItem('LP_Lion', 0, 0, 0);
+var lion = Scene.createItem('LP_Lion', 0, 0, 0);
 
 // Set up arguments for the showInfoPanel() method call.
 var config = {

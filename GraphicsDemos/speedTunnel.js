@@ -14,7 +14,7 @@ function randNumBetween(min, max) {
  *
  */
 function Mover(pos) {
-  this.item = Space.createItem('Cube', 0, 0, 0);
+  this.item = Scene.createItem('Cube', 0, 0, 0);
   this.item.setRandomColor();
   this.pos = {
     x: pos.x,
@@ -54,7 +54,7 @@ for (var i = -10; i < 250; i++) {
   moversBottom.push(new Mover({x: randNumBetween(-3, 3), y: i, z: 0}));
 }
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   for (var i = 0; i < moversLeft.length; i++) {
     moversLeft[i].update().display();
     moversRight[i].update().display();

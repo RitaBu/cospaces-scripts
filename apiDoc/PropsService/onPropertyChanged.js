@@ -1,4 +1,4 @@
-var lion = Space.createItem('LP_Lion', 0, 0, 0);
+var lion = Scene.createItem('LP_Lion', 0, 0, 0);
 lion.setProperty('age', 17);
 
 // execute a function if the value of the age property changes
@@ -11,6 +11,6 @@ function lionAges() {
 }
 
 // lion ages after 2 seconds
-Space.schedule(function() {
+Scene.schedule(function() {
   lionAges();
 }, 2);

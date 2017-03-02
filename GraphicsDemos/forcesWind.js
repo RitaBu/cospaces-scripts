@@ -88,7 +88,7 @@ Vector.div = function(v, d) {
  */
 function Mover(mass) {
   this.mass = mass;
-  this.item = Space.createItem('Sphere', 0, 0, 0);
+  this.item = Scene.createItem('Sphere', 0, 0, 0);
   this.item.setScale(mass * 0.05);
   this.item.setColor((255 / mass) * 12, (255 / mass) * 3, (255 / mass) * 7);
   this.pos = new Vector(Helper.randNumBetween(-8, -4), Helper.randNumBetween(-10, 10), Helper.randNumBetween(1, 4));
@@ -126,7 +126,7 @@ Mover.prototype.checkEdges = function() {
  * Init
  *
  */
-var wall = Space.getItem('FfM9uBBYwB');
+var wall = Scene.getItem('FfM9uBBYwB');
 wall.setPosition(4, 0, 0);
 
 var movers = [];
@@ -134,7 +134,7 @@ for (var i = 1; i <= 30; i++) {
   movers.push(new Mover(i));
 }
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   var wind = new Vector(0.003, 0, 0);
   var gravity = new Vector(0, 0, -0.005);
 

@@ -87,7 +87,7 @@ Vector.div = function(v, d) {
  *
  */
 function Snowflake() {
-  this.item = Space.createItem('Sphere', 0, 0, 0);
+  this.item = Scene.createItem('Sphere', 0, 0, 0);
   this.item.setScale(0.05);
   this.item.setColor(255, 255, 255);
   this.mass = 1;
@@ -143,6 +143,6 @@ function draw() {
 }
 
 init();
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   draw();
 }, 0);

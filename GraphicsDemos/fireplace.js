@@ -87,7 +87,7 @@ Vector.div = function(v, d) {
  *
  */
 function Spark() {
-  this.item = Space.createItem('Cube', 0, 0, 0);
+  this.item = Scene.createItem('Cube', 0, 0, 0);
   this.item.setScale(0.02);
   this.item.setColor(255, 0, 0);
   this.mass = 1;
@@ -144,6 +144,6 @@ function draw() {
 }
 
 init();
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   draw();
 }, 0);

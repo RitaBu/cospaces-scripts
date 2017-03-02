@@ -23,14 +23,14 @@ function init() {
     ctx = new AudioContext();
     loadFile();
   } catch (e) {
-    Project.log('ERROR: ' + e);
+    Space.log('ERROR: ' + e);
   }
   for (var i = 0; i < 8; i++) {
     for (var j = 0; j < 6; j++) {
-      var cube = Space.createItem('Cube', (i / 2) - 2, (j / 2) - 1.5, 0);
+      var cube = Scene.createItem('Cube', (i / 2) - 2, (j / 2) - 1.5, 0);
       cube.setOpacity(0);
       cubes.push(cube);
-      spheres.push(Space.createItem('LP_Sphere', 0, 0, 0));
+      spheres.push(Scene.createItem('LP_Sphere', 0, 0, 0));
     }
   }
 }
@@ -54,7 +54,7 @@ function loadFile() {
 function play() {
   // create a source node from the buffer
   var src = ctx.createBufferSource();
-  Project.log(src);
+  Space.log(src);
   src.buffer = buf;
 
   // create fft
@@ -71,7 +71,7 @@ function play() {
 }
 
 init();
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   if (isSetup) {
     data = new Uint8Array(samples);
     fft.getByteFrequencyData(data);
@@ -84,6 +84,6 @@ Space.scheduleRepeating(function() {
       spheres[i].setColor(255 - data[i] / 2, 255 - data[i], data[i]);
     }
 
-    Space.setMood((1 / 255) * data[36]);
+    Scene.setMood((1 / 255) * data[36]);
   }
 }, 0);

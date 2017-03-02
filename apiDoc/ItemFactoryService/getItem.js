@@ -1,2 +1,2 @@
-var dog = Space.getItem('rm9SCsJoyE');
+var dog = Scene.getItem('rm9SCsJoyE');
 dog.say('Wuff!');

@@ -62,7 +62,7 @@ function Gem() {
 }
 
 Gem.prototype.init = function() {
-  this.item = Space.createItem('LP_Star', this.xPos, this.yPos, this.zPos);
+  this.item = Scene.createItem('LP_Star', this.xPos, this.yPos, this.zPos);
   this.item.setScale(this.scale);
   this.item.setColor(this.color.r, this.color.g, this.color.b);
 };
@@ -132,7 +132,7 @@ AsteroidField.prototype.spawnAsteroid = function() {
   var rotationVec = helper.createVector();
   var modelId = helper.randModelId();
 
-  var asteroid = new Asteroid(Space.createItem(modelId, xPos, yPos, zPos), xPos, yPos, zPos, velocity, rotationVec, xzDirection);
+  var asteroid = new Asteroid(Scene.createItem(modelId, xPos, yPos, zPos), xPos, yPos, zPos, velocity, rotationVec, xzDirection);
   asteroid.item.setScale(scale);
 
   return asteroid;
@@ -172,23 +172,23 @@ AsteroidField.prototype.update = function() {
  */
 function Game() {
   this.zPosOffset = -300;
-  this.player = new Player(Space.createItem('LP_BlackBird', 0, 0, 20 + this.zPosOffset), 0, 0, 20 + this.zPosOffset);
+  this.player = new Player(Scene.createItem('LP_BlackBird', 0, 0, 20 + this.zPosOffset), 0, 0, 20 + this.zPosOffset);
   this.gem = {};
   this.asteroidField = new AsteroidField();
-  this.camera = Space.getCamera();
+  this.camera = Scene.getCamera();
   this.cameraDirVec = {};
   this.cameraAxisX = {};
   this.bkgdPlanet = {};
   this.sounds = {
-    gameMusic: Space.loadSound('SPctPQ2kdViMgP9KS4PHOtKqBL1kDAAAF2qfCUsEXXt'),
-    asteroidHit: Space.loadSound('Mglh30MT8XeGHlKj1N1p0J6lOiBcrw8gx1LrmfOCibu'),
-    gemCollect: Space.loadSound('JLDQeK5DdnQ1VFULou31xvOPc6GPUimDb66drxrh1or')
+    gameMusic: Scene.loadSound('SPctPQ2kdViMgP9KS4PHOtKqBL1kDAAAF2qfCUsEXXt'),
+    asteroidHit: Scene.loadSound('Mglh30MT8XeGHlKj1N1p0J6lOiBcrw8gx1LrmfOCibu'),
+    gemCollect: Scene.loadSound('JLDQeK5DdnQ1VFULou31xvOPc6GPUimDb66drxrh1or')
   }
 }
 
 Game.prototype.initLoop = function() {
   var self = this;
-  Space.scheduleRepeating(function() {
+  Scene.scheduleRepeating(function() {
     self.cameraDirVec = self.camera.getDirection();
     self.cameraAxisX = self.camera.getAxisX();
     self.player.update(self.cameraDirVec, self.cameraAxisX);
@@ -198,14 +198,14 @@ Game.prototype.initLoop = function() {
 };
 
 Game.prototype.init = function() {
-  Space.setMood(0);
+  Scene.setMood(0);
   this.player.item.focusOn(true);
   this.asteroidField.init();
   this.gem = new Gem();
   this.gem.init();
   this.sounds.gameMusic.play(true);
   this.initLoop();
-  this.bkgdPlanet = Space.getItem('twjRf56cvq');
+  this.bkgdPlanet = Scene.getItem('twjRf56cvq');
   this.bkgdPlanet.setPosition(200, 1000, 120 + this.zPosOffset);
   this.bkgdPlanet.setScale(300);
   this.bkgdPlanet.addLocalRotation(0, 0, 0, -1, 1, 1, Math.PI / 6);

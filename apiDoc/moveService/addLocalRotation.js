@@ -1,5 +1,5 @@
-var cube = Space.createItem('Cube', 2, -2, 1);
+var cube = Scene.createItem('Cube', 2, -2, 1);
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   cube.addLocalRotation(0, 0, 0, 1, 1, 1, 0.01);
 }, 0);

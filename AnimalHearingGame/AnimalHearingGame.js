@@ -83,7 +83,7 @@ function Animal(animalId, item) {
 
 function Sound(id, soundClipId) {
   this.id = id;
-  this.soundClip = Space.loadSound(soundClipId);
+  this.soundClip = Scene.loadSound(soundClipId);
 
   this.getSoundId = function () {
     return this.id;
@@ -144,17 +144,17 @@ function Game(host, animals, sounds) {
 }
 
 // Initialize application.
-var host = new Host(Space.getItem('FJNpNV30CN'));
+var host = new Host(Scene.getItem('FJNpNV30CN'));
 
 var animals = [
-  new Animal('elephant', Space.getItem('9np5tnExpc')),
-  new Animal('dog', Space.getItem('VIkx0xO2XE')),
-  new Animal('cat', Space.getItem('RbGraO0IGj')),
-  new Animal('bear', Space.getItem('xVXDONVw9d')),
-  new Animal('camel', Space.getItem('PTIQD6TUWU')),
-  new Animal('horse', Space.getItem('EOBZ04u457')),
-  new Animal('mouse', Space.getItem('LQMTggrwRe')),
-  new Animal('lion', Space.getItem('kbSkFnaMZ5'))
+  new Animal('elephant', Scene.getItem('9np5tnExpc')),
+  new Animal('dog', Scene.getItem('VIkx0xO2XE')),
+  new Animal('cat', Scene.getItem('RbGraO0IGj')),
+  new Animal('bear', Scene.getItem('xVXDONVw9d')),
+  new Animal('camel', Scene.getItem('PTIQD6TUWU')),
+  new Animal('horse', Scene.getItem('EOBZ04u457')),
+  new Animal('mouse', Scene.getItem('LQMTggrwRe')),
+  new Animal('lion', Scene.getItem('kbSkFnaMZ5'))
 ];
 
 var sounds = [

@@ -1,1 +1,1 @@
-Project.log('Log it!');
+Space.log('Log it!');

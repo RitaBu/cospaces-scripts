@@ -1,4 +1,4 @@
-var swan = Space.createItem('LP_Swan', 0, 0, 0);
+var swan = Scene.createItem('LP_Swan', 0, 0, 0);
 
 swan.onHover(function(isHovered) {
   if(isHovered) {

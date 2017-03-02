@@ -1,5 +1,5 @@
-var lion = Space.createItem('LP_Lion', 0, 0, 0);
+var lion = Scene.createItem('LP_Lion', 0, 0, 0);
 
-Space.scheduleRepeating(function() {
-  lion.say('Time passed since script started: ' + Math.ceil(Space.currentTime()) + 's');
+Scene.scheduleRepeating(function() {
+  lion.say('Time passed since script started: ' + Math.ceil(Scene.currentTime()) + 's');
 }, 1);

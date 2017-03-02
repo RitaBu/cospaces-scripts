@@ -10,8 +10,8 @@ var v = {
   zDir: 1
 };
 
-var cube = Space.createItem('Cube', 1, 0, 0);
+var cube = Scene.createItem('Cube', 1, 0, 0);
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   cube.addRotation(v.xPos, v.yPos, v.zPos, v.xDir, v.yDir, v.zDir, 0.01);
 }, 0);

@@ -1,8 +1,8 @@
-var items = Space.getItems();
+var items = Scene.getItems();
 
 var itemsCopy = items.map(function (item) {
   item.setOpacity(0);
-  return Space.copyItem(item);
+  return Scene.copyItem(item);
 });
 
 items.forEach(function (item, index) {

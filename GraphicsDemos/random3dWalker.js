@@ -15,7 +15,7 @@ Walker.prototype.setRandomColor = function(cube) {
 
 Walker.prototype.display = function() {
   if (this.pieces.length < this.piecesAmount) {
-    var cube = Space.createItem('Cube', this.x, this.y, this.z);
+    var cube = Scene.createItem('Cube', this.x, this.y, this.z);
     cube.setScale(0.5);
     this.setRandomColor(cube);
     this.pieces.push(cube);
@@ -63,7 +63,7 @@ function draw() {
   });
 }
 
-Space.clear();
-Space.scheduleRepeating(function() {
+Scene.clear();
+Scene.scheduleRepeating(function() {
   draw();
 }, 1 / 20);

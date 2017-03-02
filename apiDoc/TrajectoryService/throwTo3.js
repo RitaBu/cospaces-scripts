@@ -1,9 +1,9 @@
 var balls = [];
 for(var i = 0; i < 5; i++) {
-  balls.push(Space.createItem('Sphere', i, i, 0));
+  balls.push(Scene.createItem('Sphere', i, i, 0));
 }
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   balls.forEach(function(ball) {
     var xPos = Math.random() * 10 - 10;
     var yPos = Math.random() * 10 - 10;

@@ -37,7 +37,7 @@ Vector.sub = function(v1, v2) {
  *
  */
 function Camera(pos) {
-  this.item = Space.getCamera();
+  this.item = Scene.getCamera();
   this.item.setPosition(pos.x, pos.y, pos.z);
   this.pos = new Vector(pos.x, pos.y, pos.z);
   this.dir = new Vector(0, 0, 0);
@@ -53,7 +53,7 @@ Camera.prototype.update = function() {
  *
  */
 function Marker(pos) {
-  this.item = Space.createItem('Cube', pos.x, pos.y, pos.z);
+  this.item = Scene.createItem('Cube', pos.x, pos.y, pos.z);
   this.item.setColor(255, 0, 0);
   this.pos = new Vector(pos.x, pos.y, pos.z);
   this.con = new Vector();
@@ -71,7 +71,7 @@ Marker.prototype.update = function() {
 
 // Init
 var camera = new Camera({x: 3, y: -7, z: 5});
-var observer = Space.createItem('Sphere', 3, -7, 5);
+var observer = Scene.createItem('Sphere', 3, -7, 5);
 observer.focusOn(true);
 camera.item.setPlayerCamera();
 
@@ -88,7 +88,7 @@ var markers = [
   new Marker({x: 5, y: 5, z: 5})
 ];
 
-Space.scheduleRepeating(function() {
+Scene.scheduleRepeating(function() {
   camera.update();
   markers.forEach(function(marker) {
     marker.update();
