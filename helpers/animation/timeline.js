@@ -11,8 +11,8 @@ define(function () {
   };
 
   Timeline.prototype.addAnimation = function (a, time) {
-    if (this.startTime > 0 && ((Space.currentTime() - this.lastUpdateTime) > time)) {
-      Project.log("Time elapsed before even starting for " + a);
+    if (this.startTime > 0 && ((Scene.currentTime() - this.lastUpdateTime) > time)) {
+      Space.log("Time elapsed before even starting for " + a);
     } else {
       this.allTimes.push(time);
       this.allAnims.push(a);
@@ -21,23 +21,23 @@ define(function () {
 
   Timeline.prototype.start = function () {
     var that = this;
-    this.startTime = Space.currentTime();
+    this.startTime = Scene.currentTime();
     this.lastUpdateTime = this.startTime;
     this.update();
-    this.scheduled = Space.scheduleRepeating(function () {
+    this.scheduled = Scene.scheduleRepeating(function () {
       that.update();
     }, 0);
   };
 
   Timeline.prototype.update = function () {
     var that = this;
-    var timePassed = Space.currentTime() - that.lastUpdateTime;
+    var timePassed = Scene.currentTime() - that.lastUpdateTime;
     if (timePassed === 0 || (timePassed) >= this.updateInterval) {
-      that.lastUpdateTime = Space.currentTime();
+      that.lastUpdateTime = Scene.currentTime();
       that.allTimes.forEach(function (t, index) {
-        var totalTimePassed = Space.currentTime() - that.startTime;
-        // Project.log("Total time passed: " + totalTimePassed);
-        // Project.log("t: " + t);
+        var totalTimePassed = Scene.currentTime() - that.startTime;
+        // Space.log("Total time passed: " + totalTimePassed);
+        // Space.log("t: " + t);
         if (totalTimePassed > t) {
           var a = that.allAnims[index];
           that.runningAnims.push(a);

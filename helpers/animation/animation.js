@@ -14,18 +14,18 @@ define(function () {
   };
 
   Animation.prototype.start = function () {
-    this.startTime = Space.currentTime();
+    this.startTime = Scene.currentTime();
     this.finished = false;
     if (this.DEBUG) {
-      Project.log(this.toString() + " started");
+      Space.log(this.toString() + " started");
     }
   };
 
   Animation.prototype.update = function () {
-    if ((Space.currentTime() - this.startTime) > this.duration) {
+    if ((Scene.currentTime() - this.startTime) > this.duration) {
       this.finished = true;
       if (this.DEBUG){
-        Project.log(this.toString() + " finished");
+        Space.log(this.toString() + " finished");
       }
     }
     this.exec(this);
@@ -34,10 +34,10 @@ define(function () {
 
   Animation.prototype.getProgress = function () {
     if (this.finished) return 1;
-    var timeLeft = this.startTime + this.duration - Space.currentTime();
+    var timeLeft = this.startTime + this.duration - Scene.currentTime();
     if (this.DEBUG){
-      Project.log("Time left " + timeLeft);
-      Project.log("Duration " + this.duration);
+      Space.log("Time left " + timeLeft);
+      Space.log("Duration " + this.duration);
     }
     return 1 - timeLeft / this.duration;
   };
@@ -52,7 +52,7 @@ define(function () {
       var a = this.anims[0];
       a.update();
       if (this.DEBUG) {
-        Project.log(a.toString() + " Progress: " + a.getProgress());
+        Space.log(a.toString() + " Progress: " + a.getProgress());
       }
       if (a.finished) {
         this.anims.shift();
@@ -60,7 +60,7 @@ define(function () {
           a = this.anims[0];
           a.start();
           if (this.DEBUG) {
-            Project.log(a.toString() + " finished. Left " + this.anims.length + " animations");
+            Space.log(a.toString() + " finished. Left " + this.anims.length + " animations");
           }
         }
       }
@@ -69,7 +69,7 @@ define(function () {
 
   Animator.prototype.addAnimation = function (a) {
     if (this.DEBUG) {
-      Project.log("Added " + (this.anims.length + 1) + " animation");
+      Space.log("Added " + (this.anims.length + 1) + " animation");
     }
     this.anims.push(a);
     if (this.anims.length == 1) {

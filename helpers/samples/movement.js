@@ -1,11 +1,11 @@
-Space.clear();
+Scene.clear();
 
-Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
+Scene.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
   require(['formations/Spiral', 'formations/Circle', 'formations/Rect'], function (Spiral, Circle, Rect) {
     var n = 50;
     var items = [];
     for (var i = 0; i < n; ++i) {
-      items.push(Space.createItem("Sphere", 0, 0, 0));
+      items.push(Scene.createItem("Sphere", 0, 0, 0));
     }
 
     function getFormation(i) {
@@ -25,7 +25,7 @@ Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/
         var next = formation.next();
         item.throwTo(next.x, next.y, 0, Math.random() * 10 + 0.1);
       });
-      Space.schedule(function () {
+      Scene.schedule(function () {
         newFormation((i + 1) % 3);
       }, 5);
     })(0);

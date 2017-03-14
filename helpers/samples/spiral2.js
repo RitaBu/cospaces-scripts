@@ -1,13 +1,13 @@
-Space.clear();
+Scene.clear();
 
-Space.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
+Scene.loadLibrary("https://raw.githubusercontent.com/delightex/cospaces-scripts/master/helpers/", function () {
   require(['samples/CircleOfSpirals'], function (CircleOfSpirals) {
     var formation = new CircleOfSpirals(0.1, 0.5, 5, 0, Math.PI * 2 / 10, 10);
     var n = 0;
     (function newItem() {
-      Space.schedule(function () {
+      Scene.schedule(function () {
         var next = formation.next();
-        Space.createItem("Sphere", next.x, next.y, 0);
+        Scene.createItem("Sphere", next.x, next.y, 0);
         if (++n < 100) {
           newItem();
         }

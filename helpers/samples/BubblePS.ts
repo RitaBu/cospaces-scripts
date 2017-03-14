@@ -39,9 +39,9 @@ class BasicParticleSystem<T extends Particle> implements ParticleSystem {
     public play() {
         if (this.playing) this.stop();
         this.playing = true;
-        this.lastEmitTime = Space.currentTime();
+        this.lastEmitTime = Scene.currentTime();
         let self = this;
-        this.disposable = Space.scheduleRepeating(function () {
+        this.disposable = Scene.scheduleRepeating(function () {
             for (let i = self.particles.length - 1; i >= 0; i--) {
                 let particle = self.particles[i];
                 particle.update();
@@ -51,9 +51,9 @@ class BasicParticleSystem<T extends Particle> implements ParticleSystem {
                 }
             }
 
-            const passed = Space.currentTime() - self.lastEmitTime;
+            const passed = Scene.currentTime() - self.lastEmitTime;
             if (passed >= self.currentEmitDelay) {
-                self.lastEmitTime = Space.currentTime();
+                self.lastEmitTime = Scene.currentTime();
                 self.currentEmitDelay = self.emitRate * (self.random ? Math.random() : 1);
                 self.emit(1);
             }
@@ -90,8 +90,8 @@ class Bubble implements Particle {
     constructor (radius: number, parent: ShapeItem, angle: number) {
         this.radius = radius;
         let p = parent.getPosition();
-        //Project.log(parent.getAxisY().y);
-        this.item = Space.createItem("Sphere", p.x + parent.getAxisY().x * 0.5, p.y + parent.getAxisY().y * 0.3, p.z);
+        //Space.log(parent.getAxisY().y);
+        this.item = Scene.createItem("Sphere", p.x + parent.getAxisY().x * 0.5, p.y + parent.getAxisY().y * 0.3, p.z);
         //this.item.addLocalPosition(angle * 0.01, angle * 0.01, 0);
         this.item.setColor(255, 255, 255);
         this.item.setScale(0.1);
@@ -104,7 +104,7 @@ class Bubble implements Particle {
     }
 
     public dispose() {
-        this.item.deleteFromSpace();
+        this.item.deleteFromScene();
     }
 }
 

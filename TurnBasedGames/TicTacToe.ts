@@ -71,7 +71,7 @@ class Ball {
         this.game = game;
         this.row = row;
         this.col = col;
-        this.item = Space.createItem("Sphere", col, 0, 2 - row);
+        this.item = Scene.createItem("Sphere", col, 0, 2 - row);
         this.item.setOpacity(0.6);
         let self = this;
         this.item.onActivate(function () {
@@ -117,7 +117,7 @@ class TicTacToe extends TurnBasedGame {
                 this.balls[row].push(new Ball(this, row, col));
             }
         }
-        this.infoPanel = Space.createTextBillboard(-3, 4, 0);
+        this.infoPanel = Scene.createTextBillboard(-3, 4, 0);
         this.initInfoPanel();
     }
 
@@ -144,7 +144,7 @@ class TicTacToe extends TurnBasedGame {
 
         this.infoPanel.setText("Now CoSpaces thinks...");
         let self = this;
-        Space.schedule(function () {
+        Scene.schedule(function () {
             self.makeMove();
         }, 1);
     }
@@ -339,7 +339,7 @@ class TicTacToe extends TurnBasedGame {
     }
 
     gameEnded() {
-        let restartSign = Space.createTextBillboard(5, 4, 0);
+        let restartSign = Scene.createTextBillboard(5, 4, 0);
         restartSign.setText("Play again?");
         const self = this;
         restartSign.onActivate(function () {
@@ -348,7 +348,7 @@ class TicTacToe extends TurnBasedGame {
                     self.states[row][col] = 0;
                     self.balls[row][col].setState(0);
                     self.moves = 0;
-                    restartSign.deleteFromSpace();
+                    restartSign.deleteFromScene();
                     self.initInfoPanel();
                 }
             }
@@ -363,11 +363,11 @@ class TicTacToe extends TurnBasedGame {
 }
 
 function l(text) {
-    Project.log(text);
+    Space.log(text);
 }
 
 /*
- let soundTheme: Sound = Space.loadSound("awd9ZjvOPCZqzl2s0rTAnbjInYKRRaFmpO6lorWNE89");
+ let soundTheme: Sound = Scene.loadSound("awd9ZjvOPCZqzl2s0rTAnbjInYKRRaFmpO6lorWNE89");
  soundTheme.setVolume(0.8);
  soundTheme.play(true);
  */
