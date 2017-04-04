@@ -1,9 +1,6 @@
 //#region "Constructor Functions"
 //Camera constructor function
 function Camera() {
-  //NOTE: returned item of Scene.getCamera() differs from Scene.getItem(cameraID)
-  //Motion-related functions like moveLinear() do not exist *yet* for Scene.getCamera() objects.
-  //In this script, cameraItem is used for getDirection(), which does not exist for objects returned by .getItem()
   this.cameraItem = Scene.getCamera();
   this.objectItem = Scene.getItem("0QiMEUjZAo");
   this.pos = new Vector(this.objectItem.getPosition().x, this.objectItem.getPosition().y, this.objectItem.getPosition().z);
