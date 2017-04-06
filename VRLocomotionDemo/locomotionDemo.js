@@ -2,7 +2,7 @@
 //Camera constructor function
 function Camera() {
   this.cameraItem = Scene.getCamera();
-  this.objectItem = Scene.getItem("0QiMEUjZAo");
+  this.objectItem = Scene.getItem("nLuphJkqiQ");
   this.pos = new Vector(this.objectItem.getPosition().x, this.objectItem.getPosition().y, this.objectItem.getPosition().z);
   this.dir = new Vector(0, 0, 0);
 }
@@ -43,19 +43,22 @@ Pin.prototype.setFacing = function() {
   var camPos = mainCamera.objectItem.getPosition();
   var targetHelper = Scene.createItem("Cube", camPos.x, camPos.y, this.position.z);
   this.item.faceTo(targetHelper);
-  targetHelper.deleteFromStage();
+  targetHelper.deleteFromScene();
 };
 
 //Move camera to this object, add positive Z offset
-Pin.prototype.moveCamera = function() {
+Pin.prototype.moveCamera = function(heightOffset, callback) {
   var pinPosVector = {
     x: this.position.x,
     y: this.position.y,
     z: this.position.z + heightOffset
   };
+  mainCamera.objectItem.connectToItem("",mainCamera.objectItem,"");
   mainCamera.objectItem.moveLinear(pinPosVector.x, pinPosVector.y, pinPosVector.z, 0.15, function() {
     PinManager.updatePins();
+    callback();
   });
+
 };
 
 Pin.prototype.setOpacity = function() {
@@ -92,7 +95,33 @@ Pin.prototype.bindEvents = function() {
     });
     self.visible = false;
     self.toggleVisibility();
-    self.moveCamera();
+    self.moveCamera(2, function(){});
+  });
+};
+
+//Creates onHover interaction to this object (only used for pins attached to another object)
+Pin.prototype.bindEventsSpecial = function() {
+  var self = this;
+  var originPos = this.position;
+  this.item.onHover(function(isHovered) {
+    if (isHovered) {
+      self.item.setColor(255, 157, 0);
+      self.item.say('Click me to move!');
+    } else {
+      self.item.setColor(214, 84, 73);
+      self.item.say("");
+    }
+  });
+
+  this.item.onActivate(function() {
+    //Flag all other pins as visible, hide selected one
+    pinGroup.forEach(function(pin) {
+      pin.visible = true;
+    });
+    self.position = self.item.getPosition();
+    self.moveCamera(0, function(){
+      mainCamera.objectItem.connectToItem("",self.item,"top");
+    });
   });
 };
 
@@ -113,7 +142,7 @@ Pin.prototype.bounceUpDown = function(originPos) {
         });
         break;
       default:
-        Scene.log("Bounce out of bounds!");
+        Space.log("Bounce out of bounds!");
     }
   }
 };
@@ -155,25 +184,28 @@ Vector.sub = function(v1, v2) {
 //#region "Init and Update"
 //Init
 //Objects in scene
-var pin1 = Scene.getItem("pin1");
+var pin1_special = Scene.getItem("pin1");
 var pin2 = Scene.getItem("pin2");
 var pin3 = Scene.getItem("pin3");
 var pin4 = Scene.getItem("pin4");
 var pin5 = Scene.getItem("pin5");
 var pin6 = Scene.getItem("pin6");
-var pinGroup = [pin1, pin2, pin3, pin4, pin5, pin6];
+var pinGroup = [pin2, pin3, pin4, pin5, pin6];
 var mainCamera = new Camera();
-var heightOffset = 2;
 
-mainCamera.cameraItem.setPlayerCamera();
-
-//Add existing pins in Scene to Pin class
+//Add existing pins in Stage to Pin class
 for (i = 0; i < pinGroup.length; i++) {
+  //Ignore first pin in array (special pin that is attached to an item)
   pinGroup[i] = new Pin(pinGroup[i]);
   pinGroup[i].toggleVisibility();
   pinGroup[i].setFacing();
   pinGroup[i].bindEvents(i);
 }
+
+pin1_special = new Pin(pin1_special);
+pin1_special.bindEventsSpecial();
+
+//pin1_special.bindEvents(pin1_special.item)
 
 var PinManager = {
   updatePins: function() {
@@ -193,8 +225,34 @@ Scene.scheduleRepeating(function() {
     }
   });
 }, 0);
+
 //#endregion "Init and Update"
 
 
+//Skier circling
+var skier = Scene.getItem("Skier");
+var skierTarget = Scene.createItem("Sphere",0,0,-1);
+skierTarget.setOpacity(0.1);
+
+var angle = 190;
+var radius = 11;
+var cx = 0;
+var cy = 0;
+var xPos, yPos;
+var speed = -0.002;
+
+Scene.scheduleRepeating(function() {
+  angle += speed;
+
+  xPos = Math.cos(angle) * radius + cx;
+  yPos = Math.sin(angle) * radius + cy;
+  xPosTarget = Math.cos(angle-0.1) * radius + cx;
+  yPosTarget = Math.sin(angle-0.1) * radius + cy;
+
+  skier.faceTo(skierTarget);
+  skier.setPosition(xPos, yPos, 0);
+  skierTarget.setPosition(xPosTarget,yPosTarget,0):
+
+}, 0);
 
 
