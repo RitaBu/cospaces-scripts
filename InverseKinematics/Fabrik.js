@@ -19,7 +19,7 @@ Vector3.add = function (v1, v2) {
 
 function Chain(joints) {
 
-  this.tolerance = 0.1;
+  this.tolerance = 0.01;
   this.speed = 1 / 60;
   this.maxIter = 15;
 
@@ -98,27 +98,34 @@ function Chain(joints) {
   return this;
 }
 
-var j0 = new Vector3(0, 0, 0);
-var j1 = new Vector3(0, 0, 0.5);
-var j2 = new Vector3(0, 0, 1);
-var j3 = new Vector3(0, 0, 1.5);
-var j4 = new Vector3(0, 0, 3);
-var j5 = new Vector3(0, 0, 4);
-var joints = [j0, j1, j2, j3, j4, j5];
-
-var chain = new Chain(joints);
-
 var target = Scene.createItem("sph", 0, 1, 1);
 target.setScale(0.1);
 
-var tail = Scene.createPathTail();
+var j0 = new Vector3(-2, 0, 0);
+var j1 = new Vector3(-2, 0, 0.5);
+var j2 = new Vector3(-2, 0, 1);
+var j3 = new Vector3(-2, 0, 1.5);
+var j4 = new Vector3(-2, 0, 3);
+var j5 = new Vector3(-2, 0, 4);
+var joints = [j0, j1, j2, j3, j4, j5];
 
-function randPos() {
-  var r = 4;
-  return new Vector3(Math.random() * 2 * r - r, Math.random() * 2 * r - r, Math.random() * r)
-}
+var chain1 = new Chain(joints);
+var tail1 = Scene.createPathTail();
+tail1.setColor("ab4722");
 
-function step() {
+j0 = new Vector3(2, 0, 0);
+j1 = new Vector3(2, 0, 0.5);
+j2 = new Vector3(2, 0, 1);
+j3 = new Vector3(2, 0, 1.5);
+j4 = new Vector3(2, 0, 3);
+j5 = new Vector3(2, 0, 4);
+joints = [j0, j1, j2, j3, j4, j5];
+
+var chain2 = new Chain(joints);
+var tail2 = Scene.createPathTail();
+tail2.setColor("5d96d0");
+
+function step(chain, tail) {
   var p = target.getPosition();
   chain.setTarget(p.x, p.y, p.z);
   chain.solve();
@@ -130,8 +137,14 @@ function step() {
 }
 
 Scene.scheduleRepeating(function () {
-  step();
+  step(chain1, tail1);
+  step(chain2, tail2);
 }, 0);
+
+function randPos() {
+  var r = 4;
+  return new Vector3(Math.random() * 2 * r - r, Math.random() * 2 * r - r, Math.random() * r)
+}
 
 function move(){
   var p = randPos();
