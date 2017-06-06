@@ -36,11 +36,42 @@ Vector3.cross = function (a, b) {
       a.z * b.x - a.x * b.z,
       a.x * b.y - a.y * b.x);
 };
+Vector3.projectOnPlane = function (normal, p) {
+  var c = Vector3.dot(normal, p) / normal.norm2();
+  return new Vector3.sub(p, normal.mul(c));
+};
+
+
+function Matrix(m0, m1, m2) {
+  this.m0 = m0;
+  this.m1 = m1;
+  this.m2 = m2;
+}
+
+Matrix.createRotationMatrix = function (dir) {
+  var xAxis;
+  var yAxis;
+  var zAxis = dir.normalized();
+
+  // Handle the singularity (i.e. bone pointing along negative Z-Axis)...
+  if (dir.z < -0.9999999) {
+    xAxis = new Vector3(1, 0, 0); // ...in which case positive X runs directly to the right...
+    yAxis = new Vector3(0, 1, 0); // ...and positive Y runs directly upwards.
+  } else {
+    var a = 1 / (1 + zAxis.z);
+    var b = -zAxis.x * zAxis.y * a;
+    xAxis = new Vector3(1 - zAxis.x * zAxis.x * a, b, -zAxis.x).normalized();
+    yAxis = new Vector3(b, 1 - zAxis.y * zAxis.y * a, -zAxis.y).normalized();
+  }
+  return new Matrix(xAxis, yAxis, zAxis);
+
+};
+
+var DEBUG = true;
 
 function Chain(joints) {
 
   this.tolerance = 0.01;
-  this.speed = 1 / 60;
   this.maxIter = 15;
 
   this.n = joints.length;
@@ -51,11 +82,6 @@ function Chain(joints) {
   this.lengths = [];
   for (var i = 0; i < joints.length - 1; i += 1) {
     this.lengths.push(dist(joints[i].pos, joints[i + 1].pos));
-  }
-
-  this.totallength = 0;
-  for (var i = 0; i < this.lengths.length; i += 1) {
-    this.totallength += this.lengths[i];
   }
 
   function mix(p1, p2, l) {
@@ -75,46 +101,34 @@ function Chain(joints) {
     for (var i = this.n - 2; i >= 0; i -= 1) {
       var l = this.lengths[i] / dist(this.joints[i + 1].pos, this.joints[i].pos);
       this.joints[i].pos = mix(this.joints[i + 1].pos, this.joints[i].pos, l);
-      this.joints[i].up = updateUp(this.joints[i].up, Vector3.sub(this.joints[i + 1].pos, this.joints[i].pos));
-      // this.orientationalConstrain(this.joints[i]);
     }
   };
 
   this.forward = function () {
     this.joints[0].pos = this.origin;
     for (var i = 0; i < this.n - 1; i += 1) {
-      // this.orientationalConstrain(this.joints[i]);
       var l = this.lengths[i] / dist(this.joints[i + 1].pos, this.joints[i].pos);
-      this.joints[i + 1].pos = mix(this.joints[i].pos, this.joints[i + 1].pos, l);
-      // p = Vector3.sub(p, this.joints[i].pos);
-      // var dir = i > 0 ? Vector3.sub(this.joints[i].pos, this.joints[i - 1].pos) : new Vector3(0, 0, 1);
-      // this.joints[i + 1].pos = this.rotationalConstrain(p, dir, this.joints[i]);
-      // this.joints[i].up = updateUp(this.joints[i].up, Vector3.sub(this.joints[i + 1].pos, this.joints[i].pos));
+      var p = mix(this.joints[i].pos, this.joints[i + 1].pos, l);
+      p = Vector3.sub(p, this.joints[i].pos);
+      var dir = i > 0 ? Vector3.sub(this.joints[i].pos, this.joints[i - 1].pos) : new Vector3(0, 0, 1);
+      this.joints[i + 1].pos = this.rotationalConstrain(p, dir, this.joints[i]).add(this.joints[i].pos);
     }
   };
 
   this.solve = function () {
-    var distance = dist(this.joints[0].pos, this.target);
-    if (distance > this.totallength) {
-      for (var i = 0; i < this.n - 1; i += 1) {
-        var l = this.lengths[i] / dist(this.target, this.joints[i].pos);
-        this.joints[i + 1].pos = mix(this.joints[i].pos, this.target, l);
-      }
-    } else {
-      var iter = 0;
+    var iter = 0;
+    var distance = dist(this.joints[this.n - 1].pos, this.target);
+    while (distance > this.tolerance) {
+      this.backward();
+      this.forward();
       distance = dist(this.joints[this.n - 1].pos, this.target);
-      while (distance > this.tolerance) {
-        this.backward();
-        this.forward();
-        distance = dist(this.joints[this.n - 1].pos, this.target);
-        iter += 1;
-        if (iter > this.maxIter) break;
-      }
+      iter += 1;
+      if (iter > this.maxIter) break;
     }
   };
 
-  this.orientationalConstrain = function (joint, dir) {
-  };
+  // this.orientationalConstrain = function (joint, dir) {
+  // };
 
   this.rotationalConstrain = function (p, dir, joint) {
     dir = dir.normalized();
@@ -127,19 +141,23 @@ function Chain(joints) {
       proj = proj.mul(-1);
     }
 
-    var upvec = joint.up;
-    var rightvec = Vector3.cross(dir, upvec);
+    var rightvec = new Vector3(1, 0, 0);
+    var upvec = new Vector3(0, -1, 0);
 
+    // if (DEBUG) {
+    //   Space.log("upvec: " + upvec.x + " " + upvec.y + " " + upvec.z);
+    //   Space.log("rightvec: " + rightvec.x + " " + rightvec.y + " " + rightvec.z);
+    // }
     // get the 2D components
     var xaspect = Vector3.dot(adjust, rightvec);
     var yaspect = Vector3.dot(adjust, upvec);
 
     // get the cross section of the cone
     var height = proj.norm();
-    var left = -height * Math.tan(joint.l);
+    var left = height * Math.tan(joint.l);
     var right = height * Math.tan(joint.r);
     var up = height * Math.tan(joint.u);
-    var down = -height * Math.tan(joint.d);
+    var down = height * Math.tan(joint.d);
 
     // find the quadrant
     var xbound = xaspect >= 0 ? right : left;
@@ -158,6 +176,13 @@ function Chain(joints) {
       var y = ybound * Math.sin(angle);
       // convert back to 3D
       f = proj.add(rightvec.mul(x)).add(upvec.mul(y)).normalized().mul(p.norm());
+
+      // if (DEBUG) {
+      //   Space.log(left + " " + right + " " + up + " " + down);
+      //   Space.log("xaspect: " + xaspect + " yaspect" + yaspect);
+      //   Space.log("x: " + x + " y: " + y);
+      //   Space.log("f: " + f.x + " " + f.y + " " + f.z);
+      // }
     }
     return f;
   };
@@ -170,12 +195,13 @@ function Chain(joints) {
 }
 
 function Joint(pos, up) {
-  var angle = Math.PI * 0.4;
+  var angle = Math.PI * 0.25;
+  var angle1 = Math.PI * 0.1;
 
   this.l = angle;
   this.r = angle;
-  this.u = angle;
-  this.d = angle;
+  this.u = angle1;
+  this.d = angle1;
 
   this.pos = pos;
   this.up = up;
@@ -186,12 +212,8 @@ target.setScale(0.1);
 var up = new Vector3(1, 0, 0);
 
 var j0 = new Joint(new Vector3(0, 0, 0), up.clone());
-var j1 = new Joint(new Vector3(0, 0, 0.5), up.clone());
-var j2 = new Joint(new Vector3(0, 0, 1), up.clone());
-var j3 = new Joint(new Vector3(0, 0, 1.5), up.clone());
-var j4 = new Joint(new Vector3(0, 0, 3), up.clone());
-var j5 = new Joint(new Vector3(0, 0, 4), up.clone());
-var joints = [j0, j1, j2, j3, j4, j5];
+var j1 = new Joint(new Vector3(0, 0, 2), up.clone());
+var joints = [j0, j1];
 
 var chain1 = new Chain(joints);
 var tail1 = Scene.createPathTail();
@@ -205,6 +227,9 @@ function step(chain, tail) {
   for (var i = 0; i < chain.joints.length; i += 1) {
     var pos = chain.joints[i].pos;
     tail.addLast(pos.x, pos.y, pos.z);
+    // if (DEBUG) {
+    //   Space.log("chain[" + i + "]: " + pos.x + " " + pos.y + " " + pos.z);
+    // }
   }
 }
 
@@ -222,5 +247,5 @@ function move() {
   var t = 3;
   target.moveBezierTo(p.x, p.y, p.z, t, move);
 }
-
+// target.setPosition(2, 0, 0);
 move();
