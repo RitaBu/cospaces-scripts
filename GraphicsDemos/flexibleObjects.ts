@@ -353,7 +353,7 @@ let cam = Scene.getCamera();
 cam.setPosition(0, 0, -50);
 
 let flexObjs = [];
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i < 5; i++) {
   flexObjs.push(
     new WFrustum(),
     //new WTorus(), Torus kills performance
