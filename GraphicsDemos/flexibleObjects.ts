@@ -349,6 +349,8 @@ class WConeFrustum extends FlexObject {
  * Init demo
  *
  */
+Space.showSceneNavigation(false);
+
 let cam = Scene.getCamera();
 cam.setPosition(0, 0, -50);
 
