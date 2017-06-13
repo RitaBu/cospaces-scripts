@@ -1,5 +1,3 @@
-// Project location: https://cospac.es/B0ak
-
 /**
  * Helper class
  *
@@ -42,7 +40,7 @@ abstract class FlexObject {
   rotationAngle: number;
 
   constructor() {
-    this.pos = new Vector3(Helper.randNumBetween(-25, 25), Helper.randNumBetween(-25, 25), Helper.randNumBetween(-15, 15));
+    this.pos = new Vector3(Helper.randNumBetween(-25, 25), Helper.randNumBetween(-25, 25), Helper.randNumBetween(-65, -35));
 
     this.angle = 0;
     this.angleStep = Helper.randNumBetween(-0.05, 0.05);
@@ -351,6 +349,9 @@ class WConeFrustum extends FlexObject {
  * Init demo
  *
  */
+let cam = Scene.getCamera();
+cam.setPosition(0, 0, -50);
+
 let flexObjs = [];
 for (let i = 0; i < 6; i++) {
   flexObjs.push(
