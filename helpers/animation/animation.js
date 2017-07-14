@@ -1,9 +1,10 @@
 define(function () {
-  var Animation = function (name, duration, exec, debug) {
+  var Animation = function (name, duration, exec, finish, debug) {
     this.name = name;
     this.duration = duration;
     this.finished = true;
     this.exec = exec;
+    this.finishCallback = finish;
     this.startTime = 0;
     this.numExecs = 0;
     this.DEBUG = (typeof debug !== 'undefined') ?  debug : false;
@@ -42,6 +43,10 @@ define(function () {
     return 1 - timeLeft / this.duration;
   };
 
+  Animation.prototype.doFinishCallback = function () {
+      this.finishCallback();
+  };
+
   var Animator = function (debug) {
     this.anims = [];
     this.DEBUG = (typeof debug !== 'undefined') ?  debug : false;
@@ -55,6 +60,7 @@ define(function () {
         Space.log(a.toString() + " Progress: " + a.getProgress());
       }
       if (a.finished) {
+        a.doFinishCallback();
         this.anims.shift();
         if (this.anims.length > 0) {
           a = this.anims[0];
