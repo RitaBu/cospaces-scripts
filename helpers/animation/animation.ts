@@ -105,4 +105,8 @@ class Animator {
             a.start();
         }
     }
+
+    public getAnimationCount(): number {
+        return this.anims.length;
+    }
 }
