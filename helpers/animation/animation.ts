@@ -1,5 +1,19 @@
-define(function () {
-    var Animation = function (name, duration, exec, finish, debug) {
+
+interface Executable {
+    (a: Animation): void;
+}
+
+class Animation {
+    private name: string;
+    private duration: number;
+    private finished: boolean;
+    private exec: Executable;
+    private finishCallback: () => void;
+    private startTime: number;
+    private numExecs: number;
+    private DEBUG: boolean;
+
+    constructor(name: string, duration: number, exec: Executable, finish: () => void, debug?: boolean) {
         this.name = name;
         this.duration = duration;
         this.finished = true;
@@ -7,59 +21,68 @@ define(function () {
         this.finishCallback = finish;
         this.startTime = 0;
         this.numExecs = 0;
-        this.DEBUG = (typeof debug !== 'undefined') ? debug : false;
-    };
+        this.DEBUG = debug;
+    }
 
-    Animation.prototype.toString = function () {
+    public toString(): string {
         return "[Animation] " + this.name;
-    };
+    }
 
-    Animation.prototype.start = function () {
+    public start() {
         this.startTime = Scene.currentTime();
         this.finished = false;
         if (this.DEBUG) {
             Space.log(this.toString() + " started");
         }
-    };
+    }
 
-    Animation.prototype.update = function () {
+    public update() {
         if ((Scene.currentTime() - this.startTime) > this.duration) {
             this.finished = true;
-            if (this.DEBUG) {
+            if (this.DEBUG){
                 Space.log(this.toString() + " finished");
             }
         }
         this.exec(this);
         this.numExecs++;
-    };
+    }
 
-    Animation.prototype.getProgress = function () {
+    public getProgress() {
         if (this.finished) return 1;
-        var timeLeft = this.startTime + this.duration - Scene.currentTime();
-        if (this.DEBUG) {
+        const timeLeft = this.startTime + this.duration - Scene.currentTime();
+        if (this.DEBUG){
             Space.log("Time left " + timeLeft);
-            Space.log("Duration " + this.duration);
+            //Space.log("Duration " + this.duration);
         }
         return 1 - timeLeft / this.duration;
-    };
+    }
 
-    Animation.prototype.doFinishCallback = function () {
+    public isFinished(): boolean {
+        return this.finished;
+    }
+
+    public doFinishCallback() {
         this.finishCallback();
-    };
+    }
+}
 
-    var Animator = function (debug) {
+class Animator {
+    private anims: Animation[];
+    private DEBUG: boolean;
+
+    constructor (debug?: boolean) {
         this.anims = [];
-        this.DEBUG = (typeof debug !== 'undefined') ? debug : false;
-    };
+        this.DEBUG = debug;
+    }
 
-    Animator.prototype.update = function () {
+    public update() {
         if (this.anims.length > 0) {
-            var a = this.anims[0];
+            let a = this.anims[0];
             a.update();
             if (this.DEBUG) {
                 Space.log(a.toString() + " Progress: " + a.getProgress());
             }
-            if (a.finished) {
+            if (a.isFinished()) {
                 a.doFinishCallback();
                 this.anims.shift();
                 if (this.anims.length > 0) {
@@ -71,22 +94,19 @@ define(function () {
                 }
             }
         }
-    };
+    }
 
-    Animator.prototype.addAnimation = function (a) {
+    public addAnimation(a: Animation) {
         if (this.DEBUG) {
             Space.log("Added " + (this.anims.length + 1) + " animation");
         }
         this.anims.push(a);
-        if (this.anims.length === 1) {
+        if (this.anims.length == 1) {
             a.start();
         }
-    };
+    }
 
-    Animator.prototype.getAnimationCount = function () {
+    public getAnimationCount(): number {
         return this.anims.length;
-    };
-
-    return {Animation: Animation, Animator: Animator};
-});
-
+    }
+}
