@@ -7,8 +7,8 @@ manBlue.setScale(4);
 manBlue.setPosition(10, 0, 0);
 
 var glasses = Scene.createItem("LP_VRGlasses", 0, 1, 0);
+glasses.setScale(3);
 glasses.connectToItem("Nose", manBlue, "Eyes");
-glasses.setScale(1);
 
 
 //man2
