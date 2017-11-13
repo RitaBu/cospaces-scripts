@@ -1,3 +1,5 @@
+// Link: https://cospac.es/uhLm
+
 let snowflakes = [];
 let cam = Scene.getCamera();
 let camPos = cam.getPosition();
