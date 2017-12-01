@@ -57,27 +57,29 @@ var rotateAround112 = function () {
       center.add(cubes[i][j][2]);
     }
   }
-  center.rotateLocal(0, 0, 1, Math.PI * 0.5, 3, function () {
-    var temp = cubes[0][0][2];
-    cubes[0][0][2] = cubes[2][0][2];
-    cubes[2][0][2] = cubes[2][2][2];
-    cubes[2][2][2] = cubes[0][2][2];
-    cubes[0][2][2] = temp;
+  center.rotateLocal(0, 0, 1, Math.PI * 0.5, 3, callback112);
+};
 
-    temp = cubes[0][1][2];
-    cubes[0][1][2] = cubes[1][0][2];
-    cubes[1][0][2] = cubes[2][1][2];
-    cubes[2][1][2] = cubes[1][2][2];
-    cubes[1][2][2] = temp;
+var callback112 = function () {
+  var temp = cubes[0][0][2];
+  cubes[0][0][2] = cubes[2][0][2];
+  cubes[2][0][2] = cubes[2][2][2];
+  cubes[2][2][2] = cubes[0][2][2];
+  cubes[0][2][2] = temp;
 
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        cubes[i][j][2].removeFromParent();
-      }
+  temp = cubes[0][1][2];
+  cubes[0][1][2] = cubes[1][0][2];
+  cubes[1][0][2] = cubes[2][1][2];
+  cubes[2][1][2] = cubes[1][2][2];
+  cubes[1][2][2] = temp;
+
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      cubes[i][j][2].removeFromParent();
     }
+  }
 
-    rotateAround211();
-  });
+  rotateAround211();
 };
 
 var rotateAround211 = function () {
@@ -87,28 +89,29 @@ var rotateAround211 = function () {
       center.add(cubes[2][i][j]);
     }
   }
-  center.rotateLocal(1, 0, 0, Math.PI * 0.5, 3, function () {
+  center.rotateLocal(1, 0, 0, Math.PI * 0.5, 3, callback211);
+};
 
-    var temp = cubes[2][0][0];
-    cubes[2][0][0] = cubes[2][2][0];
-    cubes[2][2][0] = cubes[2][2][2];
-    cubes[2][2][2] = cubes[2][0][2];
-    cubes[2][0][2] = temp;
+var callback211 = function () {
+  var temp = cubes[2][0][0];
+  cubes[2][0][0] = cubes[2][2][0];
+  cubes[2][2][0] = cubes[2][2][2];
+  cubes[2][2][2] = cubes[2][0][2];
+  cubes[2][0][2] = temp;
 
-    temp = cubes[2][0][1];
-    cubes[2][0][1] = cubes[2][1][0];
-    cubes[2][1][0] = cubes[2][2][1];
-    cubes[2][2][1] = cubes[2][1][2];
-    cubes[2][1][2] = temp;
+  temp = cubes[2][0][1];
+  cubes[2][0][1] = cubes[2][1][0];
+  cubes[2][1][0] = cubes[2][2][1];
+  cubes[2][2][1] = cubes[2][1][2];
+  cubes[2][1][2] = temp;
 
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        cubes[2][i][j].removeFromParent();
-      }
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      cubes[2][i][j].removeFromParent();
     }
+  }
 
-    rotateAround112();
-  });
+  rotateAround112();
 };
 
 rotateAround112();
