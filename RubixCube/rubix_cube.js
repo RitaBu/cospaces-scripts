@@ -1,7 +1,6 @@
 Scene.setDefaultOrigin("Center");
 
-var scale = 1.75;
-var sqrt2 = Math.sqrt(2) * 0.9;
+var size = 0.875;
 
 var cubes = [];
 for (var i = 0; i < 3; i++) {
@@ -9,16 +8,21 @@ for (var i = 0; i < 3; i++) {
   for (var j = 0; j < 3; j++) {
     cubes[i][j] = [];
     for (var k = 0; k < 3; k++) {
-      cubes[i][j][k] = Scene.createItem("Cube", i - 1, j - 1, k + 1);
-      cubes[i][j][k].setScale(scale);
+      cubes[i][j][k] = Scene.createItem("FxCd", i - 1, j - 1, k + 1);
+      cubes[i][j][k].setSize(size, size, size);
       cubes[i][j][k].setColor(128, 128, 128); //gray
     }
   }
 }
 
 function createFrustum() {
-  var frstm = Scene.createItem("Frstm", 0, 0, 0);
-  frstm.setSize(scale * 0.25 * sqrt2, 0.8 * scale * 0.25 * sqrt2, 1, 0.025);
+  var frstm = Scene.createItem("Frst4", 0, 0, 0);
+
+  var bottom = size * 0.9;
+  var top = bottom * 0.8;
+  var height = 0.025;
+
+  frstm.setSize(bottom, bottom, top, top, height);
   return frstm;
 }
 
